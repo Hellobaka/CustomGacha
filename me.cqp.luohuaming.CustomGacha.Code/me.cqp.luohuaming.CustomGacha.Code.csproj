@@ -66,11 +66,8 @@
     <Compile Include="Event_GroupMessage.cs" />
     <Compile Include="Event_StartUp.cs" />
     <Compile Include="GachaCore\GachaCore.cs" />
-    <Compile Include="GachaCore\Models\GachaItem.cs" />
-    <Compile Include="GachaCore\Models\ItemDrawConfig.cs" />
-    <Compile Include="GachaCore\Models\Pool.cs" />
-    <Compile Include="GachaCore\Models\PoolDrawConfig.cs" />
-    <Compile Include="OrderFunctions\ExampleFunction.cs" />
+    <Compile Include="OrderFunctions\Example.cs" />
+    <Compile Include="OrderFunctions\Register.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

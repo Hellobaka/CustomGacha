@@ -104,27 +104,29 @@ namespace PublicInfos
         /// <summary>
         /// QQ号
         /// </summary>
+        [SugarColumn(IsNullable = false)]
         public long QQID { get; set; }
+        public long Money { get; set; } = 0;
         /// <summary>
         /// 抽卡总次数
         /// </summary>
-        public int GachaTotalCount { get; set; }
+        public int GachaTotalCount { get; set; } = 0;
         /// <summary>
         /// 总消耗代币数
         /// </summary>
-        public int MoneyTotalCount { get; set; }
+        public int MoneyTotalCount { get; set; } = 0;
         /// <summary>
         /// 抽卡次数, 保底后重置
         /// </summary>
-        public int GachaCount { get; set; }
+        public int GachaCount { get; set; } = 0;
         /// <summary>
         /// 总签到次数
         /// </summary>
-        public int SignTotalCount { get; set; }
+        public int SignTotalCount { get; set; } = 0;
         /// <summary>
         /// 上次签到时间
         /// </summary>
-        public DateTime LastSignTime { get; set; }
+        public DateTime LastSignTime { get; set; } = new DateTime(1970, 1, 1, 0, 0, 0);
     }
     [SugarTable("Repo")]
     public class DB_Repo
@@ -160,10 +162,12 @@ namespace PublicInfos
         /// <summary>
         /// 卡池内容
         /// </summary>
-        public List<GachaItem> Content { get; set; }
+        [SugarColumn(ColumnDataType ="blob", IsJson = true)]
+        public List<GachaItem> Content { get; set; } = new List<GachaItem>();
         /// <summary>
         /// 配置卡池绘制配置
         /// </summary>
+        [SugarColumn(ColumnDataType = "blob", IsJson = true)]
         public PoolDrawConfig PoolDrawConfig { get; set; }
         /// <summary>
         /// 保底所需要的次数
@@ -210,11 +214,11 @@ namespace PublicInfos
         /// </summary>
         public long Count { get; set; }
         /// <summary>
-        /// 最低数量
+        /// 最高数量
         /// </summary>
         public int CountCeil { get; set; }
         /// <summary>
-        /// 最高数量
+        /// 最低数量
         /// </summary>
         public int CountFloor { get; set; }
         /// <summary>
@@ -228,6 +232,28 @@ namespace PublicInfos
         /// <summary>
         /// 图片与背景之间的绘制关系
         /// </summary>
+        [SugarColumn(ColumnDataType = "blob", IsJson = true)]
         public ItemDrawConfig ImageConfig { get; set; }
+
+        public GachaItem Clone()
+        {
+            return (GachaItem)this.MemberwiseClone();
+        }
+    }
+    [SugarTable("Config")]
+    public class Config 
+    {
+        [SugarColumn(IsNullable =false)]
+        public DateTime SignResetTime { get; set; }
+        [SugarColumn(IsNullable = false)]
+        public int SignCeil { get; set; }
+        [SugarColumn(IsNullable = false)]
+        public int SignFloor { get; set; }
+    }
+    [SugarTable("OrderConfig")]
+    public class OrderConfig
+    {
+        public string Register { get; set; }
+        public string Sign { get; set; }
     }
 }

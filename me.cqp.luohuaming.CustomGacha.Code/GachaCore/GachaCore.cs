@@ -1,5 +1,5 @@
-﻿using me.cqp.luohuaming.CustomGacha.Code.GachaCore.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
+using PublicInfos;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -11,16 +11,12 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
 {
     public static class GachaCore
     {
-        /// <summary>
-        /// 全局保底次数
-        /// </summary>
-        private static int BaodiCount = 1;
-        public static List<GachaItem> DoGacha(Pool pool,int count)
+        public static List<GachaItem> DoGacha(Pool pool, int count ,ref DB_User user)
         {
             List<GachaItem> results = new List<GachaItem>();
-            for(int i = 0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
-                GachaItem gachaItem = GetGachaItem(pool);
+                GachaItem gachaItem = GetGachaItem(pool,ref user);
                 if (gachaItem.CanBeFolded)
                 {
                     var tmp = results.Find(x => x.Name == gachaItem.Name);
@@ -37,12 +33,15 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
             switch (pool.PoolDrawConfig.OrderOptional)
             {
                 case OrderOptional.Increasing:
-                    results = results.OrderBy(x => x.Value).ToList();break;
+                    results = results.OrderBy(x => x.Value).ToList(); break;
                 case OrderOptional.Descending:
-                    results = results.OrderByDescending(x => x.Value).ToList();break;
+                    results = results.OrderByDescending(x => x.Value).ToList(); break;
                 case OrderOptional.None:
                     break;
             }
+            user.SignTotalCount += count;
+            SQLHelper.UpdateUser(user);
+            SQLHelper.InsertGachaItem(results);
             return results;
         }
         /// <summary>
@@ -50,13 +49,14 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
         /// </summary>
         /// <param name="pool">池</param>
         /// <returns>抽卡结果</returns>
-        private static GachaItem GetGachaItem(Pool pool)
+        private static GachaItem GetGachaItem(Pool pool, ref DB_User user)
         {
-            double totalProp = 0,destProp=0;
+            double totalProp = 0, destProp = 0;
             pool.Content.ForEach(x => totalProp += x.Probablity);
             double randomNum = new Random(GetRandomSeed()).NextDouble() / 100 * totalProp;
-            foreach (var item in pool.Content){
-                if (BaodiCount == pool.BaodiCount)
+            foreach (var item in pool.Content)
+            {
+                if (user.GachaCount == pool.BaodiCount)
                 {
                     List<GachaItem> BaodiList = pool.Content.Where(x => x.IsBaodi).ToList();
                     totalProp = 0;
@@ -68,14 +68,15 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
                         destProp += baodiitem.Probablity / 100;
                         if (randomNum < destProp)
                         {
-                            BaodiCount = 1;
+                            user.GachaCount = 1;
                             return CalcGachaItemCount(baodiitem);
                         }
                     }
                 }
                 destProp += item.Probablity / 100;
-                if (randomNum < destProp){
-                    BaodiCount = item.IsBaodi ? 1 : ++BaodiCount;
+                if (randomNum < destProp)
+                {
+                    user.GachaCount = item.IsBaodi ? 1 : ++user.GachaCount;
                     return CalcGachaItemCount(item);
                 }
             }
@@ -87,7 +88,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
         private static GachaItem CalcGachaItemCount(GachaItem baodiitem)
         {
             GachaItem gachaItem = baodiitem.Clone();
-            gachaItem.Count = new Random(GetRandomSeed()).Next(gachaItem.CountFloor, gachaItem.CountUpper + 1);
+            gachaItem.Count = new Random(GetRandomSeed()).Next(gachaItem.CountFloor, gachaItem.CountCeil + 1);
             return gachaItem;
         }
         /// <summary>
@@ -106,7 +107,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
         /// </summary>
         /// <param name="gachaItems">抽卡结果，请先排好序</param>
         /// <param name="pool">抽卡的池</param>
-        public static Image DrawGachaResult(List<GachaItem> gachaItems,Pool pool)
+        public static Image DrawGachaResult(List<GachaItem> gachaItems, Pool pool)
         {
             string backgroundImagePath = Path.Combine(pool.RelativePath, pool.BackgroundImagePath);
             if (!File.Exists(backgroundImagePath))
@@ -117,8 +118,8 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
             {
                 foreach (var item in gachaItems)
                 {
-                    Image itemImage = GetGachaItemImage(item,pool.RelativePath);
-                    g.DrawImage(itemImage,new Rectangle(DrawPoint,itemImage.Size));
+                    Image itemImage = GetGachaItemImage(item, pool.RelativePath);
+                    g.DrawImage(itemImage, new Rectangle(DrawPoint, itemImage.Size));
                     if (DrawPoint.X >= pool.PoolDrawConfig.MaxX)
                     {
                         DrawPoint.X = pool.PoolDrawConfig.XChangeValue + pool.PoolDrawConfig.StartPoint.X;
@@ -130,7 +131,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
                         DrawPoint.Y += pool.PoolDrawConfig.DrawYInterval;
                     }
                 }
-            }                
+            }
             return background;
         }
         /// <summary>
@@ -138,7 +139,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
         /// </summary>
         /// <param name="item">需要生成的GachaItem</param>
         /// <param name="relativePath">池子的相对路径</param>
-        private static Image GetGachaItemImage(GachaItem item,string relativePath)
+        private static Image GetGachaItemImage(GachaItem item, string relativePath)
         {
             string bkImagePath = Path.Combine(relativePath, item.BackgroundImagePath);
             string ImagePath = Path.Combine(relativePath, item.ImagePath);

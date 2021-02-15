@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Native.Sdk.Cqp;
 using Native.Tool.IniConfig;
@@ -15,21 +16,10 @@ namespace PublicInfos
         public static CQApi CQApi { get; set; }
         public static string AppDirectory { get; set; }
         public static string ImageDirectory { get; set; }
-
-        static IniConfig configMain;
-        public static IniConfig ConfigMain
-        {
-            get
-            {
-                if (configMain != null)
-                    return configMain;
-                configMain = new IniConfig(Path.Combine(AppDirectory, "Config.ini"));
-                configMain.Load();
-                return configMain;
-            }
-            set { configMain = value; }
-        }
-
-        public static string DBPath { get; internal set; }
+        public static string DBPath { get; set; }
+        public static OrderConfig OrderConfig { get; set; }
+        public static DateTime SignResetTime { get; set; }
+        public static int SignCeil { get; set; }
+        public static int SignFloor { get; set; }
     }
 }

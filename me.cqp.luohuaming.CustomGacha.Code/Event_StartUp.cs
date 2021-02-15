@@ -1,4 +1,5 @@
-﻿using me.cqp.luohuaming.CustomGacha.Code.OrderFunctions;
+﻿using System.IO;
+using me.cqp.luohuaming.CustomGacha.Code.OrderFunctions;
 using Native.Sdk.Cqp.EventArgs;
 using Native.Sdk.Cqp.Interface;
 using PublicInfos;
@@ -13,8 +14,14 @@ namespace me.cqp.luohuaming.CustomGacha.Code
             MainSave.CQApi = e.CQApi;
             MainSave.CQLog = e.CQLog;
             MainSave.ImageDirectory = CommonHelper.GetAppImageDirectory();
+            MainSave.DBPath = Path.Combine(e.CQApi.AppDirectory, "data.db");
+            if (File.Exists(MainSave.DBPath) is false)
+            {
+                SQLHelper.CreateDB();
+            }
+            SQLHelper.LoadConfig();
             //这里写处理逻辑
-            MainSave.Instances.Add(new ExampleFunction());//这里需要将指令实例化填在这里
+            MainSave.Instances.Add(new Register());//这里需要将指令实例化填在这里
         }
     }
 }
