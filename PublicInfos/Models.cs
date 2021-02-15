@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Text;
 using Native.Sdk.Cqp.EventArgs;
 using SqlSugar;
 
@@ -127,10 +128,26 @@ namespace PublicInfos
         /// 上次签到时间
         /// </summary>
         public DateTime LastSignTime { get; set; } = new DateTime(1970, 1, 1, 0, 0, 0);
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine($"QQ号：{QQID}");
+            sb.AppendLine($"货币数：{Money}");
+            sb.AppendLine($"总抽卡次数：{GachaTotalCount}");
+            sb.AppendLine($"总消耗货币数：{MoneyTotalCount}");
+            sb.AppendLine($"总签到次数：{SignTotalCount}");
+            sb.AppendLine($"抽卡保底剩余次数：{GachaCount}");
+            sb.AppendLine($"上次签到时间：{LastSignTime}");
+            return sb.ToString();
+        }
     }
     [SugarTable("Repo")]
     public class DB_Repo
     {
+        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
+        public int RowID { get; set; }
+        public long QQID { get; set; }
         /// <summary>
         /// 物品ID
         /// </summary>
@@ -142,7 +159,7 @@ namespace PublicInfos
         /// <summary>
         /// 物品数量
         /// </summary>
-        public int ItemCount { get; set; }
+        public long ItemCount { get; set; }
         /// <summary>
         /// 物品获取时间
         /// </summary>
@@ -154,6 +171,7 @@ namespace PublicInfos
     [SugarTable("Pool")]
     public class Pool
     {
+        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
         public int PoolID { get; set; }
         /// <summary>
         /// 卡池名称
@@ -162,7 +180,7 @@ namespace PublicInfos
         /// <summary>
         /// 卡池内容
         /// </summary>
-        [SugarColumn(ColumnDataType ="blob", IsJson = true)]
+        [SugarColumn(ColumnDataType = "blob", IsJson = true)]
         public List<GachaItem> Content { get; set; } = new List<GachaItem>();
         /// <summary>
         /// 配置卡池绘制配置
@@ -188,6 +206,7 @@ namespace PublicInfos
     [SugarTable("Items")]
     public class GachaItem
     {
+        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
         public int ItemID { get; set; }
         /// <summary>
         /// 项目名称
@@ -241,9 +260,11 @@ namespace PublicInfos
         }
     }
     [SugarTable("Config")]
-    public class Config 
+    public class Config
     {
-        [SugarColumn(IsNullable =false)]
+        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
+        public int RowID { get; set; }
+        [SugarColumn(IsNullable = false)]
         public DateTime SignResetTime { get; set; }
         [SugarColumn(IsNullable = false)]
         public int SignCeil { get; set; }
@@ -253,6 +274,8 @@ namespace PublicInfos
     [SugarTable("OrderConfig")]
     public class OrderConfig
     {
+        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
+        public int RowID { get; set; }
         public string Register { get; set; }
         public string Sign { get; set; }
     }

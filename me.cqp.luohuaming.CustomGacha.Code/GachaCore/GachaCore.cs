@@ -11,12 +11,12 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
 {
     public static class GachaCore
     {
-        public static List<GachaItem> DoGacha(Pool pool, int count ,ref DB_User user)
+        public static List<GachaItem> DoGacha(Pool pool, int count, ref DB_User user)
         {
             List<GachaItem> results = new List<GachaItem>();
             for (int i = 0; i < count; i++)
             {
-                GachaItem gachaItem = GetGachaItem(pool,ref user);
+                GachaItem gachaItem = GetGachaItem(pool, ref user);
                 if (gachaItem.CanBeFolded)
                 {
                     var tmp = results.Find(x => x.Name == gachaItem.Name);
@@ -41,7 +41,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
             }
             user.SignTotalCount += count;
             SQLHelper.UpdateUser(user);
-            SQLHelper.InsertGachaItem(results);
+            SQLHelper.InsertGachaItem(results, user.QQID);
             return results;
         }
         /// <summary>

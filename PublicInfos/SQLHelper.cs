@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using SqlSugar;
 
 namespace PublicInfos
@@ -50,13 +47,12 @@ namespace PublicInfos
             using (var db = GetInstance())
             {
                 DB_User user = db.Queryable<DB_User>().First(x => x.QQID == QQID);
-                var dt = MainSave.SignResetTime;
-                if (user.LastSignTime.Year != DateTime.Now.Year //上次签到与今天不是同一天
-                    && user.LastSignTime.Month != DateTime.Now.Month
-                    && user.LastSignTime.Day != DateTime.Now.Day
-                    && user.LastSignTime.Hour >= dt.Hour //上次签到时间大于设定的签到重置
-                    && user.LastSignTime.Minute >= dt.Minute
-                    && user.LastSignTime.Second > dt.Second)
+                var t = DateTime.Now;
+                var dt = new DateTime(t.Year, t.Month, t.Day,
+                    MainSave.SignResetTime.Hour,
+                    MainSave.SignResetTime.Minute,
+                    MainSave.SignResetTime.Second);
+                if (user.LastSignTime < dt)
                 {
                     int signMoney = new Random().Next(MainSave.SignFloor, MainSave.SignCeil + 1);
                     user.Money += signMoney;
@@ -88,16 +84,24 @@ namespace PublicInfos
                 return user;
             }
         }
-        public static void InsertGachaItem(List<GachaItem> ls)
+        public static void InsertGachaItem(List<GachaItem> ls, long QQID)
         {
             using (var db = GetInstance())
             {
-                db.Insertable(ls).ExecuteCommandAsync();
+                List<DB_Repo> repoitems = new List<DB_Repo>();
+                foreach (var item in ls)
+                {
+                    repoitems.Add(new DB_Repo
+                    {
+                        QQID = QQID,
+                        ItemCount = item.Count,
+                        ItemGetTime = DateTime.Now,
+                        ItemID = item.ItemID,
+                        ItemName = item.Name
+                    });
+                }
+                db.Insertable(repoitems).ExecuteCommandAsync();
             }
-        }
-        public static void InsertGachaItem(GachaItem item)
-        {
-            InsertGachaItem(new List<GachaItem> { item });
         }
         public static void UpdateUser(DB_User user)
         {
