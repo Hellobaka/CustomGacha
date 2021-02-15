@@ -97,7 +97,10 @@ namespace PublicInfos
         None
     }
 
-    [SugarTable("User")]
+    /// <summary>
+    /// 描述用户信息
+    /// </summary>
+    [SugarTable("User")]    
     public class DB_User
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
@@ -107,6 +110,9 @@ namespace PublicInfos
         /// </summary>
         [SugarColumn(IsNullable = false)]
         public long QQID { get; set; }
+        /// <summary>
+        /// 现有的货币数
+        /// </summary>
         public long Money { get; set; } = 0;
         /// <summary>
         /// 抽卡总次数
@@ -142,6 +148,9 @@ namespace PublicInfos
             return sb.ToString();
         }
     }
+    /// <summary>
+    /// 描述仓库信息
+    /// </summary>
     [SugarTable("Repo")]
     public class DB_Repo
     {
@@ -259,24 +268,45 @@ namespace PublicInfos
             return (GachaItem)this.MemberwiseClone();
         }
     }
+    /// <summary>
+    /// 全局设置
+    /// </summary>
     [SugarTable("Config")]
     public class Config
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
         public int RowID { get; set; }
+        /// <summary>
+        /// 签到重置时间点
+        /// </summary>
         [SugarColumn(IsNullable = false)]
         public DateTime SignResetTime { get; set; }
+        /// <summary>
+        /// 签到获得的货币上限
+        /// </summary>
         [SugarColumn(IsNullable = false)]
         public int SignCeil { get; set; }
+        /// <summary>
+        /// 签到获得的货币下限
+        /// </summary>
         [SugarColumn(IsNullable = false)]
         public int SignFloor { get; set; }
     }
+    /// <summary>
+    /// 指令文本设置
+    /// </summary>
     [SugarTable("OrderConfig")]
     public class OrderConfig
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
         public int RowID { get; set; }
+        /// <summary>
+        /// 注册指令
+        /// </summary>
         public string Register { get; set; }
+        /// <summary>
+        /// 签到指令
+        /// </summary>
         public string Sign { get; set; }
     }
 }

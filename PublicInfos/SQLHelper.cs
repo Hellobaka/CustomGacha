@@ -41,7 +41,7 @@ namespace PublicInfos
         /// 进行签到
         /// </summary>
         /// <param name="QQID">QQ号</param>
-        /// <returns>签到是否成功</returns>
+        /// <returns>签到获得的货币数</returns>
         public static int Sign(long QQID)
         {
             using (var db = GetInstance())
