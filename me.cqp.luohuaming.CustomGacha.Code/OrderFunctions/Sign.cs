@@ -4,11 +4,11 @@ using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
 {
-    public class Register : IOrderModel
+    public class Sign : IOrderModel
     {
-        public string GetOrderStr() => MainSave.OrderConfig.Register;
+        public string GetOrderStr() => MainSave.OrderConfig.Sign;
 
-        public bool Judge(string destStr) => destStr.Replace("＃","#").Equals(GetOrderStr());//这里判断是否能触发指令
+        public bool Judge(string destStr) => destStr.Replace("＃", "#").Equals(GetOrderStr());//这里判断是否能触发指令
 
         public FunctionResult Progress(CQGroupMessageEventArgs e)//群聊处理
         {
@@ -21,13 +21,15 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
             {
                 SendID = e.FromGroup,
             };
-            if(SQLHelper.IDExists(e.FromQQ))
+            int signMoney = SQLHelper.Sign(e.FromQQ);
+            if (signMoney > 0)
             {
-                sendText.MsgToSend.Add($"{e.FromQQ.CQCode_At()} 注册重复");
-                return result;
+                sendText.MsgToSend.Add($"{e.FromQQ.CQCode_At()} 签到成功, 获得 {signMoney} 通用货币");
             }
-            var c = SQLHelper.Register(e.FromQQ);
-            sendText.MsgToSend.Add($"{e.FromQQ.CQCode_At()} 注册成功，初始货币{c.Money}");
+            else
+            {
+                sendText.MsgToSend.Add($"{e.FromQQ.CQCode_At()} 重复签到");
+            }
             result.SendObject.Add(sendText);
             return result;
         }

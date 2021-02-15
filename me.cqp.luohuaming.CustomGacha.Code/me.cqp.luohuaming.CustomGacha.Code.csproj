@@ -66,6 +66,7 @@
     <Compile Include="Event_GroupMessage.cs" />
     <Compile Include="Event_StartUp.cs" />
     <Compile Include="GachaCore\GachaCore.cs" />
+    <Compile Include="OrderFunctions\Sign.cs" />
     <Compile Include="OrderFunctions\Example.cs" />
     <Compile Include="OrderFunctions\Register.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

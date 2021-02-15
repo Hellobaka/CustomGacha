@@ -20,8 +20,8 @@ namespace me.cqp.luohuaming.CustomGacha.Code
                 SQLHelper.CreateDB();
             }
             SQLHelper.LoadConfig();
-            //这里写处理逻辑
             MainSave.Instances.Add(new Register());//这里需要将指令实例化填在这里
+            MainSave.Instances.Add(new Sign());
         }
     }
 }

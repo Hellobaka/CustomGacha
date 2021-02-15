@@ -15,6 +15,11 @@ namespace me.cqp.luohuaming.CustomGacha.Code
             };
             try
             {
+                if (SQLHelper.IDExists(e.FromQQ) is false 
+                    && e.Message.Text.Replace("＃", "#").Equals(MainSave.OrderConfig.Register) is false)
+                {
+                    return result;
+                }
                 foreach (var item in MainSave.Instances.Where(item => item.Judge(e.Message.Text)))
                 {
                     return item.Progress(e);

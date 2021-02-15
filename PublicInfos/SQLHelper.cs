@@ -45,7 +45,7 @@ namespace PublicInfos
         /// </summary>
         /// <param name="QQID">QQ号</param>
         /// <returns>签到是否成功</returns>
-        public static bool Sign(long QQID)
+        public static int Sign(long QQID)
         {
             using (var db = GetInstance())
             {
@@ -63,9 +63,9 @@ namespace PublicInfos
                     user.SignTotalCount++;
                     user.LastSignTime = DateTime.Now;
                     db.Updateable(user).ExecuteCommand();
-                    return true;
+                    return signMoney;
                 }
-                return false;
+                return -1;
             }
         }
         public static bool IDExists(long QQID)
@@ -111,6 +111,13 @@ namespace PublicInfos
             using (var db = GetInstance())
             {
                 return db.Queryable<DB_User>().First(x => x.QQID == QQID);
+            }
+        }
+        public static long GetMoney(long QQID)
+        {
+            using (var db = GetInstance())
+            {
+                return db.Queryable<DB_User>().First(x => x.QQID == QQID).Money;
             }
         }
         public static void LoadConfig()
