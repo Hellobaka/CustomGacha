@@ -4,9 +4,60 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:me.cqp.luohuaming.PLUGINNAME.UI"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        Height="700"
+        Width="1200"
+        WindowStartupLocation="CenterScreen"
+        Loaded="Window_Loaded">
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <StackPanel Margin="5">
+            <ScrollViewer>
+                <ListBox x:Name="Pools"
+                         PreviewMouseDown="Pools_MouseDown"
+                         DisplayMemberPath="Name"
+                         ItemsSource="{Binding Pools, Mode=TwoWay}"
+                         SelectionChanged="Pools_SelectionChanged"
+                         ScrollViewer.CanContentScroll="True"
+                         ScrollViewer.PanningMode="VerticalFirst">
+                </ListBox>
+            </ScrollViewer>
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Center">
+                <Button Tag="Add"
+                        Command="{Binding AddPool}">Add</Button>
+                <Button Tag="Delete"
+                        Command="{Binding DeletePool}">Delete</Button>
+            </StackPanel>
+
+        </StackPanel>
+        <StackPanel Grid.Row="1">
+            <ListBox x:Name="Content"
+                     Margin="5"
+                     MouseDoubleClick="Content_MouseDoubleClick"
+                     SelectionChanged="Content_SelectionChanged" />
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Bottom"
+                        HorizontalAlignment="Center">
+                <Button Tag="Add">Add</Button>
+                <Button Tag="Clear">Clear</Button>
+            </StackPanel>
+        </StackPanel>
+        <ScrollViewer Grid.Column="1"
+                      Grid.RowSpan="2">
+            <StackPanel Margin="5">
+                <hc:PropertyGrid x:Name="PropertyEdit" />
+            </StackPanel>
+        </ScrollViewer>
     </Grid>
 </Window>

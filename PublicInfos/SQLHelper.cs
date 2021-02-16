@@ -124,6 +124,28 @@ namespace PublicInfos
                 return db.Queryable<DB_User>().First(x => x.QQID == QQID).Money;
             }
         }
+        public static List<Pool> GetAllPools()
+        {
+            using (var db = GetInstance())
+            {
+                return db.Queryable<Pool>().ToList();
+            }
+        }
+        public static void AddPool(Pool pool)
+        {
+            using (var db = GetInstance())
+            {
+                if (db.Queryable<Pool>().Any(x => x.PoolID == pool.PoolID) is false)
+                    db.Insertable(pool).ExecuteCommand();
+            }
+        }
+        public static void RemovePool(Pool pool)
+        {
+            using (var db = GetInstance())
+            {
+                db.Deleteable(pool).ExecuteCommand();
+            }
+        }
         public static void LoadConfig()
         {
             using (var db = GetInstance())

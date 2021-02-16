@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Text;
 using Native.Sdk.Cqp.EventArgs;
+using Newtonsoft.Json;
 using SqlSugar;
 
 namespace PublicInfos
@@ -49,6 +51,10 @@ namespace PublicInfos
     /// </summary>
     public class PoolDrawConfig
     {
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
         /// <summary>
         /// 绘制的起点坐标
         /// </summary>
@@ -182,32 +188,46 @@ namespace PublicInfos
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
         public int PoolID { get; set; }
+        [Category("AAA")]
         /// <summary>
         /// 卡池名称
         /// </summary>
-        public string Name { get; set; }
+        public string Name { get; set; } = "";
+        /// <summary>
+        /// 单抽指令
+        /// </summary>
+        public string SingalGachaOrder { get; set; } = "#单抽指令";
+        /// <summary>
+        /// 十连指令
+        /// </summary>
+        public string MultiOrder { get; set; } = "#多抽指令";
+        public int MultiGachaNumber { get; set; } = 10;
         /// <summary>
         /// 卡池内容
         /// </summary>
-        [SugarColumn(ColumnDataType = "blob", IsJson = true)]
+        [SugarColumn(ColumnDataType = "Text", IsJson = true)]
         public List<GachaItem> Content { get; set; } = new List<GachaItem>();
         /// <summary>
         /// 配置卡池绘制配置
         /// </summary>
-        [SugarColumn(ColumnDataType = "blob", IsJson = true)]
-        public PoolDrawConfig PoolDrawConfig { get; set; }
+        [SugarColumn(ColumnDataType = "Text", IsJson = true)]
+        public PoolDrawConfig PoolDrawConfig { get; set; } = new PoolDrawConfig();
         /// <summary>
         /// 保底所需要的次数
         /// </summary>
-        public int BaodiCount { get; set; }
+        public int BaodiCount { get; set; } = 10;
         /// <summary>
         /// 卡池背景图片相对路径
         /// </summary>
-        public string BackgroundImagePath { get; set; }
+        public string BackgroundImagePath { get; set; } = "";
         /// <summary>
         /// 自动设置相对路径
         /// </summary>
-        public string RelativePath { get; set; }
+        public string RelativePath { get; set; } = "";
+        public override string ToString()
+        {
+            return Name;
+        }
     }
     /// <summary>
     /// 描述抽卡子项目的模型类

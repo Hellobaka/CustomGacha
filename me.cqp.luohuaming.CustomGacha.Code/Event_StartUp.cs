@@ -20,6 +20,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code
                 SQLHelper.CreateDB();
             }
             SQLHelper.LoadConfig();
+            MainSave.PoolInstances = SQLHelper.GetAllPools();
             MainSave.Instances.Add(new Register());//这里需要将指令实例化填在这里
             MainSave.Instances.Add(new Sign());
         }

@@ -169,11 +169,5 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
                 return destBitmap;
             }
         }
-        public static Pool LoadPool(string path)
-        {
-            Pool destPool = JsonConvert.DeserializeObject<Pool>(File.ReadAllText(path));
-            destPool.RelativePath = Path.GetDirectoryName(path);
-            return destPool;
-        }
     }
 }

@@ -21,5 +21,6 @@ namespace PublicInfos
         public static DateTime SignResetTime { get; set; }
         public static int SignCeil { get; set; }
         public static int SignFloor { get; set; }
+        public static List<Pool> PoolInstances { get; set; } 
     }
 }
