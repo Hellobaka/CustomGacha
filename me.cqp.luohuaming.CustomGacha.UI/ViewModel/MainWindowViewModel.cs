@@ -12,7 +12,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
     class MainWindowViewModel : NotifyicationObject
     {
         private ObservableCollection<Pool> pools;
-        private ObservableCollection<GachaItem> gachaItems;
 
         public ObservableCollection<Pool> Pools
         {
@@ -25,12 +24,27 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         }
         private Pool selectPool;
 
+        private ObservableCollection<GachaItem> gachaItems;
+        public ObservableCollection<GachaItem> GachaItems
+        {
+            get { return gachaItems; }
+            set
+            {
+                gachaItems = value;
+                this.RaisePropertyChanged("GachaItems");
+            }
+        }
+
+
         public Pool SelectPool
         {
             get { return selectPool; }
             set
             {
+                SQLHelper.UpdatePool(selectPool);
                 selectPool = value;
+                GachaItems.Clear();
+                selectPool.Content.ForEach(x => GachaItems.Add(x));
                 this.RaisePropertyChanged("SelectPool");
             }
         }
@@ -51,6 +65,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             if (MainSave.PoolInstances == null)
                 MainSave.PoolInstances = SQLHelper.GetAllPools();
             Pools = new ObservableCollection<Pool>();
+            GachaItems = new ObservableCollection<GachaItem>();
             MainSave.PoolInstances.ForEach(x => Pools.Add(x));
             AddPool = new DelegateCommand
             {
@@ -59,6 +74,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             DeletePool = new DelegateCommand
             {
                 ExecuteAction = new Action<object>(deletePool)
+            };
+            AddGachaItem = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(addGachaItem)
             };
         }
         public DelegateCommand AddPool { get; set; }
@@ -79,6 +98,18 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             Pools.Remove(SelectPool);
             SQLHelper.RemovePool(SelectPool);
             SelectPool = null;
+        }
+        public DelegateCommand AddGachaItem { get; set; }
+        private void addGachaItem(object peremeter)
+        {
+            if (SelectPool == null)
+                return;
+            var c = new GachaItem
+            {
+                Name="示例项目"
+            };
+            GachaItems.Add(c);
+            SelectPool.Content.Add(c);
         }
     }
 }

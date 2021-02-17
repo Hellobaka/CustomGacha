@@ -113,7 +113,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
             if (!File.Exists(backgroundImagePath))
                 throw new FileNotFoundException($"池子的背景图片文件不存在，在池{pool.Name}中 路径{backgroundImagePath}");
             Image background = Image.FromFile(backgroundImagePath);
-            Point DrawPoint = pool.PoolDrawConfig.StartPoint;
+            Point DrawPoint = new Point(pool.PoolDrawConfig.StartPointX, pool.PoolDrawConfig.StartPointY);
             using (Graphics g = Graphics.FromImage(background))
             {
                 foreach (var item in gachaItems)
@@ -122,8 +122,8 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
                     g.DrawImage(itemImage, new Rectangle(DrawPoint, itemImage.Size));
                     if (DrawPoint.X >= pool.PoolDrawConfig.MaxX)
                     {
-                        DrawPoint.X = pool.PoolDrawConfig.XChangeValue + pool.PoolDrawConfig.StartPoint.X;
-                        DrawPoint.Y = pool.PoolDrawConfig.YChangeValue + pool.PoolDrawConfig.StartPoint.Y;
+                        DrawPoint.X = pool.PoolDrawConfig.XChangeValue + pool.PoolDrawConfig.StartPointX;
+                        DrawPoint.Y = pool.PoolDrawConfig.YChangeValue + pool.PoolDrawConfig.StartPointY;
                     }
                     else
                     {
@@ -147,16 +147,16 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
             if (!File.Exists(ImagePath))
                 throw new FileNotFoundException($"卡片的图片文件不存在，在卡 {item.Name} 中 路径{ImagePath}");
             Image DestImage = Image.FromFile(ImagePath);
-            Point DrawPoint = item.ImageConfig.ImagePoint;
+            Point DrawPoint = new Point(item.ImageConfig.ImagePointX, item.ImageConfig.ImagePointY);
             if (!string.IsNullOrEmpty(item.BackgroundImagePath))
             {
                 Image background = Image.FromFile(bkImagePath);
-                Bitmap backgroundResize = new Bitmap(background, item.ImageConfig.BackgroundImageSize);
+                Bitmap backgroundResize = new Bitmap(background, new Size(item.ImageConfig.BackgroundImageWidth, item.ImageConfig.BackgroundImageHeight));
                 using (Graphics g = Graphics.FromImage(item.ImageConfig.DrawOrder == DrawOrder.ImageAboveBackground ?
                          backgroundResize : DestImage))
                 {
                     g.DrawImage(item.ImageConfig.DrawOrder == DrawOrder.ImageAboveBackground ?
-                        DestImage : backgroundResize, new Rectangle(DrawPoint, item.ImageConfig.ImageSize));
+                        DestImage : backgroundResize, new Rectangle(DrawPoint, new Size(item.ImageConfig.ImageWidth, item.ImageConfig.ImageHeight)));
                 }
                 background.Dispose();
                 DestImage.Dispose();
@@ -164,7 +164,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
             }
             else
             {
-                Bitmap destBitmap = new Bitmap(DestImage, item.ImageConfig.ImageSize);
+                Bitmap destBitmap = new Bitmap(DestImage, new Size(item.ImageConfig.ImageWidth, item.ImageConfig.ImageHeight));
                 DestImage.Dispose();
                 return destBitmap;
             }

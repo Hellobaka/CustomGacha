@@ -139,6 +139,15 @@ namespace PublicInfos
                     db.Insertable(pool).ExecuteCommand();
             }
         }
+        public static void UpdatePool(Pool pool)
+        {
+            if (pool == null)
+                return;
+            using (var db = GetInstance())
+            {
+                db.Updateable(pool).ExecuteCommand();
+            }
+        }
         public static void RemovePool(Pool pool)
         {
             using (var db = GetInstance())

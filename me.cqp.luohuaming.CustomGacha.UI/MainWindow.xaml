@@ -10,7 +10,7 @@
         Height="700"
         Width="1200"
         WindowStartupLocation="CenterScreen"
-        Loaded="Window_Loaded">
+        KeyDown="Window_KeyDown">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*" />
@@ -20,44 +20,60 @@
             <RowDefinition />
             <RowDefinition />
         </Grid.RowDefinitions>
-        <StackPanel Margin="5">
-            <ScrollViewer>
-                <ListBox x:Name="Pools"
-                         PreviewMouseDown="Pools_MouseDown"
-                         DisplayMemberPath="Name"
-                         ItemsSource="{Binding Pools, Mode=TwoWay}"
-                         SelectionChanged="Pools_SelectionChanged"
-                         ScrollViewer.CanContentScroll="True"
-                         ScrollViewer.PanningMode="VerticalFirst">
-                </ListBox>
-            </ScrollViewer>
+        <Grid Margin="5">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="9*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
+            <ListBox x:Name="Pools"
+                     MouseDoubleClick="ListBox_MouseDoubleClick"
+                     DisplayMemberPath="Name"
+                     ItemsSource="{Binding Pools, Mode=TwoWay}"
+                     SelectionChanged="Pools_SelectionChanged"
+                     SelectionMode="Single">
+            </ListBox>
             <StackPanel Orientation="Horizontal"
                         VerticalAlignment="Bottom"
-                        HorizontalAlignment="Center">
+                        HorizontalAlignment="Center"
+                        Grid.Row="1"
+                        Height="30"
+                        Width="105">
                 <Button Tag="Add"
                         Command="{Binding AddPool}">Add</Button>
                 <Button Tag="Delete"
                         Command="{Binding DeletePool}">Delete</Button>
             </StackPanel>
 
-        </StackPanel>
-        <StackPanel Grid.Row="1">
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="9*" />
+                <RowDefinition Height="1*" />
+            </Grid.RowDefinitions>
             <ListBox x:Name="Content"
-                     Margin="5"
-                     MouseDoubleClick="Content_MouseDoubleClick"
-                     SelectionChanged="Content_SelectionChanged" />
+                     MouseDoubleClick="ListBox_MouseDoubleClick"
+                     DisplayMemberPath="Name"
+                     SelectionChanged="Pools_SelectionChanged"
+                     ItemsSource="{Binding GachaItems, Mode=TwoWay}"
+                     SelectionMode="Single" />
             <StackPanel Orientation="Horizontal"
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Center">
-                <Button Tag="Add">Add</Button>
-                <Button Tag="Clear">Clear</Button>
+                        HorizontalAlignment="Center"
+                        Grid.Row="1">
+                <Button Tag="Add"
+                        Command="{Binding AddGachaItem}">Add</Button>
+                <Button Tag="Clear">Delete</Button>
             </StackPanel>
-        </StackPanel>
-        <ScrollViewer Grid.Column="1"
-                      Grid.RowSpan="2">
-            <StackPanel Margin="5">
+        </Grid>
+        <Grid Grid.Column="1"
+              Grid.RowSpan="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <TextBlock Margin="5">按F4快捷呼起文件选择对话框</TextBlock>
+            <ScrollViewer Grid.Row="1">
                 <hc:PropertyGrid x:Name="PropertyEdit" />
-            </StackPanel>
-        </ScrollViewer>
+            </ScrollViewer>
+        </Grid>
     </Grid>
 </Window>

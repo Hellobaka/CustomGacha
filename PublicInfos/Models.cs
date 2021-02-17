@@ -21,19 +21,29 @@ namespace PublicInfos
         /// <summary>
         /// 核心图片绘制大小
         /// </summary>
-        public Size ImageSize { get; set; }
+        [Category("核心图片绘制尺寸")]
+        public int ImageWidth { get; set; }
+        [Category("核心图片绘制尺寸")]
+        public int ImageHeight { get; set; }
         /// <summary>
         /// 背景图片绘制大小
         /// </summary>
-        public Size BackgroundImageSize { get; set; }
+        [Category("背景图片绘制尺寸")]
+        public int BackgroundImageWidth { get; set; }
+        [Category("背景图片绘制尺寸")]
+        public int BackgroundImageHeight { get; set; }
         /// <summary>
         /// 背景与核心图片绘制顺序
         /// </summary>
+        [Category("背景与核心图片绘制顺序")]
         public DrawOrder DrawOrder { get; set; }
         /// <summary>
         /// 核心图片相对于背景的偏移坐标
         /// </summary>
-        public Point ImagePoint { get; set; }
+        [Category("核心图片相对于背景的偏移")]
+        public int ImagePointX { get; set; }
+        [Category("核心图片相对于背景的偏移")]
+        public int ImagePointY { get; set; }
     }
     public enum DrawOrder
     {
@@ -58,30 +68,39 @@ namespace PublicInfos
         /// <summary>
         /// 绘制的起点坐标
         /// </summary>
-        public Point StartPoint { get; set; }
+        [Category("起始坐标")]
+        public int StartPointX { get; set; }
+        [Category("起始坐标")]
+        public int StartPointY { get; set; }
         /// <summary>
         /// 每个项目之间的X坐标间隔
         /// </summary>
+        [Category("绘制间隔")]
         public int DrawXInterval { get; set; }
         /// <summary>
         /// 每个项目之间的Y坐标间隔
         /// </summary>
+        [Category("绘制间隔")]
         public int DrawYInterval { get; set; }
         /// <summary>
         /// 大于等于此值将会换行
         /// </summary>
+        [Category("换行临界值")]
         public int MaxX { get; set; }
         /// <summary>
         /// 换行之后Y坐标变化值，请不考虑图片大小
         /// </summary>
+        [Category("换行偏移")]
         public int YChangeValue { get; set; }
         /// <summary>
         /// 换行之后X坐标变化值
         /// </summary>
+        [Category("换行偏移")]
         public int XChangeValue { get; set; }
         /// <summary>
         /// 抽卡结束之后按价值的排序方式
         /// </summary>
+        [Category("排序方式")]
         public OrderOptional OrderOptional { get; set; }
     }
     /// <summary>
@@ -106,7 +125,7 @@ namespace PublicInfos
     /// <summary>
     /// 描述用户信息
     /// </summary>
-    [SugarTable("User")]    
+    [SugarTable("User")]
     public class DB_User
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
@@ -187,42 +206,54 @@ namespace PublicInfos
     public class Pool
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
+        [Browsable(false)]
         public int PoolID { get; set; }
-        [Category("AAA")]
         /// <summary>
         /// 卡池名称
         /// </summary>
+        [Category("基本属性")]
         public string Name { get; set; } = "";
         /// <summary>
         /// 单抽指令
         /// </summary>
+        [Category("指令")]
         public string SingalGachaOrder { get; set; } = "#单抽指令";
         /// <summary>
-        /// 十连指令
+        /// 多抽指令
         /// </summary>
+        [Category("指令")]
         public string MultiOrder { get; set; } = "#多抽指令";
+        /// <summary>
+        /// 多抽抽取次数
+        /// </summary>
+        [Category("数值")]
         public int MultiGachaNumber { get; set; } = 10;
         /// <summary>
         /// 卡池内容
         /// </summary>
         [SugarColumn(ColumnDataType = "Text", IsJson = true)]
+        [Browsable(false)]
         public List<GachaItem> Content { get; set; } = new List<GachaItem>();
         /// <summary>
         /// 配置卡池绘制配置
         /// </summary>
         [SugarColumn(ColumnDataType = "Text", IsJson = true)]
+        [Category("绘制配置")]
         public PoolDrawConfig PoolDrawConfig { get; set; } = new PoolDrawConfig();
         /// <summary>
         /// 保底所需要的次数
         /// </summary>
+        [Category("数值")]
         public int BaodiCount { get; set; } = 10;
         /// <summary>
         /// 卡池背景图片相对路径
         /// </summary>
+        [Category("路径")]
         public string BackgroundImagePath { get; set; } = "";
         /// <summary>
         /// 自动设置相对路径
         /// </summary>
+        [Category("路径")]
         public string RelativePath { get; set; } = "";
         public override string ToString()
         {
@@ -236,52 +267,63 @@ namespace PublicInfos
     public class GachaItem
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
+        [Browsable(false)]
         public int ItemID { get; set; }
         /// <summary>
         /// 项目名称
         /// </summary>
+        [Category("基本属性")]
         public string Name { get; set; }
         /// <summary>
         /// 项目概率
         /// </summary>
+        [Category("数值")]
         public double Probablity { get; set; }
         /// <summary>
         /// 图片相对路径
         /// </summary>
+        [Category("路径")]
         public string ImagePath { get; set; }
         /// <summary>
         /// 背景图片相对路径
         /// </summary>
+        [Category("路径")]
         public string BackgroundImagePath { get; set; }
         /// <summary>
         /// 是否为保底项目
         /// </summary>
+        [Category("数值")]
         public bool IsBaodi { get; set; }
         /// <summary>
         /// 表示当前项目的数量
         /// </summary>
+        [Category("数值")]
         public long Count { get; set; }
         /// <summary>
         /// 最高数量
         /// </summary>
+        [Category("数值")]
         public int CountCeil { get; set; }
         /// <summary>
         /// 最低数量
         /// </summary>
+        [Category("数值")]
         public int CountFloor { get; set; }
         /// <summary>
         /// 是否能被折叠
         /// </summary>
+        [Category("数值")]
         public bool CanBeFolded { get; set; }
         /// <summary>
         /// 卡片价值，影响后续排序
         /// </summary>
+        [Category("数值")]
         public int Value { get; set; }
         /// <summary>
         /// 图片与背景之间的绘制关系
         /// </summary>
-        [SugarColumn(ColumnDataType = "blob", IsJson = true)]
-        public ItemDrawConfig ImageConfig { get; set; }
+        [SugarColumn(ColumnDataType = "Text", IsJson = true)]
+        public ItemDrawConfig ImageConfig { get; set; } = new ItemDrawConfig();
 
         public GachaItem Clone()
         {
