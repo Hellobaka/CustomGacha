@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using me.cqp.luohuaming.CustomGacha.UI.ViewModel;
@@ -49,7 +50,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI
                 PropertyEdit.SelectedObject = c;
             }
         }
-        private string filePath = "";
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
             if (!(Keyboard.FocusedElement is TextBox textBox))
@@ -58,12 +58,36 @@ namespace me.cqp.luohuaming.CustomGacha.UI
             {
                 OpenFileDialog dialog = new OpenFileDialog
                 {
-                    InitialDirectory = filePath,
+                    InitialDirectory = MainWindowViewModel.GetSelectPool().RelativePath,
                     Filter = "图像文件|*.jpg;*.png"
                 };
                 dialog.ShowDialog();
-                filePath = dialog.FileName;
-                textBox.Text = dialog.FileName;
+                textBox.Text = dialog.FileName.Replace(dialog.InitialDirectory, "");
+            }
+            else if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+            {
+                switch (e.Key)
+                {
+                    case Key.S:
+                        var c = PropertyEdit.SelectedObject;
+                        if (c is Pool)
+                        {
+                            SQLHelper.UpdatePool(c as Pool);
+                        }
+                        else if (c is GachaItem)
+                        {
+                            SQLHelper.UpdatePool(MainSave.PoolInstances[Pools.SelectedIndex]);
+                            SQLHelper.InsertOrUpdateGachaItem(c as GachaItem);
+                        }
+                        else
+                        {
+                            return;
+                        }
+                        Helper.ShowGrowlMsg("项目已保存");
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }

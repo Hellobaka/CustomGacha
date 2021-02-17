@@ -65,7 +65,6 @@
   <ItemGroup>
     <Compile Include="Event_GroupMessage.cs" />
     <Compile Include="Event_StartUp.cs" />
-    <Compile Include="GachaCore\GachaCore.cs" />
     <Compile Include="OrderFunctions\MultiGacha.cs" />
     <Compile Include="OrderFunctions\SingalGacha.cs" />
     <Compile Include="OrderFunctions\Sign.cs" />
@@ -90,6 +89,9 @@
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="GachaCore\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

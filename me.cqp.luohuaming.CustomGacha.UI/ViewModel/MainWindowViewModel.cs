@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using HandyControl.Controls;
 using me.cqp.luohuaming.CustomGacha.UI.Command;
 using PublicInfos;
 
@@ -22,7 +19,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 this.RaisePropertyChanged("Pools");
             }
         }
-        private Pool selectPool;
 
         private ObservableCollection<GachaItem> gachaItems;
         public ObservableCollection<GachaItem> GachaItems
@@ -35,6 +31,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             }
         }
 
+        private static Pool selectPool;
 
         public Pool SelectPool
         {
@@ -44,9 +41,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 SQLHelper.UpdatePool(selectPool);
                 selectPool = value;
                 GachaItems.Clear();
-                selectPool.Content.ForEach(x => GachaItems.Add(x));
                 this.RaisePropertyChanged("SelectPool");
+                if (value != null)
+                    selectPool.Content.ForEach(x => GachaItems.Add(x));
             }
+        }
+        public static Pool GetSelectPool()
+        {
+            return selectPool;
         }
         private GachaItem selectGachaItem;
 
@@ -79,11 +81,23 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             {
                 ExecuteAction = new Action<object>(addGachaItem)
             };
+            DeleteGachaItem = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(deleteGachaItem)
+            };
+            CopyGachaItem = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(copyGachaItem)
+            };
+            PoolDrawTest = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(poolDrawTest)
+            };
         }
         public DelegateCommand AddPool { get; set; }
         private void addPool(object parameter)
         {
-            var c =new Pool
+            var c = new Pool
             {
                 Name = "新池子"
             };
@@ -106,10 +120,38 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 return;
             var c = new GachaItem
             {
-                Name="示例项目"
+                Name = "示例项目"
             };
             GachaItems.Add(c);
             SelectPool.Content.Add(c);
+            c.ItemID = SQLHelper.InsertOrUpdateGachaItem(c);
+        }
+        public DelegateCommand DeleteGachaItem { get; set; }
+        private void deleteGachaItem(object peremeter)
+        {
+            SelectPool.Content.Remove(SelectGachaItem);
+            GachaItems.Remove(SelectGachaItem);
+            SQLHelper.RemoveGachaItem(SelectGachaItem);
+            SelectGachaItem = null;
+        }
+        public DelegateCommand CopyGachaItem { get; set; }
+        private void copyGachaItem(object peremeter)
+        {
+            if (SelectGachaItem == null)
+                return;
+            var c = SelectGachaItem.Clone();
+            c.ItemID = 0;
+            GachaItems.Add(c);
+            SelectPool.Content.Add(c);
+            c.ItemID = SQLHelper.InsertOrUpdateGachaItem(c);
+        }
+        public DelegateCommand PoolDrawTest { get; set; }
+        private void poolDrawTest(object peremeter)
+        {
+            var c = GachaCore.DoGacha(SelectPool, SelectPool.MultiGachaNumber);
+            string filename = Guid.NewGuid().ToString() + ".jpg";
+            GachaCore.DrawGachaResult(c, SelectPool).Save(filename);
+            new ImageBrowser(filename).Show();
         }
     }
 }

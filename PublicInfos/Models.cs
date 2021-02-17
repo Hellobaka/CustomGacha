@@ -268,7 +268,7 @@ namespace PublicInfos
     {
         [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
         [Browsable(false)]
-        public int ItemID { get; set; }
+        public int ItemID { get; set; } = 0;
         /// <summary>
         /// 项目名称
         /// </summary>
@@ -278,47 +278,47 @@ namespace PublicInfos
         /// 项目概率
         /// </summary>
         [Category("数值")]
-        public double Probablity { get; set; }
+        public double Probablity { get; set; } = 0;
         /// <summary>
         /// 图片相对路径
         /// </summary>
         [Category("路径")]
-        public string ImagePath { get; set; }
+        public string ImagePath { get; set; } = "";
         /// <summary>
         /// 背景图片相对路径
         /// </summary>
         [Category("路径")]
-        public string BackgroundImagePath { get; set; }
+        public string BackgroundImagePath { get; set; } = "";
         /// <summary>
         /// 是否为保底项目
         /// </summary>
         [Category("数值")]
-        public bool IsBaodi { get; set; }
+        public bool IsBaodi { get; set; } = false;
         /// <summary>
         /// 表示当前项目的数量
         /// </summary>
         [Category("数值")]
-        public long Count { get; set; }
+        public long Count { get; set; } = 0;
         /// <summary>
         /// 最高数量
         /// </summary>
         [Category("数值")]
-        public int CountCeil { get; set; }
+        public int CountCeil { get; set; } = 0;
         /// <summary>
         /// 最低数量
         /// </summary>
         [Category("数值")]
-        public int CountFloor { get; set; }
+        public int CountFloor { get; set; } = 0;
         /// <summary>
         /// 是否能被折叠
         /// </summary>
         [Category("数值")]
-        public bool CanBeFolded { get; set; }
+        public bool CanBeFolded { get; set; } = false;
         /// <summary>
         /// 卡片价值，影响后续排序
         /// </summary>
         [Category("数值")]
-        public int Value { get; set; }
+        public int Value { get; set; } = 0;
         /// <summary>
         /// 图片与背景之间的绘制关系
         /// </summary>

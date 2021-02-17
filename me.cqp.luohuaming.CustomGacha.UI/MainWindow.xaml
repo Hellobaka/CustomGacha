@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:me.cqp.luohuaming.PLUGINNAME.UI"
         xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:controls="clr-namespace:HandyControl.Controls;assembly=HandyControl"
         mc:Ignorable="d"
         Title="MainWindow"
         Height="700"
@@ -13,8 +14,8 @@
         KeyDown="Window_KeyDown">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
             <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="4*" />
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -35,17 +36,17 @@
             <StackPanel Orientation="Horizontal"
                         VerticalAlignment="Bottom"
                         HorizontalAlignment="Center"
-                        Grid.Row="1"
-                        Height="30"
-                        Width="105">
+                        Grid.Row="1">
                 <Button Tag="Add"
                         Command="{Binding AddPool}">Add</Button>
                 <Button Tag="Delete"
                         Command="{Binding DeletePool}">Delete</Button>
+                <Button Command="{Binding PoolDrawTest}">Test</Button>
             </StackPanel>
 
         </Grid>
-        <Grid Grid.Row="1">
+        <Grid Grid.Row="1"
+              Margin="5">
             <Grid.RowDefinitions>
                 <RowDefinition Height="9*" />
                 <RowDefinition Height="1*" />
@@ -61,7 +62,9 @@
                         Grid.Row="1">
                 <Button Tag="Add"
                         Command="{Binding AddGachaItem}">Add</Button>
-                <Button Tag="Clear">Delete</Button>
+                <Button Tag="Delete"
+                        Command="{Binding DeleteGachaItem}">Delete</Button>
+                <Button Command="{Binding CopyGachaItem}">Copy</Button>
             </StackPanel>
         </Grid>
         <Grid Grid.Column="1"
@@ -70,10 +73,16 @@
                 <RowDefinition Height="Auto" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <TextBlock Margin="5">按F4快捷呼起文件选择对话框</TextBlock>
+            <TextBlock Margin="5"><Run Text="按F4快捷呼起文件选择对话框 RelativePath 请手动填写" /></TextBlock>
             <ScrollViewer Grid.Row="1">
-                <hc:PropertyGrid x:Name="PropertyEdit" />
+                <controls:PropertyGrid x:Name="PropertyEdit" />
             </ScrollViewer>
         </Grid>
+        <StackPanel HorizontalAlignment="Right"
+                    controls:Growl.GrowlParent="True"
+                    VerticalAlignment="Top"
+                    Margin="0,10,10,10"
+                    Grid.Column="2"
+                    Grid.RowSpan="2" />
     </Grid>
 </Window>

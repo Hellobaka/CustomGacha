@@ -1,22 +1,20 @@
-﻿using Newtonsoft.Json;
-using PublicInfos;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 
-namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
+namespace PublicInfos
 {
     public static class GachaCore
     {
-        public static List<GachaItem> DoGacha(Pool pool, int count, ref DB_User user)
+        public static List<GachaItem> DoGacha(Pool pool, int count, int gachaCount = 1)
         {
             List<GachaItem> results = new List<GachaItem>();
             for (int i = 0; i < count; i++)
             {
-                GachaItem gachaItem = GetGachaItem(pool, ref user);
+                GachaItem gachaItem = GetGachaItem(pool, gachaCount);
                 if (gachaItem.CanBeFolded)
                 {
                     var tmp = results.Find(x => x.Name == gachaItem.Name);
@@ -39,9 +37,11 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
                 case OrderOptional.None:
                     break;
             }
-            user.SignTotalCount += count;
-            SQLHelper.UpdateUser(user);
-            SQLHelper.InsertGachaItem(results, user.QQID);
+            //TODO: 抽卡命令处写入数据库，保持模块功能单一
+            //TODO: 根据结果更新用户剩余保底数
+            //user.SignTotalCount += count;            
+            //SQLHelper.UpdateUser(user);
+            //SQLHelper.InsertGachaItem(results, user.QQID);
             return results;
         }
         /// <summary>
@@ -49,14 +49,14 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
         /// </summary>
         /// <param name="pool">池</param>
         /// <returns>抽卡结果</returns>
-        private static GachaItem GetGachaItem(Pool pool, ref DB_User user)
+        private static GachaItem GetGachaItem(Pool pool, int gachaCount = 1)
         {
             double totalProp = 0, destProp = 0;
             pool.Content.ForEach(x => totalProp += x.Probablity);
             double randomNum = new Random(GetRandomSeed()).NextDouble() / 100 * totalProp;
             foreach (var item in pool.Content)
             {
-                if (user.GachaCount == pool.BaodiCount)
+                if (gachaCount == pool.BaodiCount)
                 {
                     List<GachaItem> BaodiList = pool.Content.Where(x => x.IsBaodi).ToList();
                     totalProp = 0;
@@ -68,7 +68,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
                         destProp += baodiitem.Probablity / 100;
                         if (randomNum < destProp)
                         {
-                            user.GachaCount = 1;
+                            gachaCount = 1;
                             return CalcGachaItemCount(baodiitem);
                         }
                     }
@@ -76,7 +76,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code.GachaCore
                 destProp += item.Probablity / 100;
                 if (randomNum < destProp)
                 {
-                    user.GachaCount = item.IsBaodi ? 1 : ++user.GachaCount;
+                    gachaCount = item.IsBaodi ? 1 : ++gachaCount;
                     return CalcGachaItemCount(item);
                 }
             }

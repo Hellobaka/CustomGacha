@@ -87,6 +87,7 @@
   <ItemGroup>
     <Compile Include="CommonHelper.cs" />
     <Compile Include="FunctionResult.cs" />
+    <Compile Include="Functions\GachaCore.cs" />
     <Compile Include="MainSave.cs" />
     <Compile Include="Models.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
