@@ -148,30 +148,6 @@ namespace PublicInfos
                 db.Updateable(pool).ExecuteCommand();
             }
         }
-        public static int InsertOrUpdateGachaItem(GachaItem item)
-        {
-            if (item == null)
-                return -1;
-            using (var db = GetInstance())
-            {
-                if (db.Queryable<GachaItem>().Any(x => x.ItemID == item.ItemID))
-                {
-                    db.Updateable(item).ExecuteCommand();
-                    return item.ItemID;
-                }
-                else
-                {
-                    return db.Insertable(item).ExecuteReturnIdentity();
-                }
-            }
-        }
-        public static void RemoveGachaItem(GachaItem item)
-        {
-            using (var db = GetInstance())
-            {
-                db.Deleteable(item).ExecuteCommand();
-            }
-        }
         public static void RemovePool(Pool pool)
         {
             using (var db = GetInstance())
@@ -211,5 +187,38 @@ namespace PublicInfos
                 }
             }
         }
+        #region ---GachaItem---
+        public static List<GachaItem> GetAllGachaItem()
+        {
+            using(var db = GetInstance())
+            {
+                return db.Queryable<GachaItem>().ToList();
+            }
+        }
+        public static int InsertOrUpdateGachaItem(GachaItem item)
+        {
+            if (item == null)
+                return -1;
+            using (var db = GetInstance())
+            {
+                if (db.Queryable<GachaItem>().Any(x => x.ItemID == item.ItemID))
+                {
+                    db.Updateable(item).ExecuteCommand();
+                    return item.ItemID;
+                }
+                else
+                {
+                    return db.Insertable(item).ExecuteReturnIdentity();
+                }
+            }
+        }
+        public static void RemoveGachaItem(GachaItem item)
+        {
+            using (var db = GetInstance())
+            {
+                db.Deleteable(item).ExecuteCommand();
+            }
+        }
+        #endregion
     }
 }

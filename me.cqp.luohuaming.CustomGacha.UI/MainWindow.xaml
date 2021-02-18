@@ -65,6 +65,7 @@
                 <Button Tag="Delete"
                         Command="{Binding DeleteGachaItem}">Delete</Button>
                 <Button Command="{Binding CopyGachaItem}">Copy</Button>
+                <Button Command="{Binding ShowInteractiveDialogCmd}">Query</Button>
             </StackPanel>
         </Grid>
         <Grid Grid.Column="1"

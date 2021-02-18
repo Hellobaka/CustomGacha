@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Linq;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using HandyControl.Controls;
+using HandyControl.Tools.Extension;
 using me.cqp.luohuaming.CustomGacha.UI.Command;
+using me.cqp.luohuaming.CustomGacha.UI.View;
 using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
@@ -93,6 +97,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             {
                 ExecuteAction = new Action<object>(poolDrawTest)
             };
+            ShowInteractiveDialogCmd = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(ShowInteractiveDialog)
+            };
         }
         public DelegateCommand AddPool { get; set; }
         private void addPool(object parameter)
@@ -152,6 +160,26 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             string filename = Guid.NewGuid().ToString() + ".jpg";
             GachaCore.DrawGachaResult(c, SelectPool).Save(filename);
             new ImageBrowser(filename).Show();
+        }
+        public DelegateCommand ShowInteractiveDialogCmd { get; set; }
+        private void ShowInteractiveDialog(object peremeter)
+        {
+            if (SelectPool == null)
+            {
+                Helper.ShowGrowlMsg("请先选中一个池");
+                return;
+            }
+            Dialog.Show<GachaItemQueryDialog>()
+                .Initialize<GachaItemQueryDialogViewModel>(vm => vm.Result = new List<GachaItem>())
+                .GetResultAsync<List<GachaItem>>().ContinueWith(x =>
+                {
+                    System.Windows.Application.Current.Dispatcher.Invoke(() 
+                        => x.Result.ForEach(o =>
+                    {
+                        if (GachaItems.Any(z => z.ItemID == o.ItemID) is false)
+                            GachaItems.Add(o);
+                    }));
+                });
         }
     }
 }
