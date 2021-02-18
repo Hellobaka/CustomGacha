@@ -7,6 +7,7 @@ using HandyControl.Tools.Extension;
 using me.cqp.luohuaming.CustomGacha.UI.Command;
 using me.cqp.luohuaming.CustomGacha.UI.View;
 using PublicInfos;
+using System.Diagnostics;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
 {
@@ -61,6 +62,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             get { return selectGachaItem; }
             set
             {
+                SQLHelper.InsertOrUpdateGachaItem(selectGachaItem);
                 selectGachaItem = value;
                 this.RaisePropertyChanged("SelectGachaItem");
             }
@@ -112,6 +114,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             MainSave.PoolInstances.Add(c);
             Pools.Add(c);
             SQLHelper.AddPool(c);
+            SelectPool = c;
         }
         public DelegateCommand DeletePool { get; set; }
         private void deletePool(object peremeter)
@@ -133,6 +136,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             GachaItems.Add(c);
             SelectPool.Content.Add(c);
             c.ItemID = SQLHelper.InsertOrUpdateGachaItem(c);
+            SelectGachaItem = c;
         }
         public DelegateCommand DeleteGachaItem { get; set; }
         private void deleteGachaItem(object peremeter)
@@ -152,6 +156,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             GachaItems.Add(c);
             SelectPool.Content.Add(c);
             c.ItemID = SQLHelper.InsertOrUpdateGachaItem(c);
+            SelectGachaItem = c;
         }
         public DelegateCommand PoolDrawTest { get; set; }
         private void poolDrawTest(object peremeter)
@@ -159,7 +164,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             var c = GachaCore.DoGacha(SelectPool, SelectPool.MultiGachaNumber);
             string filename = Guid.NewGuid().ToString() + ".jpg";
             GachaCore.DrawGachaResult(c, SelectPool).Save(filename);
-            new ImageBrowser(filename).Show();
+            Process.Start(filename);
         }
         public DelegateCommand ShowInteractiveDialogCmd { get; set; }
         private void ShowInteractiveDialog(object peremeter)
@@ -170,14 +175,17 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 return;
             }
             Dialog.Show<GachaItemQueryDialog>()
-                .Initialize<GachaItemQueryDialogViewModel>(vm => vm.Result = new List<GachaItem>())
+                .Initialize<GachaItemQueryDialogViewModel>(vm => vm.Result = GachaItems.ToList())
                 .GetResultAsync<List<GachaItem>>().ContinueWith(x =>
                 {
-                    System.Windows.Application.Current.Dispatcher.Invoke(() 
+                    System.Windows.Application.Current.Dispatcher.Invoke(()
                         => x.Result.ForEach(o =>
                     {
                         if (GachaItems.Any(z => z.ItemID == o.ItemID) is false)
+                        {
                             GachaItems.Add(o);
+                            SelectPool.Content.Add(o);
+                        }
                     }));
                 });
         }

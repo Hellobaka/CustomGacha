@@ -15,6 +15,8 @@ namespace PublicInfos
             for (int i = 0; i < count; i++)
             {
                 GachaItem gachaItem = GetGachaItem(pool, gachaCount);
+                if (gachaItem == null)
+                    break;
                 if (gachaItem.CanBeFolded)
                 {
                     var tmp = results.Find(x => x.Name == gachaItem.Name);

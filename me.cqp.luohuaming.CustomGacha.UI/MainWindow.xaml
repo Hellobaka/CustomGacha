@@ -30,6 +30,7 @@
                      MouseDoubleClick="ListBox_MouseDoubleClick"
                      DisplayMemberPath="Name"
                      ItemsSource="{Binding Pools, Mode=TwoWay}"
+                     SelectedItem="{Binding SelectPool}"
                      SelectionChanged="Pools_SelectionChanged"
                      SelectionMode="Single">
             </ListBox>
@@ -54,6 +55,7 @@
             <ListBox x:Name="Content"
                      MouseDoubleClick="ListBox_MouseDoubleClick"
                      DisplayMemberPath="Name"
+                     SelectedItem="{Binding SelectGachaItem}"
                      SelectionChanged="Pools_SelectionChanged"
                      ItemsSource="{Binding GachaItems, Mode=TwoWay}"
                      SelectionMode="Single" />

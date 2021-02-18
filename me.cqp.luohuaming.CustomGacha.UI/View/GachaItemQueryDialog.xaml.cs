@@ -51,5 +51,18 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
             ((GachaItemQueryDialogViewModel)this.DataContext).Result = c;
             ((GachaItemQueryDialogViewModel)this.DataContext).CloseCmd.Execute(null);
         }
+
+        private void Border_Loaded(object sender, RoutedEventArgs e)
+        {
+            var c = ((GachaItemQueryDialogViewModel)this.DataContext).Result;
+            foreach (var item in c)
+            {
+                for (int i = 0; i < DataGrid_Main.Items.Count; i++)
+                {
+                    if ((DataGrid_Main.Items[i] as GachaItem).ItemID == item.ItemID)
+                        ((DataGridRow)DataGrid_Main.ItemContainerGenerator.ContainerFromIndex(i)).IsSelected = true;
+                }
+            }
+        }
     }
 }

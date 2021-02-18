@@ -62,7 +62,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI
                     Filter = "图像文件|*.jpg;*.png"
                 };
                 dialog.ShowDialog();
-                textBox.Text = dialog.FileName.Replace(dialog.InitialDirectory, "");
+                textBox.Text = dialog.FileName.Replace(dialog.InitialDirectory + "\\", "");
             }
             else if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
             {
