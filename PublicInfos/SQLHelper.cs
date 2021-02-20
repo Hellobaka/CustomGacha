@@ -219,6 +219,18 @@ namespace PublicInfos
                 db.Deleteable(item).ExecuteCommand();
             }
         }
+        public static List<GachaItem> UpdateContentByID(List<GachaItem> old)
+        {
+            List<GachaItem> c = new List<GachaItem>();
+            using (var db = GetInstance())
+            {
+               foreach(var item in old)
+                {
+                    c.Add(db.Queryable<GachaItem>().First(x => x.ItemID == item.ItemID));
+                }
+            }
+            return c;
+        }
         #endregion
     }
 }

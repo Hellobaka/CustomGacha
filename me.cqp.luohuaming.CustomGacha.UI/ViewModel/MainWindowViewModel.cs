@@ -161,6 +161,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         public DelegateCommand PoolDrawTest { get; set; }
         private void poolDrawTest(object peremeter)
         {
+            SelectPool.Content = SQLHelper.UpdateContentByID(SelectPool.Content);
             var c = GachaCore.DoGacha(SelectPool, SelectPool.MultiGachaNumber);
             string filename = Guid.NewGuid().ToString() + ".jpg";
             GachaCore.DrawGachaResult(c, SelectPool).Save(filename);

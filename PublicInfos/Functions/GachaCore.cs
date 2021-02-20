@@ -148,20 +148,38 @@ namespace PublicInfos
 
             if (!File.Exists(ImagePath))
                 throw new FileNotFoundException($"卡片的图片文件不存在，在卡 {item.Name} 中 路径{ImagePath}");
+            if (!File.Exists(bkImagePath))
+                throw new FileNotFoundException($"卡片的背景图片文件不存在，在卡 {item.Name} 中 路径{ImagePath}");
             Image DestImage = Image.FromFile(ImagePath);
             Point DrawPoint = new Point(item.ImageConfig.ImagePointX, item.ImageConfig.ImagePointY);
+            Size destSize = new Size(item.ImageConfig.ImageWidth, item.ImageConfig.ImageHeight);
+            Size backGroundReSizeSize = new Size(item.ImageConfig.BackgroundImageWidth, item.ImageConfig.BackgroundImageHeight);
+
             if (!string.IsNullOrEmpty(item.BackgroundImagePath))
             {
                 Image background = Image.FromFile(bkImagePath);
-                Bitmap backgroundResize = new Bitmap(background, new Size(item.ImageConfig.BackgroundImageWidth, item.ImageConfig.BackgroundImageHeight));
-                using (Graphics g = Graphics.FromImage(item.ImageConfig.DrawOrder == DrawOrder.ImageAboveBackground ?
-                         backgroundResize : DestImage))
+                Bitmap backgroundResize = new Bitmap(background, backGroundReSizeSize);
+                switch (item.ImageConfig.DrawOrder)
                 {
-                    g.DrawImage(item.ImageConfig.DrawOrder == DrawOrder.ImageAboveBackground ?
-                        DestImage : backgroundResize, new Rectangle(DrawPoint, new Size(item.ImageConfig.ImageWidth, item.ImageConfig.ImageHeight)));
+                    case DrawOrder.ImageAboveBackground:
+                        using (Graphics g = Graphics.FromImage(backgroundResize))
+                        {
+                            g.DrawImage(DestImage, new Rectangle(DrawPoint, destSize));
+                        }
+                        break;
+                    case DrawOrder.ImageBelowBackground:
+                        Bitmap emptyBitmap = new Bitmap(item.ImageConfig.BackgroundImageWidth, item.ImageConfig.BackgroundImageHeight);
+                        using (Graphics g = Graphics.FromImage(emptyBitmap))
+                        {
+                            emptyBitmap.Save("tmp.png");
+                            g.DrawImage(DestImage, new Rectangle(DrawPoint, destSize));
+                            emptyBitmap.Save("tmp.png");
+                            g.DrawImage(backgroundResize, new Point(0, 0));
+                            emptyBitmap.Save("tmp.png");
+                            backgroundResize = emptyBitmap;
+                        }
+                        break;
                 }
-                background.Dispose();
-                DestImage.Dispose();
                 return backgroundResize;
             }
             else

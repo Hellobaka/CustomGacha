@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using HandyControl.Controls;
 using HandyControl.Data;
+using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.UI
 {
@@ -18,6 +19,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI
                 WaitTime = showTime
             };
             Growl.Success(info);
+        }
+        public static void GetRealPoolContent(Pool pool)
+        {
+
         }
     }
 }

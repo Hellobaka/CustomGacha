@@ -30,6 +30,7 @@
                   HeadersVisibility="All"
                   RowHeaderWidth="60"
                   AutoGenerateColumns="False"
+                  EnableRowVirtualization="False"
                   ItemsSource="{Binding GachaItems, Mode=TwoWay}">
             <DataGrid.RowHeaderTemplate>
                 <DataTemplate>
