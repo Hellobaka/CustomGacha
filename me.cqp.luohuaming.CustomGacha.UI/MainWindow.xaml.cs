@@ -16,7 +16,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI
         public MainWindow()
         {
             InitializeComponent();
-            //SQLHelper.CreateDB();
+            SQLHelper.CreateDB();
             this.DataContext = new MainWindowViewModel();
         }
 

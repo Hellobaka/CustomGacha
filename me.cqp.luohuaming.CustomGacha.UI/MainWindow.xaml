@@ -61,9 +61,9 @@
                 <ListBox x:Name="Category"
                          SelectionMode="Single"
                          DisplayMemberPath="Name"
-                         SelectedItem="{Binding Categories}"
+                         SelectedItem="{Binding SelectCategory}"
                          SelectionChanged="Pools_SelectionChanged"
-                         ItemsSource="{Binding GachaItems, Mode=TwoWay}" />
+                         ItemsSource="{Binding Categories, Mode=TwoWay}" />
                 <ListBox x:Name="Content"
                          MouseDoubleClick="ListBox_MouseDoubleClick"
                          DisplayMemberPath="Name"

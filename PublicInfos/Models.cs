@@ -394,7 +394,9 @@ namespace PublicInfos
         public string Name { get; set; }
         public double NormalProbablity { get; set; }
         public double UpProbablity { get; set; }
-        public List<int> Content { get; set; }
+        [SugarColumn(ColumnDataType = "Text", IsJson = true)]
+        [Browsable(false)]
+        public List<int> Content { get; set; } = new List<int>();
         public Category Clone()
         {
             return (Category)this.MemberwiseClone();

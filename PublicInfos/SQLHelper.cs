@@ -35,6 +35,7 @@ namespace PublicInfos
                 db.CodeFirst.InitTables(typeof(GachaItem));
                 db.CodeFirst.InitTables(typeof(Config));
                 db.CodeFirst.InitTables(typeof(OrderConfig));
+                db.CodeFirst.InitTables(typeof(Category));
             }
         }
         /// <summary>

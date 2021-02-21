@@ -175,6 +175,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             if (ButtonDirection is false)
             {
                 addCategory(peremeter);
+                return;
             }    
             var c = new GachaItem
             {
@@ -192,6 +193,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             if (ButtonDirection is false)
             {
                 removeCategory(peremeter);
+                return;
             }
             SelectCategory.Content.Remove(SelectGachaItem.ItemID);
             GachaItems.Remove(SelectGachaItem);
@@ -207,6 +209,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             if (ButtonDirection is false)
             {
                 copyCategory(peremeter);
+                return;
             }
             var c = SelectGachaItem.Clone();
             c.ItemID = 0;
@@ -229,7 +232,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         }
         private void addCategory(object peremeter)
         {
-            if (SelectCategory == null)
+            if (SelectPool == null)
                 return;
             var c = new Category
             {
