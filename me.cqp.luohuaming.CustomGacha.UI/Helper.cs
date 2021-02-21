@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -20,9 +21,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI
             };
             Growl.Success(info);
         }
-        public static void GetRealPoolContent(Pool pool)
+        public static ObservableCollection<T> List2ObservableCollection<T>(List<T> content)
         {
-
+            ObservableCollection<T> tmp = new ObservableCollection<T>();
+            content.ForEach(x => tmp.Add(x));
+            return tmp;
         }
     }
 }

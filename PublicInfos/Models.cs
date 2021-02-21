@@ -395,6 +395,10 @@ namespace PublicInfos
         public double NormalProbablity { get; set; }
         public double UpProbablity { get; set; }
         public List<int> Content { get; set; }
+        public Category Clone()
+        {
+            return (Category)this.MemberwiseClone();
+        }
     }
 
     /// <summary>

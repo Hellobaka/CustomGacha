@@ -52,22 +52,57 @@
                 <RowDefinition Height="9*" />
                 <RowDefinition Height="1*" />
             </Grid.RowDefinitions>
-            <ListBox x:Name="Content"
-                     MouseDoubleClick="ListBox_MouseDoubleClick"
-                     DisplayMemberPath="Name"
-                     SelectedItem="{Binding SelectGachaItem}"
-                     SelectionChanged="Pools_SelectionChanged"
-                     ItemsSource="{Binding GachaItems, Mode=TwoWay}"
-                     SelectionMode="Single" />
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="4*" />
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="4*" />
+                </Grid.ColumnDefinitions>
+                <ListBox x:Name="Category"
+                         SelectionMode="Single"
+                         DisplayMemberPath="Name"
+                         SelectedItem="{Binding Categories}"
+                         SelectionChanged="Pools_SelectionChanged"
+                         ItemsSource="{Binding GachaItems, Mode=TwoWay}" />
+                <ListBox x:Name="Content"
+                         MouseDoubleClick="ListBox_MouseDoubleClick"
+                         DisplayMemberPath="Name"
+                         SelectedItem="{Binding SelectGachaItem}"
+                         SelectionChanged="Pools_SelectionChanged"
+                         ItemsSource="{Binding GachaItems, Mode=TwoWay}"
+                         SelectionMode="Single"
+                         Grid.Column="2" />
+            </Grid>
             <StackPanel Orientation="Horizontal"
                         HorizontalAlignment="Center"
                         Grid.Row="1">
+                <ToggleButton x:Name="ButtonDirection"
+                              BorderThickness="0"
+                              IsChecked="{Binding ButtonDirection}"
+                              HorizontalAlignment="Center"
+                              Style="{StaticResource ToggleButtonFlip}">
+                    <hc:StatusSwitchElement.CheckedElement>
+                        <Border Background="{DynamicResource PrimaryBrush}">
+                            <TextBlock HorizontalAlignment="Center"
+                                       VerticalAlignment="Center"
+                                       Text="右"
+                                       Foreground="{DynamicResource TextIconBrush}" />
+                        </Border>
+                    </hc:StatusSwitchElement.CheckedElement>
+                    <Border Background="{DynamicResource InfoBrush}">
+                        <TextBlock HorizontalAlignment="Center"
+                                   VerticalAlignment="Center"
+                                   Text="左"
+                                   Foreground="{DynamicResource TextIconBrush}" />
+                    </Border>
+                </ToggleButton>
                 <Button Tag="Add"
                         Command="{Binding AddGachaItem}">Add</Button>
                 <Button Tag="Delete"
                         Command="{Binding DeleteGachaItem}">Delete</Button>
                 <Button Command="{Binding CopyGachaItem}">Copy</Button>
-                <Button Command="{Binding ShowInteractiveDialogCmd}">Query</Button>
+                <Button Command="{Binding ShowInteractiveDialogCmd}"
+                        IsEnabled="{Binding Path=IsChecked, ElementName=ButtonDirection}">Query</Button>
             </StackPanel>
         </Grid>
         <Grid Grid.Column="1"

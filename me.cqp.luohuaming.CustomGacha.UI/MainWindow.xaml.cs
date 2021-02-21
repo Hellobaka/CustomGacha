@@ -59,7 +59,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI
             }
             else if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
             {
-                switch (e.Key)
+                switch (e.Key)//Ctrl + S
                 {
                     case Key.S:
                         var c = PropertyEdit.SelectedObject;

@@ -187,6 +187,45 @@ namespace PublicInfos
                 }
             }
         }
+        #region ---Category---
+        public static List<Category> GetCategoriesByIDs(List<int> id)
+        {
+            using(var db = GetInstance())
+            {
+                List<Category> c = new List<Category>();
+                foreach(var item in id)
+                {
+                    c.Add(db.Queryable<Category>().First(x => x.ID == item));
+                }
+                return c;
+            }
+        }
+        public static int UpdateOrAddCategory(Category item)
+        {
+            if (item == null)
+                return -1;
+            using (var db = GetInstance())
+            {
+                if (db.Queryable<Category>().Any(x => x.ID == item.ID))
+                {
+                    db.Updateable(item).ExecuteCommand();
+                    return item.ID;
+                }
+                else
+                {
+                    return db.Insertable(item).ExecuteReturnIdentity();
+                }
+            }
+        }
+        public static void RemoveCategory(Category category) 
+        {
+            using (var db = GetInstance())
+            {
+                db.Deleteable(category).ExecuteCommand();
+            }
+        }
+        #endregion
+
         #region ---GachaItem---
         public static List<GachaItem> GetAllGachaItem()
         {
