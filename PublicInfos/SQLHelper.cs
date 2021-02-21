@@ -84,7 +84,7 @@ namespace PublicInfos
                 return user;
             }
         }
-        public static void InsertGachaItem(List<GachaItem> ls, long QQID)
+        public static void InsertGachaItem2Repo(List<GachaItem> ls, long QQID)
         {
             using (var db = GetInstance())
             {
@@ -219,14 +219,14 @@ namespace PublicInfos
                 db.Deleteable(item).ExecuteCommand();
             }
         }
-        public static List<GachaItem> UpdateContentByID(List<GachaItem> old)
+        public static List<GachaItem> GetContentByIDs(List<int> id)
         {
             List<GachaItem> c = new List<GachaItem>();
             using (var db = GetInstance())
             {
-               foreach(var item in old)
+               foreach(var item in id)
                 {
-                    c.Add(db.Queryable<GachaItem>().First(x => x.ItemID == item.ItemID));
+                    c.Add(db.Queryable<GachaItem>().First(x => x.ItemID == item));
                 }
             }
             return c;

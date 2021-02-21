@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
 using System.Text;
 using Native.Sdk.Cqp.EventArgs;
 using Newtonsoft.Json;
@@ -211,50 +210,82 @@ namespace PublicInfos
         /// <summary>
         /// 卡池名称
         /// </summary>
-        [Category("基本属性")]
+        [Category("0.基本属性")]
         public string Name { get; set; } = "";
         /// <summary>
         /// 单抽指令
         /// </summary>
-        [Category("指令")]
+        [Category("1.指令")]
         public string SingalGachaOrder { get; set; } = "#单抽指令";
         /// <summary>
         /// 多抽指令
         /// </summary>
-        [Category("指令")]
+        [Category("1.指令")]
         public string MultiOrder { get; set; } = "#多抽指令";
         /// <summary>
         /// 多抽抽取次数
         /// </summary>
-        [Category("数值")]
+        [Category("2.数值")]
         public int MultiGachaNumber { get; set; } = 10;
         /// <summary>
         /// 卡池内容
         /// </summary>
         [SugarColumn(ColumnDataType = "Text", IsJson = true)]
         [Browsable(false)]
-        public List<GachaItem> Content { get; set; } = new List<GachaItem>();
+        public List<int> Content { get; set; } = new List<int>();
         /// <summary>
         /// 配置卡池绘制配置
         /// </summary>
         [SugarColumn(ColumnDataType = "Text", IsJson = true)]
-        [Category("绘制配置")]
+        [Category("5.绘制配置")]
         public PoolDrawConfig PoolDrawConfig { get; set; } = new PoolDrawConfig();
         /// <summary>
         /// 保底所需要的次数
         /// </summary>
-        [Category("数值")]
+        [Category("2.数值")]
         public int BaodiCount { get; set; } = 10;
         /// <summary>
         /// 卡池背景图片相对路径
         /// </summary>
-        [Category("路径")]
+        [Category("3.路径")]
         public string BackgroundImagePath { get; set; } = "";
         /// <summary>
         /// 自动设置相对路径
         /// </summary>
-        [Category("路径")]
+        [Category("3.路径")]
         public string RelativePath { get; set; } = "";
+        /// <summary>
+        /// New 图片相对路径
+        /// </summary>
+        [Category("4.New图片选项")]
+        public string NewPicPath { get; set; } = "";
+        /// <summary>
+        /// New 图片绘制宽度
+        /// </summary>
+        [Category("4.New图片选项")]
+        public int NewPicWidth { get; set; } = 0;
+        /// <summary>
+        /// New 图片绘制高度
+        /// </summary>
+        [Category("4.New图片选项")]
+        public int NewPicHeight { get; set; } = 0;
+        /// <summary>
+        /// New 图片绘制坐标 X
+        /// </summary>
+        [Category("4.New图片选项")]
+        public int NewPicX { get; set; } = 0;
+        /// <summary>
+        /// New 图片绘制坐标 Y
+        /// </summary>
+        [Category("4.New图片选项")]
+        public int NewPicY { get; set; } = 0;
+        /// <summary>
+        /// 图片与背景之间的绘制关系
+        /// </summary>
+        [SugarColumn(ColumnDataType = "Text", IsJson = true)]
+        [Category("6.卡片绘制设置")] 
+        public ItemDrawConfig ImageConfig { get; set; } = new ItemDrawConfig();
+
         public override string ToString()
         {
             return Name;
@@ -298,17 +329,18 @@ namespace PublicInfos
         /// 表示当前项目的数量
         /// </summary>
         [Category("数值")]
+        [Browsable(false)]
         public long Count { get; set; } = 0;
         /// <summary>
         /// 最高数量
         /// </summary>
         [Category("数值")]
-        public int CountCeil { get; set; } = 0;
+        public int CountCeil { get; set; } = 1;
         /// <summary>
         /// 最低数量
         /// </summary>
         [Category("数值")]
-        public int CountFloor { get; set; } = 0;
+        public int CountFloor { get; set; } = 1;
         /// <summary>
         /// 是否能被折叠
         /// </summary>
@@ -319,11 +351,6 @@ namespace PublicInfos
         /// </summary>
         [Category("数值")]
         public int Value { get; set; } = 0;
-        /// <summary>
-        /// 图片与背景之间的绘制关系
-        /// </summary>
-        [SugarColumn(ColumnDataType = "Text", IsJson = true)]
-        public ItemDrawConfig ImageConfig { get; set; } = new ItemDrawConfig();
 
         public GachaItem Clone()
         {
@@ -355,7 +382,23 @@ namespace PublicInfos
         public int SignFloor { get; set; }
     }
     /// <summary>
-    /// 指令文本设置
+    /// 描述抽卡项目类别的类
+    /// 概率统一, 项目自行设置Up与否
+    /// </summary>
+    [SugarTable("Category")]
+    public class Category
+    {
+        [SugarColumn(IsPrimaryKey = true, IsIdentity = true)]
+        [Browsable(false)]
+        public int ID { get; set; }
+        public string Name { get; set; }
+        public double NormalProbablity { get; set; }
+        public double UpProbablity { get; set; }
+        public List<int> Content { get; set; }
+    }
+
+    /// <summary>
+    /// 注册与签到 指令文本设置
     /// </summary>
     [SugarTable("OrderConfig")]
     public class OrderConfig

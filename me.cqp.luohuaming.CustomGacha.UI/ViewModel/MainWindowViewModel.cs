@@ -8,6 +8,7 @@ using me.cqp.luohuaming.CustomGacha.UI.Command;
 using me.cqp.luohuaming.CustomGacha.UI.View;
 using PublicInfos;
 using System.Diagnostics;
+using System.IO;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
 {
@@ -48,7 +49,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 GachaItems.Clear();
                 this.RaisePropertyChanged("SelectPool");
                 if (value != null)
-                    selectPool.Content.ForEach(x => GachaItems.Add(x));
+                    SQLHelper.GetContentByIDs(selectPool.Content).ForEach(x => GachaItems.Add(x));
             }
         }
         public static Pool GetSelectPool()
@@ -134,16 +135,18 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 Name = "示例项目"
             };
             GachaItems.Add(c);
-            SelectPool.Content.Add(c);
             c.ItemID = SQLHelper.InsertOrUpdateGachaItem(c);
+            SelectPool.Content.Add(c.ItemID);
+            SQLHelper.UpdatePool(SelectPool);
             SelectGachaItem = c;
         }
         public DelegateCommand DeleteGachaItem { get; set; }
         private void deleteGachaItem(object peremeter)
         {
-            SelectPool.Content.Remove(SelectGachaItem);
+            SelectPool.Content.Remove(SelectGachaItem.ItemID);
             GachaItems.Remove(SelectGachaItem);
             SQLHelper.RemoveGachaItem(SelectGachaItem);
+            SQLHelper.UpdatePool(SelectPool);
             SelectGachaItem = null;
         }
         public DelegateCommand CopyGachaItem { get; set; }
@@ -154,17 +157,18 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             var c = SelectGachaItem.Clone();
             c.ItemID = 0;
             GachaItems.Add(c);
-            SelectPool.Content.Add(c);
             c.ItemID = SQLHelper.InsertOrUpdateGachaItem(c);
+            SelectPool.Content.Add(c.ItemID);
+            SQLHelper.UpdatePool(SelectPool);
             SelectGachaItem = c;
         }
         public DelegateCommand PoolDrawTest { get; set; }
         private void poolDrawTest(object peremeter)
         {
-            SelectPool.Content = SQLHelper.UpdateContentByID(SelectPool.Content);
+            Directory.CreateDirectory("DrawTest");
             var c = GachaCore.DoGacha(SelectPool, SelectPool.MultiGachaNumber);
             string filename = Guid.NewGuid().ToString() + ".jpg";
-            GachaCore.DrawGachaResult(c, SelectPool).Save(filename);
+            GachaCore.DrawGachaResult(c, SelectPool).Save("DrawTest\\" + filename);
             Process.Start(filename);
         }
         public DelegateCommand ShowInteractiveDialogCmd { get; set; }
@@ -185,7 +189,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         if (GachaItems.Any(z => z.ItemID == o.ItemID) is false)
                         {
                             GachaItems.Add(o);
-                            SelectPool.Content.Add(o);
+                            SelectPool.Content.Add(o.ItemID);
                         }
                     }));
                 });

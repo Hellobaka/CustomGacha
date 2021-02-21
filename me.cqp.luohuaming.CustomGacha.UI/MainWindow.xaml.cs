@@ -31,13 +31,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI
             {
                 PropertyEdit.SelectedObject = c;
             }
-            if (e.AddedItems.Count > 0)
-            {
-                if (c as Pool == null)
-                    (this.DataContext as MainWindowViewModel).SelectGachaItem = (GachaItem)c;
-                else
-                    (this.DataContext as MainWindowViewModel).SelectPool = (Pool)c;
-            }
         }
 
         private void ListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
