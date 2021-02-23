@@ -20,18 +20,27 @@
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Border.Resources>
-    <Grid Margin="5">
+    <Grid Margin="15">
         <Grid.RowDefinitions>
+            <RowDefinition Height="1*" />
             <RowDefinition Height="9*" />
             <RowDefinition Height="1*" />
         </Grid.RowDefinitions>
+        <hc:SearchBar Margin="10,0"
+                      ShowClearButton="True"
+                      IsRealTime="True"
+                      SearchStarted="SearchBar_SearchStarted"
+                      Style="{StaticResource SearchBarPlus}" 
+                      hc:InfoElement.Placeholder="需要搜索的内容..."/>
+
         <DataGrid Margin="10"
                   x:Name="DataGrid_Main"
                   HeadersVisibility="All"
                   RowHeaderWidth="60"
                   AutoGenerateColumns="False"
                   EnableRowVirtualization="False"
-                  ItemsSource="{Binding GachaItems, Mode=TwoWay}">
+                  ItemsSource="{Binding GachaItems, Mode=TwoWay}"
+                  Grid.Row="1">
             <DataGrid.RowHeaderTemplate>
                 <DataTemplate>
                     <CheckBox IsChecked="{Binding IsSelected,RelativeSource={RelativeSource AncestorType=DataGridRow}}" />
@@ -54,7 +63,7 @@
                                         Header="是否为保底" />
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="1"
+        <StackPanel Grid.Row="2"
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">

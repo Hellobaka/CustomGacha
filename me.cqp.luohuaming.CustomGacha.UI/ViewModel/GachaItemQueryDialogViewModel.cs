@@ -10,7 +10,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
     class GachaItemQueryDialogViewModel : NotifyicationObject, IDialogResultable<List<GachaItem>>
     {
         private ObservableCollection<GachaItem> gachaItems;
-
         public ObservableCollection<GachaItem> GachaItems
         {
             get { return gachaItems; }
@@ -21,7 +20,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             }
         }
         private List<GachaItem> result;
-
         public List<GachaItem> Result
         {
             get { return result; }
@@ -31,12 +29,38 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 this.RaisePropertyChanged("Result");
             }
         }
+        private List<int> upContent;
+        public List<int> UpContent
+        {
+            get { return upContent; }
+            set
+            {
+                upContent = value;
+                this.RaisePropertyChanged("UpContent");
+            }
+        }
+
+        private string openMode;
+        public string OpenMode
+        {
+            get { return openMode; }
+            set
+            {
+                openMode = value;
+                this.RaisePropertyChanged("OpenMode");
+                switch (openMode)
+                {
+                    case "Query":
+                        var c = SQLHelper.GetAllGachaItem();
+                        c.ForEach(x => GachaItems.Add(x));
+                        break;
+                }
+            }
+        }
 
         public GachaItemQueryDialogViewModel()
         {
             GachaItems = new ObservableCollection<GachaItem>();
-            var c = SQLHelper.GetAllGachaItem();
-            c.ForEach(x => GachaItems.Add(x));
         }
         private void closeAction(object permerter)
         {

@@ -23,17 +23,26 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
             {
                 case "AllSelect":
                     for (int i = 0; i < DataGrid_Main.Items.Count; i++)
-                        ((DataGridRow)DataGrid_Main.ItemContainerGenerator.ContainerFromIndex(i)).IsSelected = true;
+                    {
+                        var c = ((DataGridRow)DataGrid_Main.ItemContainerGenerator.ContainerFromIndex(i));
+                        if (c.IsVisible)
+                            c.IsSelected = true;
+                    }
                     break;
                 case "NonSelect":
                     for (int i = 0; i < DataGrid_Main.Items.Count; i++)
-                        ((DataGridRow)DataGrid_Main.ItemContainerGenerator.ContainerFromIndex(i)).IsSelected = false;
+                    {
+                        var c = ((DataGridRow)DataGrid_Main.ItemContainerGenerator.ContainerFromIndex(i));
+                        if (c.IsVisible)
+                            c.IsSelected = false;
+                    }
                     break;
                 case "AntiSelect":
                     for (int i = 0; i < DataGrid_Main.Items.Count; i++)
                     {
                         var c = ((DataGridRow)DataGrid_Main.ItemContainerGenerator.ContainerFromIndex(i));
-                        c.IsSelected = !c.IsSelected;
+                        if (c.IsVisible)
+                            c.IsSelected = !c.IsSelected;
                     }
                     break;
                 default:
@@ -54,13 +63,47 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
 
         private void Border_Loaded(object sender, RoutedEventArgs e)
         {
-            var c = ((GachaItemQueryDialogViewModel)this.DataContext).Result;
-            foreach (var item in c)
+            var c = (GachaItemQueryDialogViewModel)this.DataContext;
+            if (c.OpenMode == "Query")
             {
-                for (int i = 0; i < DataGrid_Main.Items.Count; i++)
+                foreach (var item in c.Result)
                 {
-                    if ((DataGrid_Main.Items[i] as GachaItem).ItemID == item.ItemID)
-                        ((DataGridRow)DataGrid_Main.ItemContainerGenerator.ContainerFromIndex(i)).IsSelected = true;
+                    for (int i = 0; i < DataGrid_Main.Items.Count; i++)
+                    {
+                        if ((DataGrid_Main.Items[i] as GachaItem).ItemID == item.ItemID)
+                            ((DataGridRow)DataGrid_Main.ItemContainerGenerator.ContainerFromIndex(i)).IsSelected = true;
+                    }
+                }
+            }
+            else if (c.OpenMode == "SelectUp")
+            {
+                foreach (var item in c.UpContent)
+                {
+                    for (int i = 0; i < DataGrid_Main.Items.Count; i++)
+                    {
+                        if ((DataGrid_Main.Items[i] as GachaItem).ItemID == item)
+                            ((DataGridRow)DataGrid_Main.ItemContainerGenerator.ContainerFromIndex(i)).IsSelected = true;
+                    }
+                }
+            }
+        }
+
+        private void SearchBar_SearchStarted(object sender, HandyControl.Data.FunctionEventArgs<string> e)
+        {
+            string key = e.Info;
+            for (int i = 0; i < DataGrid_Main.Items.Count; i++)
+            {
+                ((DataGridRow)DataGrid_Main.ItemContainerGenerator.ContainerFromIndex(i)).Visibility = Visibility.Collapsed;
+            }
+            for (int i = 0; i < DataGrid_Main.Items.Count; i++)
+            {
+                GachaItem item = (GachaItem)DataGrid_Main.Items[i];
+                if (item.Name.Contains(key) ||
+                    item.ItemID.ToString().Contains(key) ||
+                    item.Probablity.ToString().Contains(key) ||
+                    item.UpProbablity.ToString().Contains(key))
+                {
+                    ((DataGridRow)DataGrid_Main.ItemContainerGenerator.ContainerFromIndex(i)).Visibility = Visibility.Visible;
                 }
             }
         }

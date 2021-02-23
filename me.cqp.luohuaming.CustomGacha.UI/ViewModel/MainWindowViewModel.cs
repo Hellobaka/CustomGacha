@@ -86,7 +86,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             get { return gachaItems; }
             set
             {
-                gachaItems = value;
+                gachaItems = new ObservableCollection<GachaItem>(value.OrderByDescending(x => x.IsUp)
+                                                                                    .ThenBy(x => x.Probablity));
                 this.RaisePropertyChanged("GachaItems");
             }
         }
@@ -139,8 +140,12 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             {
                 SQLHelper.UpdateOrAddCategory(SelectCategory);
                 selectCategory = value;
-                GachaItems = Helper.List2ObservableCollection(SQLHelper.GetContentByIDs(value.Content));
                 this.RaisePropertyChanged("SelectCategory");
+                if (value == null)
+                    return;
+                var c = SQLHelper.GetContentByIDs(value.Content);
+                c.Where(x => value.UpContent.Any(o => o == x.ItemID)).Do(x => x.IsUp = true);
+                GachaItems = Helper.List2ObservableCollection(c);                
             }
         }
 
@@ -176,7 +181,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             {
                 addCategory(peremeter);
                 return;
-            }    
+            }
             var c = new GachaItem
             {
                 Name = "示例项目"
@@ -204,13 +209,13 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         public DelegateCommand CopyGachaItem { get; set; }
         private void copyGachaItem(object peremeter)
         {
-            if (SelectGachaItem == null)
-                return;
             if (ButtonDirection is false)
             {
                 copyCategory(peremeter);
                 return;
             }
+            if (SelectGachaItem == null)
+                return;
             var c = SelectGachaItem.Clone();
             c.ItemID = 0;
             GachaItems.Add(c);
@@ -267,13 +272,15 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         public DelegateCommand ShowInteractiveDialogCmd { get; set; }
         private void ShowInteractiveDialog(object peremeter)
         {
-            if (SelectPool == null)
+            if (SelectCategory == null)
             {
-                Helper.ShowGrowlMsg("请先选中一个池");
+                Helper.ShowGrowlMsg("请先选中一个目录");
                 return;
             }
-            Dialog.Show<GachaItemQueryDialog>()
-                .Initialize<GachaItemQueryDialogViewModel>(vm => vm.Result = GachaItems.ToList())
+            if (ButtonDirection)
+            {
+                Dialog.Show<GachaItemQueryDialog>()
+                .Initialize<GachaItemQueryDialogViewModel>(vm => { vm.Result = GachaItems.ToList(); vm.OpenMode = "Query"; })
                 .GetResultAsync<List<GachaItem>>().ContinueWith(x =>
                 {
                     System.Windows.Application.Current.Dispatcher.Invoke(()
@@ -286,6 +293,33 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                             }
                         }));
                 });
+            }
+            else
+            {
+                Dialog.Show<GachaItemQueryDialog>()
+                .Initialize<GachaItemQueryDialogViewModel>(vm =>
+                    {
+                        vm.GachaItems = GachaItems; 
+                        vm.UpContent = SelectCategory.UpContent; 
+                        vm.OpenMode = "SelectUp"; 
+                    })
+                .GetResultAsync<List<GachaItem>>().ContinueWith(x =>
+                    {
+                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            SelectCategory.UpContent.Clear();
+                            x.Result.ForEach(o =>
+                            {
+                                SelectCategory.UpContent.Add(o.ItemID);
+                            });
+                            SQLHelper.UpdateOrAddCategory(SelectCategory);
+                            GachaItems.Clear();
+                            GachaItems = Helper.List2ObservableCollection(SQLHelper.GetContentByIDs(SelectCategory.Content));
+                            GachaItems.Where(o => x.Result.Any(i => i.ItemID == o.ItemID)).Do(o => o.IsUp = true);
+                            this.RaisePropertyChanged("GachaItems");
+                        });
+                    });
+            }
         }
         #endregion
     }

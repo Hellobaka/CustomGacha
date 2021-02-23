@@ -146,6 +146,7 @@ namespace PublicInfos
                 return;
             using (var db = GetInstance())
             {
+                pool.UpdateDt = DateTime.Now;
                 db.Updateable(pool).ExecuteCommand();
             }
         }
@@ -209,6 +210,7 @@ namespace PublicInfos
             {
                 if (db.Queryable<Category>().Any(x => x.ID == item.ID))
                 {
+                    item.UpdateDt = DateTime.Now;
                     db.Updateable(item).ExecuteCommand();
                     return item.ID;
                 }
@@ -243,6 +245,7 @@ namespace PublicInfos
             {
                 if (db.Queryable<GachaItem>().Any(x => x.ItemID == item.ItemID))
                 {
+                    item.UpdateDt = DateTime.Now;
                     db.Updateable(item).ExecuteCommand();
                     return item.ItemID;
                 }

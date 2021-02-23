@@ -57,6 +57,7 @@ namespace PublicInfos
             List<GachaItem> content = SQLHelper.GetContentByIDs(pool.Content);
             content.ForEach(x => totalProp += x.Probablity);
             double randomNum = new Random(GetRandomSeed()).NextDouble() / 100 * totalProp;
+            //TODO: 斟酌目录与内容的关系
             foreach (var item in content)
             {
                 if (gachaCount == pool.BaodiCount)

@@ -80,6 +80,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Command\DelegateCommand.cs" />
+    <Compile Include="Converter\Bool2IntConverter.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="ViewModel\GachaItemQueryDialogViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
@@ -146,5 +147,6 @@
       <Name>PublicInfos</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

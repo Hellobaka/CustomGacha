@@ -283,8 +283,13 @@ namespace PublicInfos
         /// 图片与背景之间的绘制关系
         /// </summary>
         [SugarColumn(ColumnDataType = "Text", IsJson = true)]
-        [Category("6.卡片绘制设置")] 
+        [Category("6.卡片绘制设置")]
         public ItemDrawConfig ImageConfig { get; set; } = new ItemDrawConfig();
+        [Browsable(false)]
+        public DateTime CreateDt { get; set; } = DateTime.Now;
+        [Browsable(false)]
+        public DateTime UpdateDt { get; set; }
+
 
         public override string ToString()
         {
@@ -310,6 +315,8 @@ namespace PublicInfos
         /// </summary>
         [Category("数值")]
         public double Probablity { get; set; } = 0;
+        [Category("数值")]
+        public double UpProbablity { get; set; } = 0;
         /// <summary>
         /// 图片相对路径
         /// </summary>
@@ -341,6 +348,9 @@ namespace PublicInfos
         /// </summary>
         [Category("数值")]
         public int CountFloor { get; set; } = 1;
+        [SugarColumn(IsIgnore = true)]
+        [Browsable(false)]
+        public bool IsUp { get; set; } = false;
         /// <summary>
         /// 是否能被折叠
         /// </summary>
@@ -351,6 +361,10 @@ namespace PublicInfos
         /// </summary>
         [Category("数值")]
         public int Value { get; set; } = 0;
+        [Browsable(false)]
+        public DateTime CreateDt { get; set; } = DateTime.Now;
+        [Browsable(false)]
+        public DateTime UpdateDt { get; set; }
 
         public GachaItem Clone()
         {
@@ -392,11 +406,18 @@ namespace PublicInfos
         [Browsable(false)]
         public int ID { get; set; }
         public string Name { get; set; }
-        public double NormalProbablity { get; set; }
-        public double UpProbablity { get; set; }
         [SugarColumn(ColumnDataType = "Text", IsJson = true)]
         [Browsable(false)]
         public List<int> Content { get; set; } = new List<int>();
+        [SugarColumn(ColumnDataType = "Text", IsJson = true)]
+        [Browsable(false)]
+        public List<int> UpContent { get; set; } = new List<int>();
+        //TODO: 实现时间项
+        [Browsable(false)]
+        public DateTime CreateDt { get; set; } = DateTime.Now;
+        [Browsable(false)]
+        public DateTime UpdateDt { get; set; }
+
         public Category Clone()
         {
             return (Category)this.MemberwiseClone();
