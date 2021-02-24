@@ -15,6 +15,7 @@ namespace PublicInfos
             for (int i = 0; i < count; i++)
             {
                 GachaItem gachaItem = GetGachaItem(pool, gachaCount);
+                gachaCount = (gachaCount == pool.BaodiCount) ? 1 : ++gachaCount;
                 if (gachaItem == null)
                     break;
                 if (gachaItem.CanBeFolded)
@@ -23,10 +24,8 @@ namespace PublicInfos
                     if (tmp != null)
                     {
                         tmp.Count += gachaItem.Count;
-                        gachaItem = null;
-                        GC.Collect();
                         continue;
-                    }
+                    }                    
                 }
                 results.Add(gachaItem);
             }
@@ -53,52 +52,58 @@ namespace PublicInfos
         /// <returns>抽卡结果</returns>
         private static GachaItem GetGachaItem(Pool pool, int gachaCount = 1)
         {
+            var categraies = SQLHelper.GetCategoriesByIDs(pool.Content);
+            Category destCategory = RandomGetItem(categraies);
+            List<GachaItem> content = SQLHelper.GetContentByIDs(destCategory.Content);
+            content.ForEach(x => 
+                    x.Probablity = destCategory.UpContent.Any(o => o == x.ItemID) ? x.UpProbablity : x.Probablity);
+            if (gachaCount == pool.BaodiCount)
+                return GetBaodiItem(content);
+            else
+                return RandomGetItem(content);            
+        }
+        private static T RandomGetItem<T>(List<T> ls)
+        {
+            //原理: 先将所有概率加合, 之后以这个概率为上限, 取个随机数. 之后遍历所有项目, 将项目概率累计
+            //       若累计概率总和小于先前取的随机数则未命中项目, 继续遍历. 直至累计概率总和大于等于目标随机数
+
+            //totalProp => 物品概率总和
+            //destProp => 当前已未命中的概率累计
+            //randomNum => 目标随机数
+
             double totalProp = 0, destProp = 0;
-            List<GachaItem> content = SQLHelper.GetContentByIDs(pool.Content);
-            content.ForEach(x => totalProp += x.Probablity);
-            double randomNum = new Random(GetRandomSeed()).NextDouble() / 100 * totalProp;
-            //TODO: 斟酌目录与内容的关系
-            foreach (var item in content)
+            foreach(dynamic item in ls)
             {
-                if (gachaCount == pool.BaodiCount)
-                {
-                    List<GachaItem> BaodiList = content.Where(x => x.IsBaodi).ToList();
-                    totalProp = 0;
-                    destProp = 0;
-                    BaodiList.ForEach(x => totalProp += x.Probablity);
-                    randomNum = new Random(GetRandomSeed()).NextDouble() / 100 * totalProp;
-                    foreach (var baodiitem in BaodiList)
-                    {
-                        destProp += baodiitem.Probablity / 100;
-                        if (randomNum < destProp)
-                        {
-                            gachaCount = 1;
-                            return CalcGachaItemCount(baodiitem);
-                        }
-                    }
-                }
+                totalProp += item.Probablity;
+            }
+            double randomNum = new Random(GetRandomSeed()).NextDouble() / 100 * totalProp;
+            foreach (dynamic item in ls)
+            {
                 destProp += item.Probablity / 100;
-                if (randomNum < destProp)
+                if (randomNum <= destProp)
                 {
-                    gachaCount = item.IsBaodi ? 1 : ++gachaCount;
-                    return CalcGachaItemCount(item);
+                    return item;
                 }
             }
-            return null;
+            return default;
+        }
+        private static GachaItem GetBaodiItem(List<GachaItem> ls)
+        {
+            return RandomGetItem(ls.Where(x => x.IsBaodi).ToList());
         }
         /// <summary>
         /// 进行随机数量的处理
         /// </summary>
-        private static GachaItem CalcGachaItemCount(GachaItem baodiitem)
+        private static GachaItem CalcGachaItemCount(GachaItem targetItem)
         {
-            GachaItem gachaItem = baodiitem.Clone();
+            GachaItem gachaItem = targetItem.Clone();
             gachaItem.Count = new Random(GetRandomSeed()).Next(gachaItem.CountFloor, gachaItem.CountCeil + 1);
             return gachaItem;
         }
         /// <summary>
         /// 使用RNGCryptoServiceProvider生成种子
         /// </summary>
-        /// <returns>按此格式new Random(GetRandomSeed())</returns>
+        /// <returns>按此格式 new Random(GetRandomSeed()) 使用随机数种子</returns>
         private static int GetRandomSeed()
         {
             byte[] bytes = new byte[new Random().Next(0, 10000000)];
@@ -145,19 +150,23 @@ namespace PublicInfos
         /// <param name="relativePath">池子的相对路径</param>
         private static Image GetGachaItemImage(GachaItem item, string relativePath, ItemDrawConfig ImageConfig)
         {
+            //不需要合成时请填写图片路径，忽略背景路径
             string bkImagePath = Path.Combine(relativePath, item.BackgroundImagePath);
             string ImagePath = Path.Combine(relativePath, item.ImagePath);
+            bool nobackgroundFlag = false;
+            if (string.IsNullOrWhiteSpace(bkImagePath))
+                nobackgroundFlag = true;
 
             if (!File.Exists(ImagePath))
                 throw new FileNotFoundException($"卡片的图片文件不存在，在卡 {item.Name} 中 路径{ImagePath}");
-            if (!File.Exists(bkImagePath))
+            if (!File.Exists(bkImagePath) && nobackgroundFlag is false)
                 throw new FileNotFoundException($"卡片的背景图片文件不存在，在卡 {item.Name} 中 路径{ImagePath}");
             Image DestImage = Image.FromFile(ImagePath);
             Point DrawPoint = new Point(ImageConfig.ImagePointX, ImageConfig.ImagePointY);
             Size destSize = new Size(ImageConfig.ImageWidth, ImageConfig.ImageHeight);
             Size backGroundReSizeSize = new Size(ImageConfig.BackgroundImageWidth, ImageConfig.BackgroundImageHeight);
 
-            if (!string.IsNullOrEmpty(item.BackgroundImagePath))
+            if (!string.IsNullOrWhiteSpace(item.BackgroundImagePath))
             {
                 Image background = Image.FromFile(bkImagePath);
                 Bitmap backgroundResize = new Bitmap(background, backGroundReSizeSize);

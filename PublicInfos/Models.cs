@@ -409,6 +409,7 @@ namespace PublicInfos
         [SugarColumn(ColumnDataType = "Text", IsJson = true)]
         [Browsable(false)]
         public List<int> Content { get; set; } = new List<int>();
+        public double Probablity { get; set; } = 0;
         [SugarColumn(ColumnDataType = "Text", IsJson = true)]
         [Browsable(false)]
         public List<int> UpContent { get; set; } = new List<int>();
