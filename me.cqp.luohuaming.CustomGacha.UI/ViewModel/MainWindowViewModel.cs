@@ -189,7 +189,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             GachaItems.Add(c);
             c.ItemID = SQLHelper.InsertOrUpdateGachaItem(c);
             SelectCategory.Content.Add(c.ItemID);
-            SQLHelper.UpdatePool(SelectPool);
+            SQLHelper.UpdateOrAddCategory(SelectCategory);
             SelectGachaItem = c;
         }
         public DelegateCommand DeleteGachaItem { get; set; }
@@ -228,12 +228,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         private void poolDrawTest(object peremeter)
         {
             if (SelectPool == null)
-                Helper.ShowGrowlMsg("请先选中一个池");
+            { 
+                Helper.ShowGrowlMsg("请先选中一个池"); return;
+            }
             Directory.CreateDirectory("DrawTest");
             var c = GachaCore.DoGacha(SelectPool, SelectPool.MultiGachaNumber);
             string filename = Guid.NewGuid().ToString() + ".jpg";
             GachaCore.DrawGachaResult(c, SelectPool).Save("DrawTest\\" + filename);
-            Process.Start(filename);
+            Process.Start("DrawTest\\"+filename);
         }
         private void addCategory(object peremeter)
         {
@@ -289,7 +291,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                             if (GachaItems.Any(z => z.ItemID == o.ItemID) is false)
                             {
                                 GachaItems.Add(o);
-                                SelectPool.Content.Add(o.ItemID);
+                                SelectCategory.Content.Add(o.ItemID);
+                                SQLHelper.UpdateOrAddCategory(SelectCategory);
                             }
                         }));
                 });

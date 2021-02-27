@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
+using System.Reflection;
 using System.Text;
 using Native.Sdk.Cqp.EventArgs;
 using Newtonsoft.Json;
@@ -255,6 +257,11 @@ namespace PublicInfos
         [Category("3.路径")]
         public string RelativePath { get; set; } = "";
         /// <summary>
+        /// 插件路径
+        /// </summary>
+        [Category("3.路径")]
+        public string PluginPath { get; set; } = "";
+        /// <summary>
         /// New 图片相对路径
         /// </summary>
         [Category("4.New图片选项")]
@@ -289,8 +296,64 @@ namespace PublicInfos
         public DateTime CreateDt { get; set; } = DateTime.Now;
         [Browsable(false)]
         public DateTime UpdateDt { get; set; }
+        /// <summary>
+        /// 插件_绘制核心图片
+        /// </summary>
+        [Browsable(false)]
+        [SugarColumn(IsIgnore = true)]
+        public object DrawMainImage { get; set; }
+        /// <summary>
+        /// 插件_绘制抽卡子项目
+        /// </summary>
+        [Browsable(false)]
+        [SugarColumn(IsIgnore = true)]
+        public object DrawItem { get; set; }
 
+        /// <summary>
+        /// 插件_获取绘制坐标
+        /// </summary>
+        [Browsable(false)]
+        [SugarColumn(IsIgnore = true)]
+        public object DrawPoints { get; set; }
 
+        public void PluginInit()
+        {
+            if (string.IsNullOrWhiteSpace(PluginPath) is false)
+            {
+                string filePath = Path.Combine(RelativePath, PluginPath);
+                if (File.Exists(filePath))
+                {
+                    Assembly plugin = Assembly.LoadFile(filePath);
+                    try
+                    {
+                        foreach (var item in plugin.GetTypes())
+                        {
+                            if (item.GetInterface("IDrawMainImage") != null)
+                            {
+                                DrawMainImage = plugin.CreateInstance(item.FullName);
+                            }
+                            if (item.GetInterface("IDrawItem") != null)
+                            {
+                                DrawItem = plugin.CreateInstance(item.FullName);
+                            }
+                            if (item.GetInterface("IDrawPoints") != null)
+                            {
+                                DrawPoints = plugin.CreateInstance(item.FullName);
+                            }
+                            //TODO: 实现其他接口
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        throw new FileLoadException($"请检查 {filePath} 插件是否正确编写：{e.Message}\n{e.StackTrace}");
+                    }
+                }
+                else
+                {
+                    //TODO: 补全错误抛出
+                }
+            }
+        }
         public override string ToString()
         {
             return Name;
@@ -413,7 +476,6 @@ namespace PublicInfos
         [SugarColumn(ColumnDataType = "Text", IsJson = true)]
         [Browsable(false)]
         public List<int> UpContent { get; set; } = new List<int>();
-        //TODO: 实现时间项
         [Browsable(false)]
         public DateTime CreateDt { get; set; } = DateTime.Now;
         [Browsable(false)]

@@ -15,6 +15,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI
     {
         public MainWindow()
         {
+            //TODO: 搜索框
             InitializeComponent();
             SQLHelper.CreateDB();
             this.DataContext = new MainWindowViewModel();
@@ -52,7 +53,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI
                 OpenFileDialog dialog = new OpenFileDialog
                 {
                     InitialDirectory = MainWindowViewModel.GetSelectPool().RelativePath,
-                    Filter = "图像文件|*.jpg;*.png"
+                    Filter = "图像文件|*.jpg;*.png|插件文件|*.dll"
                 };
                 dialog.ShowDialog();
                 textBox.Text = dialog.FileName.Replace(dialog.InitialDirectory + "\\", "");

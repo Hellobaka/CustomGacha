@@ -142,6 +142,10 @@
       <Project>{0ca93eb9-4e25-46c6-94d2-0f97137a1606}</Project>
       <Name>Native.Tool</Name>
     </ProjectReference>
+    <ProjectReference Include="..\PluginInterface\PluginInterface.csproj">
+      <Project>{f9f73104-c1fc-4579-b448-078f79429fac}</Project>
+      <Name>PluginInterface</Name>
+    </ProjectReference>
     <ProjectReference Include="..\PublicInfos\PublicInfos.csproj">
       <Project>{9ca41650-71f2-4f0c-9a80-9cdb5a7d593c}</Project>
       <Name>PublicInfos</Name>

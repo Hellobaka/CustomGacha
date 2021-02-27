@@ -25,7 +25,7 @@ namespace PublicInfos
                     {
                         tmp.Count += gachaItem.Count;
                         continue;
-                    }                    
+                    }
                 }
                 results.Add(gachaItem);
             }
@@ -55,12 +55,12 @@ namespace PublicInfos
             var categraies = SQLHelper.GetCategoriesByIDs(pool.Content);
             Category destCategory = RandomGetItem(categraies);
             List<GachaItem> content = SQLHelper.GetContentByIDs(destCategory.Content);
-            content.ForEach(x => 
+            content.ForEach(x =>
                     x.Probablity = destCategory.UpContent.Any(o => o == x.ItemID) ? x.UpProbablity : x.Probablity);
             if (gachaCount == pool.BaodiCount)
                 return GetBaodiItem(content);
             else
-                return RandomGetItem(content);            
+                return RandomGetItem(content);
         }
         private static T RandomGetItem<T>(List<T> ls)
         {
@@ -72,7 +72,7 @@ namespace PublicInfos
             //randomNum => 目标随机数
 
             double totalProp = 0, destProp = 0;
-            foreach(dynamic item in ls)
+            foreach (dynamic item in ls)
             {
                 totalProp += item.Probablity;
             }
@@ -89,7 +89,15 @@ namespace PublicInfos
         }
         private static GachaItem GetBaodiItem(List<GachaItem> ls)
         {
-            return RandomGetItem(ls.Where(x => x.IsBaodi).ToList());
+            var c = RandomGetItem(ls.Where(x => x.IsBaodi).ToList());
+            if (c == null)//不存在保底项目，则随机返回一个
+            {
+                return RandomGetItem(ls);
+            }
+            else
+            {
+                return c;
+            }
         }
         /// <summary>
         /// 进行随机数量的处理
@@ -118,27 +126,45 @@ namespace PublicInfos
         /// <param name="pool">抽卡的池</param>
         public static Image DrawGachaResult(List<GachaItem> gachaItems, Pool pool)
         {
+            //TODO: 坐标预先计算, 便于后期开放接口
             string backgroundImagePath = Path.Combine(pool.RelativePath, pool.BackgroundImagePath);
             if (!File.Exists(backgroundImagePath))
                 throw new FileNotFoundException($"池子的背景图片文件不存在，在池{pool.Name}中 路径{backgroundImagePath}");
             Image background = Image.FromFile(backgroundImagePath);
-            Point DrawPoint = new Point(pool.PoolDrawConfig.StartPointX, pool.PoolDrawConfig.StartPointY);
-            using (Graphics g = Graphics.FromImage(background))
+
+            Point[] DrawPoints = new Point[pool.MultiGachaNumber];
+            if (pool.DrawPoints != null)
             {
-                foreach (var item in gachaItems)
+                var o = pool.DrawPoints;
+                var method = o.GetType().GetMethod("GetDrawPoints");
+                DrawPoints = (Point[])method.Invoke(o, new object[] { DrawPoints.Length });
+            }
+            else
+            {
+                int x = pool.PoolDrawConfig.StartPointX, y = pool.PoolDrawConfig.StartPointY;
+                for (int i = 0; i < DrawPoints.Length; i++)
                 {
-                    Image itemImage = GetGachaItemImage(item, pool.RelativePath, pool.ImageConfig);
-                    g.DrawImage(itemImage, new Rectangle(DrawPoint, itemImage.Size));
-                    if (DrawPoint.X >= pool.PoolDrawConfig.MaxX)
+                    DrawPoints[i] = new Point(x, y);
+                    if (x >= pool.PoolDrawConfig.MaxX)
                     {
-                        DrawPoint.X = pool.PoolDrawConfig.XChangeValue + pool.PoolDrawConfig.StartPointX;
-                        DrawPoint.Y = pool.PoolDrawConfig.YChangeValue + pool.PoolDrawConfig.StartPointY;
+                        x = pool.PoolDrawConfig.XChangeValue + pool.PoolDrawConfig.StartPointX;
+                        y = pool.PoolDrawConfig.YChangeValue + pool.PoolDrawConfig.StartPointY;
                     }
                     else
                     {
-                        DrawPoint.X += pool.PoolDrawConfig.DrawXInterval + itemImage.Width;
-                        DrawPoint.Y += pool.PoolDrawConfig.DrawYInterval;
+                        x += pool.PoolDrawConfig.DrawXInterval + pool.ImageConfig.BackgroundImageWidth;
+                        y += pool.PoolDrawConfig.DrawYInterval;
                     }
+                }
+            }
+            using (Graphics g = Graphics.FromImage(background))
+            {
+                int index = 0;
+                foreach (var item in gachaItems)
+                {
+                    Image itemImage = GetGachaItemImage(item, pool.RelativePath, pool.ImageConfig, pool.DrawMainImage, pool.DrawItem);
+                    g.DrawImage(itemImage, new Rectangle(DrawPoints[index], itemImage.Size));
+                    index++;
                 }
             }
             return background;
@@ -148,7 +174,7 @@ namespace PublicInfos
         /// </summary>
         /// <param name="item">需要生成的GachaItem</param>
         /// <param name="relativePath">池子的相对路径</param>
-        private static Image GetGachaItemImage(GachaItem item, string relativePath, ItemDrawConfig ImageConfig)
+        private static Image GetGachaItemImage(GachaItem item, string relativePath, ItemDrawConfig ImageConfig, object P_DMI, object P_DI)
         {
             //不需要合成时请填写图片路径，忽略背景路径
             string bkImagePath = Path.Combine(relativePath, item.BackgroundImagePath);
@@ -162,39 +188,52 @@ namespace PublicInfos
             if (!File.Exists(bkImagePath) && nobackgroundFlag is false)
                 throw new FileNotFoundException($"卡片的背景图片文件不存在，在卡 {item.Name} 中 路径{ImagePath}");
             Image DestImage = Image.FromFile(ImagePath);
-            Point DrawPoint = new Point(ImageConfig.ImagePointX, ImageConfig.ImagePointY);
-            Size destSize = new Size(ImageConfig.ImageWidth, ImageConfig.ImageHeight);
-            Size backGroundReSizeSize = new Size(ImageConfig.BackgroundImageWidth, ImageConfig.BackgroundImageHeight);
-
-            if (!string.IsNullOrWhiteSpace(item.BackgroundImagePath))
+            if (P_DMI != null)
             {
-                Image background = Image.FromFile(bkImagePath);
-                Bitmap backgroundResize = new Bitmap(background, backGroundReSizeSize);
-                switch (ImageConfig.DrawOrder)
-                {
-                    case DrawOrder.ImageAboveBackground:
-                        using (Graphics g = Graphics.FromImage(backgroundResize))
-                        {
-                            g.DrawImage(DestImage, new Rectangle(DrawPoint, destSize));
-                        }
-                        break;
-                    case DrawOrder.ImageBelowBackground:
-                        Bitmap emptyBitmap = new Bitmap(ImageConfig.BackgroundImageWidth, ImageConfig.BackgroundImageHeight);
-                        using (Graphics g = Graphics.FromImage(emptyBitmap))
-                        {
-                            g.DrawImage(DestImage, new Rectangle(DrawPoint, destSize));
-                            g.DrawImage(backgroundResize, new Point(0, 0));
-                            backgroundResize = emptyBitmap;
-                        }
-                        break;
-                }
-                return backgroundResize;
+                var method = P_DMI.GetType().GetMethod("RedrawMainImage");
+                DestImage = (Bitmap)method.Invoke(P_DMI, new object[] { DestImage });
+            }
+            if (P_DI != null)
+            {
+                var method = P_DMI.GetType().GetMethod("DrawPicItem");
+                return (Bitmap)method.Invoke(P_DMI, new object[] { item, relativePath, ImageConfig });
             }
             else
             {
-                Bitmap destBitmap = new Bitmap(DestImage, new Size(ImageConfig.ImageWidth, ImageConfig.ImageHeight));
-                DestImage.Dispose();
-                return destBitmap;
+                Point DrawPoint = new Point(ImageConfig.ImagePointX, ImageConfig.ImagePointY);
+                Size destSize = new Size(ImageConfig.ImageWidth, ImageConfig.ImageHeight);
+                Size backGroundReSizeSize = new Size(ImageConfig.BackgroundImageWidth, ImageConfig.BackgroundImageHeight);
+
+                if (!string.IsNullOrWhiteSpace(item.BackgroundImagePath))
+                {
+                    Image background = Image.FromFile(bkImagePath);
+                    Bitmap backgroundResize = new Bitmap(background, backGroundReSizeSize);
+                    switch (ImageConfig.DrawOrder)
+                    {
+                        case DrawOrder.ImageAboveBackground:
+                            using (Graphics g = Graphics.FromImage(backgroundResize))
+                            {
+                                g.DrawImage(DestImage, new Rectangle(DrawPoint, destSize));
+                            }
+                            break;
+                        case DrawOrder.ImageBelowBackground:
+                            Bitmap emptyBitmap = new Bitmap(ImageConfig.BackgroundImageWidth, ImageConfig.BackgroundImageHeight);
+                            using (Graphics g = Graphics.FromImage(emptyBitmap))
+                            {
+                                g.DrawImage(DestImage, new Rectangle(DrawPoint, destSize));
+                                g.DrawImage(backgroundResize, new Point(0, 0));
+                                backgroundResize = emptyBitmap;
+                            }
+                            break;
+                    }
+                    return backgroundResize;
+                }
+                else
+                {
+                    Bitmap destBitmap = new Bitmap(DestImage, new Size(ImageConfig.ImageWidth, ImageConfig.ImageHeight));
+                    DestImage.Dispose();
+                    return destBitmap;
+                }
             }
         }
     }

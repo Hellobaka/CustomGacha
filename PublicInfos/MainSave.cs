@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using Native.Sdk.Cqp;
-using Native.Tool.IniConfig;
 
 namespace PublicInfos
 {

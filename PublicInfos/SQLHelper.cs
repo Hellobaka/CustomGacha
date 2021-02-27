@@ -11,6 +11,7 @@ namespace PublicInfos
         {
             SqlSugarClient db = new SqlSugarClient(new ConnectionConfig()
             {
+                //TODO: 插件发布时替换此处
                 ConnectionString = $"data source={Path.Combine(Environment.CurrentDirectory, "data.db")}",
                 //ConnectionString = $"data source={MainSave.DBPath}",
                 DbType = DbType.Sqlite,
@@ -27,6 +28,7 @@ namespace PublicInfos
         {
             using (var db = GetInstance())
             {
+                //TODO: 插件发布时替换此处
                 //db.DbMaintenance.CreateDatabase(MainSave.DBPath);
                 db.DbMaintenance.CreateDatabase(Path.Combine(Environment.CurrentDirectory, "data.db"));
                 db.CodeFirst.InitTables(typeof(DB_Repo));
@@ -129,7 +131,9 @@ namespace PublicInfos
         {
             using (var db = GetInstance())
             {
-                return db.Queryable<Pool>().ToList();
+                var c = db.Queryable<Pool>().ToList();
+                c.ForEach(x => x.PluginInit());
+                return c;
             }
         }
         public static void AddPool(Pool pool)
