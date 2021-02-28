@@ -9,6 +9,7 @@ using me.cqp.luohuaming.CustomGacha.UI.View;
 using PublicInfos;
 using System.Diagnostics;
 using System.IO;
+using System.Windows;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
 {
@@ -200,11 +201,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 removeCategory(peremeter);
                 return;
             }
-            SelectCategory.Content.Remove(SelectGachaItem.ItemID);
-            GachaItems.Remove(SelectGachaItem);
-            SQLHelper.RemoveGachaItem(SelectGachaItem);
-            SQLHelper.UpdatePool(SelectPool);
-            SelectGachaItem = null;
+            if (System.Windows.MessageBox.Show("确认要删除项目吗？", "疑问", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                SelectCategory.Content.Remove(SelectGachaItem.ItemID);
+                //SQLHelper.RemoveGachaItem(SelectGachaItem);
+                SQLHelper.UpdatePool(SelectPool);
+                GachaItems.Remove(SelectGachaItem);
+                SelectGachaItem = null;
+            }
         }
         public DelegateCommand CopyGachaItem { get; set; }
         private void copyGachaItem(object peremeter)
@@ -253,11 +257,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         }
         private void removeCategory(object peremeter)
         {
-            SelectPool.Content.Remove(SelectCategory.ID);
-            Categories.Remove(SelectCategory);
-            SQLHelper.RemoveCategory(SelectCategory);
-            SQLHelper.UpdatePool(SelectPool);
-            SelectCategory = null;
+            if (System.Windows.MessageBox.Show("确认要删除池子吗？", "疑问", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            {
+                SelectPool.Content.Remove(SelectCategory.ID);
+                SQLHelper.RemoveCategory(SelectCategory);
+                SQLHelper.UpdatePool(SelectPool);
+                Categories.Remove(SelectCategory);
+                SelectCategory = null;
+            }
         }
         private void copyCategory(object peremeter)
         {
@@ -265,6 +272,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 return;
             var c = SelectCategory.Clone();
             c.ID = 0;
+            c.Content.Clear();
             Categories.Add(c);
             c.ID = SQLHelper.UpdateOrAddCategory(c);
             SelectPool.Content.Add(c.ID);

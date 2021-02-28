@@ -56,6 +56,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI
                     Filter = "图像文件|*.jpg;*.png|插件文件|*.dll"
                 };
                 dialog.ShowDialog();
+                if (string.IsNullOrWhiteSpace(dialog.FileName))
+                    return;
                 textBox.Text = dialog.FileName.Replace(dialog.InitialDirectory + "\\", "");
             }
             else if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
@@ -73,9 +75,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI
                             SQLHelper.UpdatePool(MainSave.PoolInstances[Pools.SelectedIndex]);
                             SQLHelper.InsertOrUpdateGachaItem(c as GachaItem);
                         }
-                        else
+                        else if(c is Category)
                         {
-                            return;
+                            SQLHelper.UpdateOrAddCategory(c as Category);
+                            //return;
                         }
                         Helper.ShowGrowlMsg("项目已保存");
                         break;

@@ -52,6 +52,7 @@ namespace PublicInfos
         /// <returns>抽卡结果</returns>
         private static GachaItem GetGachaItem(Pool pool, int gachaCount = 1)
         {
+            //TODO: 修复保底机制，不能只从一个池里面取
             var categraies = SQLHelper.GetCategoriesByIDs(pool.Content);
             Category destCategory = RandomGetItem(categraies);
             List<GachaItem> content = SQLHelper.GetContentByIDs(destCategory.Content);
