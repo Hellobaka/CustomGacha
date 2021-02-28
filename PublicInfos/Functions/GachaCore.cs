@@ -15,6 +15,7 @@ namespace PublicInfos
             for (int i = 0; i < count; i++)
             {
                 GachaItem gachaItem = GetGachaItem(pool, gachaCount);
+                gachaItem = CalcGachaItemCount(gachaItem);
                 gachaCount = (gachaCount == pool.BaodiCount) ? 1 : ++gachaCount;
                 if (gachaItem == null)
                     break;
@@ -52,14 +53,13 @@ namespace PublicInfos
         /// <returns>抽卡结果</returns>
         private static GachaItem GetGachaItem(Pool pool, int gachaCount = 1)
         {
-            //TODO: 修复保底机制，不能只从一个池里面取
             var categraies = SQLHelper.GetCategoriesByIDs(pool.Content);
             Category destCategory = RandomGetItem(categraies);
-            List<GachaItem> content = SQLHelper.GetContentByIDs(destCategory.Content);
+            List<GachaItem> content = SQLHelper.GetGachaItemsByIDs(destCategory.Content);
             content.ForEach(x =>
                     x.Probablity = destCategory.UpContent.Any(o => o == x.ItemID) ? x.UpProbablity : x.Probablity);
             if (gachaCount == pool.BaodiCount)
-                return GetBaodiItem(content);
+                return GetBaodiItem(categraies);
             else
                 return RandomGetItem(content);
         }
@@ -88,16 +88,16 @@ namespace PublicInfos
             }
             return default;
         }
-        private static GachaItem GetBaodiItem(List<GachaItem> ls)
+        private static GachaItem GetBaodiItem(List<Category> ls)
         {
             var c = RandomGetItem(ls.Where(x => x.IsBaodi).ToList());
             if (c == null)//不存在保底项目，则随机返回一个
             {
-                return RandomGetItem(ls);
+                return RandomGetItem(SQLHelper.GetGachaItemsByIDs(RandomGetItem(ls).Content));
             }
             else
             {
-                return c;
+                return RandomGetItem(SQLHelper.GetGachaItemsByIDs(c.Content));
             }
         }
         /// <summary>
@@ -159,12 +159,18 @@ namespace PublicInfos
                 }
             }
             using (Graphics g = Graphics.FromImage(background))
+            using (Bitmap newImage = (Bitmap)Image.FromFile(Path.Combine(pool.RelativePath, pool.NewPicPath)))
             {
                 int index = 0;
                 foreach (var item in gachaItems)
                 {
                     Image itemImage = GetGachaItemImage(item, pool.RelativePath, pool.ImageConfig, pool.DrawMainImage, pool.DrawItem);
                     g.DrawImage(itemImage, new Rectangle(DrawPoints[index], itemImage.Size));
+                    if(item.IsNew)
+                    {
+                        Point newPoint = new Point(DrawPoints[index].X + pool.NewPicX, DrawPoints[index].Y + pool.NewPicY);
+                        g.DrawImage(newImage, new Rectangle(newPoint, new Size(pool.NewPicWidth, pool.NewPicHeight)));
+                    }
                     index++;
                 }
             }

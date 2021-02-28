@@ -340,7 +340,6 @@ namespace PublicInfos
                             {
                                 DrawPoints = plugin.CreateInstance(item.FullName);
                             }
-                            //TODO: 实现其他接口
                         }
                     }
                     catch (Exception e)
@@ -391,11 +390,6 @@ namespace PublicInfos
         [Category("路径")]
         public string BackgroundImagePath { get; set; } = "";
         /// <summary>
-        /// 是否为保底项目
-        /// </summary>
-        [Category("数值")]
-        public bool IsBaodi { get; set; } = false;
-        /// <summary>
         /// 表示当前项目的数量
         /// </summary>
         [Category("数值")]
@@ -432,6 +426,9 @@ namespace PublicInfos
         public DateTime CreateDt { get; set; } = DateTime.Now;
         [Browsable(false)]
         public DateTime UpdateDt { get; set; }
+        [SugarColumn(IsIgnore = true)]
+        [Browsable(false)]
+        public bool IsNew { get; set; }
 
         public GachaItem Clone()
         {
@@ -473,6 +470,11 @@ namespace PublicInfos
         [Browsable(false)]
         public int ID { get; set; }
         public string Name { get; set; }
+        /// <summary>
+        /// 是否为保底项目
+        /// </summary>
+        public bool IsBaodi { get; set; } = false;
+
         [SugarColumn(ColumnDataType = "Text", IsJson = true)]
         [Browsable(false)]
         public List<int> Content { get; set; } = new List<int>();

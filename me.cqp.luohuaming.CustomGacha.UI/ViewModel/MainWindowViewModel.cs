@@ -9,7 +9,9 @@ using me.cqp.luohuaming.CustomGacha.UI.View;
 using PublicInfos;
 using System.Diagnostics;
 using System.IO;
+using HandyControl.Data;
 using System.Windows;
+using System.Threading;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
 {
@@ -144,7 +146,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 this.RaisePropertyChanged("SelectCategory");
                 if (value == null)
                     return;
-                var c = SQLHelper.GetContentByIDs(value.Content);
+                var c = SQLHelper.GetGachaItemsByIDs(value.Content);
                 c.Where(x => value.UpContent.Any(o => o == x.ItemID)).Do(x => x.IsUp = true);
                 GachaItems = Helper.List2ObservableCollection(c);                
             }
@@ -201,11 +203,17 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 removeCategory(peremeter);
                 return;
             }
-            if (System.Windows.MessageBox.Show("确认要删除项目吗？", "疑问", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            MessageBoxInfo info = new MessageBoxInfo
+            {
+                Button = MessageBoxButton.YesNo,
+                Caption = "疑问",
+                Message = "确认要删除此抽卡项目吗？此操作并不会从数据库中删除此项",
+            };
+            if (HandyControl.Controls.MessageBox.Show(info) == MessageBoxResult.Yes)
             {
                 SelectCategory.Content.Remove(SelectGachaItem.ItemID);
                 //SQLHelper.RemoveGachaItem(SelectGachaItem);
-                SQLHelper.UpdatePool(SelectPool);
+                SQLHelper.UpdateOrAddCategory(SelectCategory);
                 GachaItems.Remove(SelectGachaItem);
                 SelectGachaItem = null;
             }
@@ -231,15 +239,22 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         public DelegateCommand PoolDrawTest { get; set; }
         private void poolDrawTest(object peremeter)
         {
-            if (SelectPool == null)
-            { 
-                Helper.ShowGrowlMsg("请先选中一个池"); return;
-            }
-            Directory.CreateDirectory("DrawTest");
-            var c = GachaCore.DoGacha(SelectPool, SelectPool.MultiGachaNumber);
-            string filename = Guid.NewGuid().ToString() + ".jpg";
-            GachaCore.DrawGachaResult(c, SelectPool).Save("DrawTest\\" + filename);
-            Process.Start("DrawTest\\"+filename);
+            Thread thread = new Thread(()=>
+            {
+                if (SelectPool == null)
+                {
+                    Helper.ShowGrowlMsg("请先选中一个池"); return;
+                }
+                Directory.CreateDirectory("DrawTest");
+                long testQQ = 8863450594;
+                var c = GachaCore.DoGacha(SelectPool, SelectPool.MultiGachaNumber);
+                c = SQLHelper.UpdateGachaItemsNewStatus(c, testQQ);
+                SQLHelper.InsertGachaItem2Repo(c, testQQ);
+                string filename = Guid.NewGuid().ToString() + ".jpg";
+                GachaCore.DrawGachaResult(c, SelectPool).Save("DrawTest\\" + filename);
+                Process.Start("DrawTest\\" + filename);
+            });
+            thread.Start();
         }
         private void addCategory(object peremeter)
         {
@@ -250,14 +265,20 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 Name = "示例目录"
             };
             Categories.Add(c);
-            c.ID = SQLHelper.UpdateOrAddCategory(c);
+            c.ID = SQLHelper.UpdateOrAddCategory(c, true);
             SelectPool.Content.Add(c.ID);
             SQLHelper.UpdatePool(SelectPool);
             SelectCategory = c;
         }
         private void removeCategory(object peremeter)
         {
-            if (System.Windows.MessageBox.Show("确认要删除池子吗？", "疑问", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
+            MessageBoxInfo info = new MessageBoxInfo
+            {
+                Button = MessageBoxButton.YesNo,
+                Caption = "疑问",
+                Message = "确认要删除此目录吗？此操作不可逆",
+            };
+            if (HandyControl.Controls.MessageBox.Show(info) == MessageBoxResult.Yes)
             {
                 SelectPool.Content.Remove(SelectCategory.ID);
                 SQLHelper.RemoveCategory(SelectCategory);
@@ -274,7 +295,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             c.ID = 0;
             c.Content.Clear();
             Categories.Add(c);
-            c.ID = SQLHelper.UpdateOrAddCategory(c);
+            c.ID = SQLHelper.UpdateOrAddCategory(c, true);
             SelectPool.Content.Add(c.ID);
             SQLHelper.UpdatePool(SelectPool);
             SelectCategory = c;
@@ -293,7 +314,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 .Initialize<GachaItemQueryDialogViewModel>(vm => { vm.Result = GachaItems.ToList(); vm.OpenMode = "Query"; })
                 .GetResultAsync<List<GachaItem>>().ContinueWith(x =>
                 {
-                    System.Windows.Application.Current.Dispatcher.Invoke(()
+                    Application.Current.Dispatcher.Invoke(()
                         => x.Result.ForEach(o =>
                         {
                             if (GachaItems.Any(z => z.ItemID == o.ItemID) is false)
@@ -316,7 +337,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     })
                 .GetResultAsync<List<GachaItem>>().ContinueWith(x =>
                     {
-                        System.Windows.Application.Current.Dispatcher.Invoke(() =>
+                        Application.Current.Dispatcher.Invoke(() =>
                         {
                             SelectCategory.UpContent.Clear();
                             x.Result.ForEach(o =>
@@ -325,7 +346,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                             });
                             SQLHelper.UpdateOrAddCategory(SelectCategory);
                             GachaItems.Clear();
-                            GachaItems = Helper.List2ObservableCollection(SQLHelper.GetContentByIDs(SelectCategory.Content));
+                            GachaItems = Helper.List2ObservableCollection(SQLHelper.GetGachaItemsByIDs(SelectCategory.Content));
                             GachaItems.Where(o => x.Result.Any(i => i.ItemID == o.ItemID)).Do(o => o.IsUp = true);
                             this.RaisePropertyChanged("GachaItems");
                         });

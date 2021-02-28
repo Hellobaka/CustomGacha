@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using SqlSugar;
 
 namespace PublicInfos
@@ -196,35 +197,35 @@ namespace PublicInfos
         #region ---Category---
         public static List<Category> GetCategoriesByIDs(List<int> id)
         {
-            using(var db = GetInstance())
+            using (var db = GetInstance())
             {
                 List<Category> c = new List<Category>();
-                foreach(var item in id)
+                foreach (var item in id)
                 {
                     c.Add(db.Queryable<Category>().First(x => x.ID == item));
                 }
                 return c;
             }
         }
-        public static int UpdateOrAddCategory(Category item)
+        public static int UpdateOrAddCategory(Category item, bool addFlag=false)
         {
             if (item == null)
                 return -1;
             using (var db = GetInstance())
             {
-                if (db.Queryable<Category>().Any(x => x.ID == item.ID))
+                if(addFlag)
+                {
+                    return db.Insertable(item).ExecuteReturnIdentity();
+                }
+                else
                 {
                     item.UpdateDt = DateTime.Now;
                     db.Updateable(item).ExecuteCommand();
                     return item.ID;
                 }
-                else
-                {
-                    return db.Insertable(item).ExecuteReturnIdentity();
-                }
             }
         }
-        public static void RemoveCategory(Category category) 
+        public static void RemoveCategory(Category category)
         {
             using (var db = GetInstance())
             {
@@ -236,7 +237,7 @@ namespace PublicInfos
         #region ---GachaItem---
         public static List<GachaItem> GetAllGachaItem()
         {
-            using(var db = GetInstance())
+            using (var db = GetInstance())
             {
                 return db.Queryable<GachaItem>().ToList();
             }
@@ -266,17 +267,37 @@ namespace PublicInfos
                 db.Deleteable(item).ExecuteCommand();
             }
         }
-        public static List<GachaItem> GetContentByIDs(List<int> id)
+        public static GachaItem GetGachaItemByID(int id)
+        {
+            using (var db = GetInstance())
+            {
+                return db.Queryable<GachaItem>().First(x => x.ItemID == id);
+            }
+        }
+        public static List<GachaItem> GetGachaItemsByIDs(List<int> id)
         {
             List<GachaItem> c = new List<GachaItem>();
             using (var db = GetInstance())
             {
-               foreach(var item in id)
+                foreach (var item in id)
                 {
                     c.Add(db.Queryable<GachaItem>().First(x => x.ItemID == item));
                 }
             }
             return c;
+        }
+        public static List<GachaItem> UpdateGachaItemsNewStatus(List<GachaItem> ls, long QQ)
+        {
+            using (var db = GetInstance())
+            {
+                foreach (var item in ls)
+                {
+                    if (ls.Any(x => x.ItemID == item.ItemID && x.IsNew))
+                        continue;
+                    item.IsNew = ! db.Queryable<DB_Repo>().Any(x => x.QQID == QQ && x.ItemID == item.ItemID);
+                }
+                return ls;
+            }
         }
         #endregion
     }
