@@ -424,6 +424,10 @@ namespace PublicInfos
         /// </summary>
         [Category("数值")]
         public int Value { get; set; } = 0;
+        /// <summary>
+        /// 自定义备注
+        /// </summary>
+        public string Remark { get; set; }
         [Browsable(false)]
         public DateTime CreateDt { get; set; } = DateTime.Now;
         [Browsable(false)]
