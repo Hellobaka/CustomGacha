@@ -14,6 +14,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code
             MainSave.CQApi = e.CQApi;
             MainSave.CQLog = e.CQLog;
             MainSave.ImageDirectory = CommonHelper.GetAppImageDirectory();
+            MainSave.GachaResultRootPath = Path.Combine(MainSave.ImageDirectory, "CustomGacha");
             MainSave.DBPath = Path.Combine(e.CQApi.AppDirectory, "data.db");
             if (File.Exists(MainSave.DBPath) is false)
             {
@@ -21,8 +22,10 @@ namespace me.cqp.luohuaming.CustomGacha.Code
             }
             SQLHelper.LoadConfig();
             MainSave.PoolInstances = SQLHelper.GetAllPools();
+            Directory.CreateDirectory(MainSave.GachaResultRootPath);
             MainSave.Instances.Add(new Register());//这里需要将指令实例化填在这里
             MainSave.Instances.Add(new Sign());
+            MainSave.Instances.Add(new MultiGacha());
         }
     }
 }

@@ -39,6 +39,6 @@
 	],
 	"auth": [ // 应用权限（发布前请删除无用权限）
 		101, //发送群消息         sendGroupMsg
-		106, //发送私聊消息       sendPrivateMsg
+		106 //发送私聊消息       sendPrivateMsg
 	]
 }

@@ -1,5 +1,7 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using Native.Sdk.Cqp;
 using Native.Sdk.Cqp.EventArgs;
 using PublicInfos;
 
@@ -22,8 +24,17 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
             {
                 SendID = e.FromGroup,
             };
+            var destPool = MainSave.PoolInstances.Find(x => x.MultiOrder == e.Message.Text);
+            string resultPicPath = Path.Combine(MainSave.GachaResultRootPath, destPool.Name);
+            Directory.CreateDirectory(resultPicPath);
 
-            sendText.MsgToSend.Add("这里输入需要发送的文本");
+            var c = GachaCore.DoGacha(destPool, destPool.MultiGachaNumber);
+            c = SQLHelper.UpdateGachaItemsNewStatus(c, e.FromQQ);
+            SQLHelper.InsertGachaItem2Repo(c, e.FromQQ);
+            string filename = DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
+            GachaCore.DrawGachaResult(c, destPool).Save(Path.Combine(resultPicPath, filename));
+            //TODO: 回复文本设置
+            sendText.MsgToSend.Add(CQApi.CQCode_Image($@"CustomGacha\{destPool.Name}\{filename}").ToSendString());
             result.SendObject.Add(sendText);
             return result;
         }

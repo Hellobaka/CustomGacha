@@ -13,8 +13,8 @@ namespace PublicInfos
             SqlSugarClient db = new SqlSugarClient(new ConnectionConfig()
             {
                 //TODO: 插件发布时替换此处
-                ConnectionString = $"data source={Path.Combine(Environment.CurrentDirectory, "data.db")}",
-                //ConnectionString = $"data source={MainSave.DBPath}",
+                //ConnectionString = $"data source={Path.Combine(Environment.CurrentDirectory, "data.db")}",
+                ConnectionString = $"data source={MainSave.DBPath}",
                 DbType = DbType.Sqlite,
                 IsAutoCloseConnection = true,
                 InitKeyType = InitKeyType.Attribute,
@@ -30,8 +30,8 @@ namespace PublicInfos
             using (var db = GetInstance())
             {
                 //TODO: 插件发布时替换此处
-                //db.DbMaintenance.CreateDatabase(MainSave.DBPath);
-                db.DbMaintenance.CreateDatabase(Path.Combine(Environment.CurrentDirectory, "data.db"));
+                db.DbMaintenance.CreateDatabase(MainSave.DBPath);
+                //db.DbMaintenance.CreateDatabase(Path.Combine(Environment.CurrentDirectory, "data.db"));
                 db.CodeFirst.InitTables(typeof(DB_Repo));
                 db.CodeFirst.InitTables(typeof(DB_User));
                 db.CodeFirst.InitTables(typeof(Pool));

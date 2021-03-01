@@ -15,6 +15,7 @@ namespace PublicInfos
         public static string AppDirectory { get; set; }
         public static string ImageDirectory { get; set; }
         public static string DBPath { get; set; }
+        public static string GachaResultRootPath { get; set; }
         public static OrderConfig OrderConfig { get; set; }
         public static DateTime SignResetTime { get; set; }
         public static int SignCeil { get; set; }
