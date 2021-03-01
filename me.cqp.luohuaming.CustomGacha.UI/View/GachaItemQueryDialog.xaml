@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.View"
         xmlns:hc="https://handyorg.github.io/handycontrol"
         xmlns:vm="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.ViewModel"
+        xmlns:s2s="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.Converter"
         mc:Ignorable="d"
         d:DesignHeight="400"
         d:DesignWidth="600"
@@ -14,6 +15,7 @@
         Loaded="Border_Loaded">
     <Border.Resources>
         <ResourceDictionary>
+            <s2s:RelativePath2FullPathConverter x:Key="s2sConverter"/>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
@@ -58,9 +60,17 @@
                 <DataGridTextColumn IsReadOnly="True"
                                     Binding="{Binding Probablity}"
                                     Header="概率" />
-                <DataGridCheckBoxColumn IsReadOnly="True"
-                                        Binding="{Binding IsBaodi}"
-                                        Header="是否为保底" />
+                <DataGridTemplateColumn Width="60"
+                                        CanUserResize="False">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding ImagePath, Converter={StaticResource s2sConverter}}"
+                                   Width="32"
+                                   Height="32"
+                                   Stretch="Uniform" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
         <StackPanel Grid.Row="2"
@@ -79,6 +89,13 @@
                     Width="60"
                     Tag="AntiSelect"
                     Click="Button_Click">反选</Button>
+            <hc:Divider LineStrokeThickness="2"
+                        LineStroke="{DynamicResource DarkPrimaryBrush}"
+                        Orientation="Vertical"
+                        MaxHeight="16" />
+            <Button Margin="3"
+                    Style="{StaticResource ButtonPrimary}"
+                    Click="Quit_Click">退出不保存</Button>
             <Button Margin="3"
                     Width="60"
                     Style="{StaticResource ButtonPrimary}"

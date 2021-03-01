@@ -78,7 +78,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI
                         else if(c is Category)
                         {
                             SQLHelper.UpdateOrAddCategory(c as Category);
-                            //return;
                         }
                         Helper.ShowGrowlMsg("项目已保存");
                         break;

@@ -7,7 +7,7 @@ using System.Windows.Input;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.Command
 {
-    class DelegateCommand : ICommand
+    public class DelegateCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
         public Action<object> ExecuteAction { get; set; }

@@ -81,6 +81,7 @@
     </ApplicationDefinition>
     <Compile Include="Command\DelegateCommand.cs" />
     <Compile Include="Converter\Bool2IntConverter.cs" />
+    <Compile Include="Converter\RelativePath2FullPathConverter.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="ViewModel\GachaItemQueryDialogViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />

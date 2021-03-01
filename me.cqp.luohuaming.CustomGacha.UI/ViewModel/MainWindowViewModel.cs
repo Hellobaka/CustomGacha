@@ -241,6 +241,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         {
             Thread thread = new Thread(()=>
             {
+                //TODO: 进度条请求
                 if (SelectPool == null)
                 {
                     Helper.ShowGrowlMsg("请先选中一个池"); return;
@@ -310,8 +311,9 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             }
             if (ButtonDirection)
             {
+                GachaItemQueryDialogViewModel.RelateivePath = SelectPool.RelativePath;
                 Dialog.Show<GachaItemQueryDialog>()
-                .Initialize<GachaItemQueryDialogViewModel>(vm => { vm.Result = GachaItems.ToList(); vm.OpenMode = "Query"; })
+                .Initialize<GachaItemQueryDialogViewModel>(vm => { vm.Result = GachaItems.ToList(); vm.OpenMode = "Query";  })
                 .GetResultAsync<List<GachaItem>>().ContinueWith(x =>
                 {
                     Application.Current.Dispatcher.Invoke(()
@@ -333,7 +335,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     {
                         vm.GachaItems = GachaItems; 
                         vm.UpContent = SelectCategory.UpContent; 
-                        vm.OpenMode = "SelectUp"; 
+                        vm.OpenMode = "SelectUp";
                     })
                 .GetResultAsync<List<GachaItem>>().ContinueWith(x =>
                     {

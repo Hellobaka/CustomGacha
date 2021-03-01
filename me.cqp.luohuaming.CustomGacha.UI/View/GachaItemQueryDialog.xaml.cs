@@ -16,7 +16,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
             InitializeComponent();
             this.DataContext = new GachaItemQueryDialogViewModel();
         }
-
+        //TODO: 分页控件请求
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             switch ((sender as Button).Tag)
@@ -60,7 +60,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
             ((GachaItemQueryDialogViewModel)this.DataContext).Result = c;
             ((GachaItemQueryDialogViewModel)this.DataContext).CloseCmd.Execute(null);
         }
-
+        private void Quit_Click(object sender, RoutedEventArgs e)
+        {
+            ((GachaItemQueryDialogViewModel)this.DataContext).Result = new List<GachaItem>();
+            ((GachaItemQueryDialogViewModel)this.DataContext).CloseCmd.Execute(null);
+        }
         private void Border_Loaded(object sender, RoutedEventArgs e)
         {
             var c = (GachaItemQueryDialogViewModel)this.DataContext;

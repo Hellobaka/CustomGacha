@@ -127,7 +127,6 @@ namespace PublicInfos
         /// <param name="pool">抽卡的池</param>
         public static Image DrawGachaResult(List<GachaItem> gachaItems, Pool pool)
         {
-            //TODO: 坐标预先计算, 便于后期开放接口
             string backgroundImagePath = Path.Combine(pool.RelativePath, pool.BackgroundImagePath);
             if (!File.Exists(backgroundImagePath))
                 throw new FileNotFoundException($"池子的背景图片文件不存在，在池{pool.Name}中 路径{backgroundImagePath}");

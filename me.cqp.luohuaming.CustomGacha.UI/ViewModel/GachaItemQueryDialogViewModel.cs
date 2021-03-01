@@ -7,8 +7,10 @@ using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
 {
-    class GachaItemQueryDialogViewModel : NotifyicationObject, IDialogResultable<List<GachaItem>>
+    public class GachaItemQueryDialogViewModel : NotifyicationObject, IDialogResultable<List<GachaItem>>
     {
+        public static string RelateivePath { get; set; }
+
         private ObservableCollection<GachaItem> gachaItems;
         public ObservableCollection<GachaItem> GachaItems
         {

@@ -2,7 +2,7 @@
 
 namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
 {
-    class NotifyicationObject : INotifyPropertyChanged
+    public class NotifyicationObject : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public void RaisePropertyChanged(string PropertyName)

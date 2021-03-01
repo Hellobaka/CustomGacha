@@ -489,7 +489,10 @@ namespace PublicInfos
 
         public Category Clone()
         {
-            return (Category)this.MemberwiseClone();
+            var o = (Category)this.MemberwiseClone();
+            o.Content = new List<int>();
+            this.Content.ForEach(x => o.Content.Add(x));
+            return o;
         }
     }
 
