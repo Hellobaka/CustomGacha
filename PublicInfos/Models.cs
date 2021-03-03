@@ -342,9 +342,9 @@ namespace PublicInfos
                             }
                         }
                     }
-                    catch (Exception e)
+                    catch (ReflectionTypeLoadException e)
                     {
-                        throw new FileLoadException($"请检查 {filePath} 插件是否正确编写：{e.Message}\n{e.StackTrace}");
+                        throw new FileLoadException($"{e.LoaderExceptions[0].Message}\n{e.StackTrace}");
                     }
                 }
                 else

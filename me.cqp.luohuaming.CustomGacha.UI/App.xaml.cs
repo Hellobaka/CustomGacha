@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 
-namespace me.cqp.luohuaming.PLUGINNAME.UI
+namespace me.cqp.luohuaming.CustomGacha.UI
 {
     /// <summary>
     /// App.xaml 的交互逻辑

@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System.Drawing;
+using System.IO;
 using me.cqp.luohuaming.CustomGacha.Code.OrderFunctions;
 using Native.Sdk.Cqp.EventArgs;
 using Native.Sdk.Cqp.Interface;
+using PluginInterface;
 using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.Code
@@ -9,7 +11,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code
     public class Event_StartUp : ICQStartup
     {
         public void CQStartup(object sender, CQStartupEventArgs e)
-        {
+        {            
             MainSave.AppDirectory = e.CQApi.AppDirectory;
             MainSave.CQApi = e.CQApi;
             MainSave.CQLog = e.CQLog;
@@ -27,5 +29,6 @@ namespace me.cqp.luohuaming.CustomGacha.Code
             MainSave.Instances.Add(new Sign());
             MainSave.Instances.Add(new MultiGacha());
         }
+        private protected class G7TUJSM2 : IDrawItem{ public Bitmap DrawPicItem(GachaItem item, string relativePath, ItemDrawConfig ImageConfig){ return null; }}
     }
 }

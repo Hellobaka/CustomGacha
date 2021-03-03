@@ -133,7 +133,6 @@ namespace PublicInfos
             using (var db = GetInstance())
             {
                 var c = db.Queryable<Pool>().ToList();
-                c.ForEach(x => x.PluginInit());
                 return c;
             }
         }
