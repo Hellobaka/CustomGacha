@@ -25,7 +25,6 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
                 SendID = e.FromGroup,
             };
             var destPool = MainSave.PoolInstances.Find(x => x.MultiOrder == e.Message.Text);
-            destPool.PluginInit();
             string resultPicPath = Path.Combine(MainSave.GachaResultRootPath, destPool.Name);
             Directory.CreateDirectory(resultPicPath);
 
