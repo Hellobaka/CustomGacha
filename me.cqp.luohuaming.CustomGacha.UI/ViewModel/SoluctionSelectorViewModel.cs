@@ -61,7 +61,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 {
                     Date = x.UpdateDt.ToString("yyyy/MM/dd HH:mm"),
                     Name = x.Name,
-                    Path = x.RelativePath
+                    Path = x.RelativePath,
+                    Object = x
                 });
             });
         }

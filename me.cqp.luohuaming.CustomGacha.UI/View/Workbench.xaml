@@ -1,0 +1,115 @@
+﻿<Window x:Class="me.cqp.luohuaming.CustomGacha.UI.View.Workbench"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.View"
+        xmlns:viewmodel="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.ViewModel"
+        xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+        mc:Ignorable="d"
+        Height="700"
+        Width="1200"
+        Title="{Binding EditPool.Name, StringFormat={}{0} - 工作台 }"
+        WindowStartupLocation="CenterScreen">
+    <Window.DataContext>
+        <viewmodel:WorkbenchViewModel />
+    </Window.DataContext>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="16*"/>
+        </Grid.RowDefinitions>
+        <Menu Margin="5,0,0,0">
+            <MenuItem Header="111">
+                <MenuItem Header="222">
+                    <MenuItem.Icon>
+                        <iconPacks:Material Kind="Github"/>
+                    </MenuItem.Icon>
+                    <MenuItem Header="333">
+                        <MenuItem.Icon>
+                            <iconPacks:BootstrapIcons Kind="Gift"/>
+                        </MenuItem.Icon>
+                    </MenuItem>
+                </MenuItem>
+            </MenuItem>
+            <MenuItem Header="1111">
+                <MenuItem Header="2222">
+                    <MenuItem Header="3333"></MenuItem>
+                </MenuItem>
+            </MenuItem>
+        </Menu>
+        <TabControl TabStripPlacement="Left" Grid.Row="1">
+            <TabItem Width="200"
+                     Height="60">
+                <TabItem.Header>
+                    <StackPanel Orientation="Horizontal">
+                        <iconPacks:PackIconUnicons Kind="LinkAlt"
+                                                   VerticalAlignment="Center"
+                                                   HorizontalAlignment="Left"
+                                                   Height="20"
+                                                   Width="20"
+                                                   Margin="10,0,10,0" />
+                        <TextBlock VerticalAlignment="Center"
+                                   HorizontalAlignment="Left">测试1</TextBlock>
+                    </StackPanel>
+                </TabItem.Header>
+                <Border Background="{DynamicResource PrimaryBrush}">
+                    <TextBlock Style="{StaticResource TextBlockLargeBold}"
+                               Foreground="{DynamicResource TextIconBrush}">
+                                <Run Text="测试" />
+                                <Run Text="1" />
+                    </TextBlock>
+                </Border>
+            </TabItem>
+            <TabItem Header="测试"
+                     Width="200"
+                     Height="60"
+                     HeaderStringFormat="{}{0}2">
+                <Border Background="{DynamicResource SuccessBrush}">
+                    <TextBlock Style="{StaticResource TextBlockLargeBold}"
+                               Foreground="{DynamicResource TextIconBrush}">
+                                <Run Text="测试" />
+                                <Run Text="2" />
+                    </TextBlock>
+                </Border>
+            </TabItem>
+            <TabItem Header="测试"
+                     Width="200"
+                     Height="60"
+                     HeaderStringFormat="{}{0}3">
+                <Border Background="{DynamicResource InfoBrush}">
+                    <TextBlock Style="{StaticResource TextBlockLargeBold}"
+                               Foreground="{DynamicResource TextIconBrush}">
+                                <Run Text="测试" />
+                                <Run Text="3" />
+                    </TextBlock>
+                </Border>
+            </TabItem>
+            <TabItem Header="测试"
+                     Width="200"
+                     Height="60"
+                     HeaderStringFormat="{}{0}4">
+                <Border Background="{DynamicResource WarningBrush}">
+                    <TextBlock Style="{StaticResource TextBlockLargeBold}"
+                               Foreground="{DynamicResource TextIconBrush}">
+                                <Run Text="测试" />
+                                <Run Text="4" />
+                    </TextBlock>
+                </Border>
+            </TabItem>
+            <TabItem Header="测试"
+                     Width="200"
+                     Height="60"
+                     HeaderStringFormat="{}{0}5">
+                <Border Background="{DynamicResource DangerBrush}">
+                    <TextBlock Style="{StaticResource TextBlockLargeBold}"
+                               Foreground="{DynamicResource TextIconBrush}">
+                                <Run Text="测试" />
+                                <Run Text="5" />
+                    </TextBlock>
+                </Border>
+            </TabItem>
+        </TabControl>
+
+    </Grid>
+</Window>

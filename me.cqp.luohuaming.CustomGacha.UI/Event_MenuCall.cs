@@ -21,7 +21,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI
                     {
                         App app = new App();
                         window = app;
-                        //app.Dispatcher.UnhandledException += App_DispatcherUnhandledException;
                         app.Exit += (A,B) => { window = null; };
                         app.InitializeComponent();
                         app.Run();
@@ -38,12 +37,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI
             {
                 MainSave.CQLog.Info("Error", exc.Message, exc.StackTrace);
             }
-        }
-
-        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
-        {
-            MainSave.CQLog.Fatal("Error", e.Exception.Message, e.Exception.StackTrace);
-            throw e.Exception;
         }
     }
 }

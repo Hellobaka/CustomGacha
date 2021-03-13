@@ -176,6 +176,7 @@
     <Compile Include="Converter\RelativePath2FullPathConverter.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Model\SoluctionSelectorModel.cs" />
+    <Compile Include="ViewModel\WorkbenchViewModel.cs" />
     <Compile Include="ViewModel\GachaItemQueryDialogViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\NotificationObject.cs" />
@@ -185,6 +186,9 @@
     </Compile>
     <Compile Include="View\SoluctionSelector.xaml.cs">
       <DependentUpon>SoluctionSelector.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\Workbench.xaml.cs">
+      <DependentUpon>Workbench.xaml</DependentUpon>
     </Compile>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -204,6 +208,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\SoluctionSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\Workbench.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
