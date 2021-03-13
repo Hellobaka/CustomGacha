@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading;
+using System.Windows;
+using me.cqp.luohuaming.CustomGacha.UI.View;
 using Native.Sdk.Cqp.EventArgs;
 using Native.Sdk.Cqp.Interface;
 using PublicInfos;
@@ -8,7 +10,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI
 {
     public class Event_MenuCall : IMenuCall
     {
-        private MainWindow window = null;
+        private App window = null;
         public void MenuCall(object sender, CQMenuCallEventArgs e)
         {
             try
@@ -17,16 +19,19 @@ namespace me.cqp.luohuaming.CustomGacha.UI
                 {
                     Thread thread = new Thread(() =>
                     {
-                        window = new MainWindow();
-                        window.Closing += Window_Closing;
-                        window.ShowDialog();
+                        App app = new App();
+                        window = app;
+                        //app.Dispatcher.UnhandledException += App_DispatcherUnhandledException;
+                        app.Exit += (A,B) => { window = null; };
+                        app.InitializeComponent();
+                        app.Run();
                     });
                     thread.SetApartmentState(ApartmentState.STA);
-                    thread.Start();
+                    thread.Start();                    
                 }
                 else
                 {
-                    window.Activate();
+                    MessageBox.Show("已经打开了一个控制台");
                 }
             }
             catch (Exception exc)
@@ -35,12 +40,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI
             }
         }
 
-        ///<summary>
-        ///窗体关闭时触发
-        ///</summary>
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
-            window = null;
+            MainSave.CQLog.Fatal("Error", e.Exception.Message, e.Exception.StackTrace);
+            throw e.Exception;
         }
     }
 }

@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:me.cqp.luohuaming.CustomGacha.UI"
              StartupUri="MainWindow.xaml">
-    <!--StartupUri="View/GachaItemQueryDialog.xaml">-->
+    <!--StartupUri="View/SoluctionSelector.xaml">-->
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
