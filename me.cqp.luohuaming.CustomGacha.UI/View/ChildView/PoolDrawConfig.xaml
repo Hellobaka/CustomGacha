@@ -1,0 +1,82 @@
+﻿<Page x:Class="me.cqp.luohuaming.CustomGacha.UI.View.ChildView.PoolDrawConfig"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.View.ChildView"
+      xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:viewModel="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.ViewModel"
+      xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+      xmlns:usercontrols="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.UserControls"
+      mc:Ignorable="d"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      Title="PoolDrawConfig">
+    <Page.DataContext>
+        <viewModel:WorkbenchViewModel />
+    </Page.DataContext>
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  CanContentScroll="True">
+        <StackPanel Margin="10">
+            <TextBlock Style="{StaticResource TextBlockSubTitle}"
+                       Margin="0,3"
+                       HorizontalAlignment="Left">注：相对路径是指 此卡池的根目录，之后的所有路径均是相对于此相对路径</TextBlock>
+            <TextBlock Margin="0,3">相对路径</TextBlock>
+            <usercontrols:PathSelector 
+                FilePath="{Binding EditPool.RelativePath,Mode=TwoWay}"
+                OpenType="Folder"/>
+            <TextBlock Margin="0,3">自定义插件</TextBlock>
+            <usercontrols:PathSelector 
+                FilePath="{Binding EditPool.PluginPath,Mode=TwoWay}"
+                OpenType="Folder"/>
+            <Expander Margin="5" Header="背景设置" Background="LightGray" Foreground="Black">
+                <StackPanel Margin="15,5,15,5">
+                    <TextBlock Margin="0,3">背景图片路径</TextBlock>
+                    <usercontrols:PathSelector FilePath="{Binding EditPool.BackgroundImagePath,Mode=TwoWay}" ReletivePath="{Binding EditPool.RelativePath}"/>
+                    <TextBlock Margin="0,3">背景绘制宽度</TextBlock>
+                    <TextBox Margin="0,3"
+                             Text="{Binding EditPool.ImageConfig.BackgroundImageWidth,Mode=TwoWay}" />
+                    <TextBlock Margin="0,3">背景绘制高度</TextBlock>
+                    <TextBox Margin="0,3"
+                             Text="{Binding EditPool.ImageConfig.BackgroundImageHeight,Mode=TwoWay}" />
+                </StackPanel>
+            </Expander>
+            <Expander Margin="5"
+                      Header="起始点位置" Background="LightGray" Foreground="Black">
+                <StackPanel Margin="15,5,15,5">
+                    <TextBlock Margin="0,3">起始点坐标 X</TextBlock>
+                    <TextBox Margin="0,3"
+                             Text="{Binding EditPool.PoolDrawConfig.StartPointX,Mode=TwoWay}" />
+                    <TextBlock Margin="0,3">起始点坐标 Y</TextBlock>
+                    <TextBox Margin="0,3"
+                             Text="{Binding EditPool.PoolDrawConfig.StartPointY,Mode=TwoWay}" />
+                </StackPanel>
+            </Expander>
+            <Expander Margin="5"
+                      Header="绘制子项目后坐标偏移" Background="LightGray" Foreground="Black">
+                <StackPanel Margin="15,5,15,5">
+                    <TextBlock Margin="0,3">每次绘制后 X 偏移量</TextBlock>
+                    <TextBox Margin="0,3"
+                             Text="{Binding EditPool.PoolDrawConfig.DrawXInterval,Mode=TwoWay}" />
+                    <TextBlock Margin="0,3">每次绘制后 Y 偏移量</TextBlock>
+                    <TextBox Margin="0,3"
+                             Text="{Binding EditPool.PoolDrawConfig.DrawYInterval,Mode=TwoWay}" />
+                </StackPanel>
+            </Expander>
+            <Expander Margin="5"
+                      Header="换行设置" Background="LightGray" Foreground="Black">
+                <StackPanel Margin="15,5,15,5">
+                    <TextBlock Margin="0,3">换行的临界 X 值</TextBlock>
+                    <TextBox Margin="0,3"
+                             Text="{Binding EditPool.PoolDrawConfig.MaxX,Mode=TwoWay}" />
+                    <TextBlock Margin="0,3">换行发生时 X 偏移量</TextBlock>
+                    <TextBox Margin="0,3"
+                             Text="{Binding EditPool.PoolDrawConfig.XChangeValue,Mode=TwoWay}" />
+                    <TextBlock Margin="0,3">换行发生时 Y 偏移量</TextBlock>
+                    <TextBox Margin="0,3"
+                             Text="{Binding EditPool.PoolDrawConfig.YChangeValue,Mode=TwoWay}" />
+                </StackPanel>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

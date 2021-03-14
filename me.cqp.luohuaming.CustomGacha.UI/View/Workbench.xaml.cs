@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using MahApps.Metro.IconPacks;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.View
 {
@@ -21,7 +22,21 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
     {
         public Workbench()
         {
+            PackIconCodicons o = new PackIconCodicons();
+            PackIconMaterial oo = new PackIconMaterial();
+            PackIconUnicons ooo = new PackIconUnicons();
             InitializeComponent();
+        }
+
+        private void Frame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        {
+            Page page = e.Content as Page;
+            page.DataContext = this.DataContext;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }

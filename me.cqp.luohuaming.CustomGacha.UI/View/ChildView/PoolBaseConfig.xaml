@@ -1,0 +1,43 @@
+﻿<Page x:Class="me.cqp.luohuaming.CustomGacha.UI.View.ChildView.PoolBaseConfig"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.View.ChildView"
+      mc:Ignorable="d"
+      xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:viewModel="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.ViewModel"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      Title="PoolBaseConfig">
+    <Page.DataContext>
+        <viewModel:WorkbenchViewModel />
+    </Page.DataContext>
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  CanContentScroll="True">
+        <StackPanel Margin="10">
+            <TextBlock Margin="0,3">卡池名称</TextBlock>
+            <TextBox Margin="0,3"
+                     Text="{Binding EditPool.Name,Mode=TwoWay}" />
+            <TextBlock Margin="0,3">单抽指令</TextBlock>
+            <TextBox Margin="0,3"
+                     Text="{Binding EditPool.SingalGachaOrder,Mode=TwoWay}" />
+            <TextBlock Margin="0,3">多抽指令</TextBlock>
+            <TextBox Margin="0,3"
+                     Text="{Binding EditPool.MultiOrder,Mode=TwoWay}" />
+            <TextBlock Margin="0,3">多抽次数</TextBlock>
+            <TextBox Margin="0,3"
+                     Text="{Binding EditPool.MultiGachaNumber,Mode=TwoWay}" />
+            <TextBlock Margin="0,3"
+                       Text="{Binding EditPool.BaodiCount, StringFormat={}保底所需次数: {0}次 }" />
+            <Slider Margin="0,3"
+                    Maximum="{Binding EditPool.MultiGachaNumber}"
+                    Minimum="1"
+                    TickFrequency="1"
+                    TickPlacement="BottomRight"
+                    hc:TipElement.Placement="Top"
+                    hc:TipElement.Visibility="Visible"
+                    Value="{Binding EditPool.BaodiCount, Mode=TwoWay}" />
+        </StackPanel>
+    </ScrollViewer>
+</Page>
