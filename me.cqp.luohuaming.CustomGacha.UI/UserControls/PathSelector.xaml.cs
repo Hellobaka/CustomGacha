@@ -1,16 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -63,7 +54,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
         {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog
             {
-                Multiselect = false
+                Multiselect = false,
             };
             switch (OpenType)
             {
@@ -71,6 +62,16 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
                     dialog.InitialDirectory = ReletivePath;
                     dialog.Filters.Add(new CommonFileDialogFilter("图像文件", "*.png;*.jpg"));
                     dialog.Filters.Add(new CommonFileDialogFilter("插件文件", "*.dll"));
+                    if (string.IsNullOrWhiteSpace(FilePath) is false)
+                    {
+                        dialog.InitialDirectory = Path.Combine(ReletivePath, FilePath);
+                        if (FilePath.EndsWith(".dll"))
+                        {
+                            dialog.Filters.Clear();
+                            dialog.Filters.Add(new CommonFileDialogFilter("插件文件", "*.dll"));
+                            dialog.Filters.Add(new CommonFileDialogFilter("图像文件", "*.png;*.jpg"));
+                        }
+                    }
                     break;
                 case OpenTypeEnum.Folder:
                     dialog.IsFolderPicker = true;
@@ -82,7 +83,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
                 switch (OpenType)
                 {
                     case OpenTypeEnum.File:
-                        FilePath = dialog.FileName.Replace(dialog.InitialDirectory + "\\", "");
+                        FilePath = dialog.FileName.Replace(ReletivePath + "\\", "");
                         break;
                     case OpenTypeEnum.Folder:
                         FilePath = dialog.FileName;

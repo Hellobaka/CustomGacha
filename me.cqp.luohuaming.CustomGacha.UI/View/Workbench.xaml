@@ -298,8 +298,13 @@
                 <MenuItem Header="保存"
                           Icon="{iconPacks:Material Kind=ContentSave}" />
                 <Separator />
+                <MenuItem Header="导入"
+                          Icon="{iconPacks:Material Kind=Import}" />
+                <MenuItem Header="导出"
+                          Icon="{iconPacks:Material Kind=Export}" />
+                <Separator />
                 <MenuItem Header="退出"
-                          Icon="{iconPacks:Material Kind=ExitToApp}" />
+                          Icon="{iconPacks:Material Kind=Power}" />
             </MenuItem>
             <MenuItem Header="关于" >
                 <MenuItem Header="GitHub"
@@ -356,7 +361,7 @@
                 </TabItem.Header>
                 <Frame NavigationUIVisibility="Hidden"
                        LoadCompleted="Frame_LoadCompleted"
-                       Source="pack://application:,,,/View/ChildView/PoolBaseConfig.xaml" />
+                       Source="pack://application:,,,/View/ChildView/SubItemDrawConfig.xaml" />
             </TabItem>
             <TabItem Width="200"
                      Height="60">
@@ -372,7 +377,7 @@
                 </TabItem.Header>
                 <Frame NavigationUIVisibility="Hidden"
                        LoadCompleted="Frame_LoadCompleted"
-                       Source="pack://application:,,,/View/ChildView/PoolBaseConfig.xaml" />
+                       Source="pack://application:,,,/View/ChildView/NewPicConfig.xaml" />
             </TabItem>
             <TabItem Width="200"
                      Height="60">

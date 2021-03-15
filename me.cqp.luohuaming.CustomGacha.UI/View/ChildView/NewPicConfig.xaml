@@ -1,0 +1,53 @@
+﻿<Page x:Class="me.cqp.luohuaming.CustomGacha.UI.View.ChildView.NewPicConfig"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.View.ChildView"
+      mc:Ignorable="d"
+      xmlns:e2i="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.Converter"
+      xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:viewModel="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.ViewModel"
+      xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
+      xmlns:usercontrols="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.UserControls"
+      d:DesignHeight="450"
+      d:DesignWidth="800">
+    <Page.Resources>
+        <ResourceDictionary>
+            <e2i:DrawOrder2IntConverter x:Key="e2iConverter" />
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Page.DataContext>
+        <viewModel:WorkbenchViewModel />
+    </Page.DataContext>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  CanContentScroll="True">
+        <StackPanel Margin="10">
+            <Expander Margin="5"
+                      Header="New图片设置"
+                      Background="LightGray"
+                      Foreground="Black" IsExpanded="True">
+                <StackPanel Margin="15,5,15,5">
+                    <TextBlock Margin="0,3">图片路径</TextBlock>
+                    <usercontrols:PathSelector FilePath="{Binding EditPool.NewPicPath,Mode=TwoWay}"
+                                               OpenType="File"
+                                               ReletivePath="{Binding EditPool.RelativePath}" />
+                    <TextBlock Margin="0,3">宽度</TextBlock>
+                    <TextBox Margin="0,3"
+                             Text="{Binding EditPool.NewPicWidth, Mode=TwoWay}" />
+                    <TextBlock Margin="0,3">高度</TextBlock>
+                    <TextBox Margin="0,3,0,0"
+                             Text="{Binding EditPool.NewPicHeight, Mode=TwoWay}" />
+                    <TextBlock Margin="0,3">X</TextBlock>
+                    <TextBox Margin="0,3"
+                             Text="{Binding EditPool.NewPicX, Mode=TwoWay}" />
+                    <TextBlock Margin="0,3">Y</TextBlock>
+                    <TextBox Margin="0,3,0,0"
+                             Text="{Binding EditPool.NewPicY, Mode=TwoWay}" />
+                </StackPanel>
+            </Expander>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

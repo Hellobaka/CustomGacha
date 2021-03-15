@@ -8,10 +8,16 @@
       xmlns:viewModel="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.ViewModel"
       xmlns:iconPacks="http://metro.mahapps.com/winfx/xaml/iconpacks"
       xmlns:usercontrols="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.UserControls"
+      xmlns:e2i="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.Converter"
       mc:Ignorable="d"
       d:DesignHeight="450"
       d:DesignWidth="800"
       Title="PoolDrawConfig">
+    <Page.Resources>
+        <ResourceDictionary>
+            <e2i:OrderOptional2IntConverter x:Key="e2iConverter" />
+        </ResourceDictionary>
+    </Page.Resources>
     <Page.DataContext>
         <viewModel:WorkbenchViewModel />
     </Page.DataContext>
@@ -28,17 +34,18 @@
             <TextBlock Margin="0,3">自定义插件</TextBlock>
             <usercontrols:PathSelector 
                 FilePath="{Binding EditPool.PluginPath,Mode=TwoWay}"
-                OpenType="Folder"/>
+                                       OpenType="File"
+                                       ReletivePath="{Binding EditPool.RelativePath}" />
             <Expander Margin="5" Header="背景设置" Background="LightGray" Foreground="Black">
                 <StackPanel Margin="15,5,15,5">
                     <TextBlock Margin="0,3">背景图片路径</TextBlock>
                     <usercontrols:PathSelector FilePath="{Binding EditPool.BackgroundImagePath,Mode=TwoWay}" ReletivePath="{Binding EditPool.RelativePath}"/>
-                    <TextBlock Margin="0,3">背景绘制宽度</TextBlock>
-                    <TextBox Margin="0,3"
-                             Text="{Binding EditPool.ImageConfig.BackgroundImageWidth,Mode=TwoWay}" />
-                    <TextBlock Margin="0,3">背景绘制高度</TextBlock>
-                    <TextBox Margin="0,3"
-                             Text="{Binding EditPool.ImageConfig.BackgroundImageHeight,Mode=TwoWay}" />
+                    <TextBlock Margin="0,3">子项目排序设置</TextBlock>
+                    <ComboBox SelectedIndex="{Binding EditPool.PoolDrawConfig.OrderOptional,Mode=TwoWay, Converter={StaticResource e2iConverter}}">
+                        <ComboBoxItem>升序，从小到大</ComboBoxItem>
+                        <ComboBoxItem>降序，从大到小</ComboBoxItem>
+                        <ComboBoxItem>不排序</ComboBoxItem>
+                    </ComboBox>
                 </StackPanel>
             </Expander>
             <Expander Margin="5"

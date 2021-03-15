@@ -179,6 +179,7 @@
     </ApplicationDefinition>
     <Compile Include="Command\DelegateCommand.cs" />
     <Compile Include="Converter\Bool2IntConverter.cs" />
+    <Compile Include="Converter\Enum2IntConverter.cs" />
     <Compile Include="Converter\RelativePath2FullPathConverter.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Model\SoluctionSelectorModel.cs" />
@@ -190,11 +191,17 @@
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\NotificationObject.cs" />
     <Compile Include="ViewModel\SoluctionSelectorViewModel.cs" />
+    <Compile Include="View\ChildView\NewPicConfig.xaml.cs">
+      <DependentUpon>NewPicConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ChildView\PoolBaseConfig.xaml.cs">
       <DependentUpon>PoolBaseConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ChildView\PoolDrawConfig.xaml.cs">
       <DependentUpon>PoolDrawConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ChildView\SubItemDrawConfig.xaml.cs">
+      <DependentUpon>SubItemDrawConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\GachaItemQueryDialog.xaml.cs">
       <DependentUpon>GachaItemQueryDialog.xaml</DependentUpon>
@@ -222,11 +229,19 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\ChildView\NewPicConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="View\ChildView\PoolBaseConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ChildView\PoolDrawConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ChildView\SubItemDrawConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
