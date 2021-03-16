@@ -183,6 +183,9 @@
     <Compile Include="Converter\RelativePath2FullPathConverter.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Model\SoluctionSelectorModel.cs" />
+    <Compile Include="UserControls\ImageSelector.xaml.cs">
+      <DependentUpon>ImageSelector.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\PathSelector.xaml.cs">
       <DependentUpon>PathSelector.xaml</DependentUpon>
     </Compile>
@@ -191,6 +194,9 @@
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\NotificationObject.cs" />
     <Compile Include="ViewModel\SoluctionSelectorViewModel.cs" />
+    <Compile Include="View\ChildView\GachaContentConfig.xaml.cs">
+      <DependentUpon>GachaContentConfig.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ChildView\NewPicConfig.xaml.cs">
       <DependentUpon>NewPicConfig.xaml</DependentUpon>
     </Compile>
@@ -225,7 +231,15 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UserControls\ImageSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\PathSelector.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ChildView\GachaContentConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

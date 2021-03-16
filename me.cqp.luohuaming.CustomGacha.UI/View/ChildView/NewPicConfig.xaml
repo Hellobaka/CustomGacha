@@ -21,33 +21,34 @@
     <Page.DataContext>
         <viewModel:WorkbenchViewModel />
     </Page.DataContext>
-
-    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                  CanContentScroll="True">
-        <StackPanel Margin="10">
-            <Expander Margin="5"
-                      Header="New图片设置"
-                      Background="LightGray"
-                      Foreground="Black" IsExpanded="True">
-                <StackPanel Margin="15,5,15,5">
-                    <TextBlock Margin="0,3">图片路径</TextBlock>
-                    <usercontrols:PathSelector FilePath="{Binding EditPool.NewPicPath,Mode=TwoWay}"
-                                               OpenType="File"
-                                               ReletivePath="{Binding EditPool.RelativePath}" />
-                    <TextBlock Margin="0,3">宽度</TextBlock>
-                    <TextBox Margin="0,3"
-                             Text="{Binding EditPool.NewPicWidth, Mode=TwoWay}" />
-                    <TextBlock Margin="0,3">高度</TextBlock>
-                    <TextBox Margin="0,3,0,0"
-                             Text="{Binding EditPool.NewPicHeight, Mode=TwoWay}" />
-                    <TextBlock Margin="0,3">X</TextBlock>
-                    <TextBox Margin="0,3"
-                             Text="{Binding EditPool.NewPicX, Mode=TwoWay}" />
-                    <TextBlock Margin="0,3">Y</TextBlock>
-                    <TextBox Margin="0,3,0,0"
-                             Text="{Binding EditPool.NewPicY, Mode=TwoWay}" />
-                </StackPanel>
-            </Expander>
-        </StackPanel>
-    </ScrollViewer>
+    <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      CanContentScroll="True">
+            <StackPanel Margin="10">
+                <Expander Margin="5"
+                          Header="New图片设置"
+                          Background="LightGray"
+                          Foreground="Black"
+                          IsExpanded="True">
+                    <StackPanel Margin="15,5,15,5">
+                        <TextBlock Margin="0,3">图片路径</TextBlock>
+                        <usercontrols:PathSelector FilePath="{Binding EditPool.NewPicPath,Mode=TwoWay}"
+                                                   OpenType="File" />
+                        <TextBlock Margin="0,3">宽度</TextBlock>
+                        <TextBox Margin="0,3"
+                                 Text="{Binding EditPool.NewPicWidth, Mode=TwoWay}" />
+                        <TextBlock Margin="0,3">高度</TextBlock>
+                        <TextBox Margin="0,3,0,0"
+                                 Text="{Binding EditPool.NewPicHeight, Mode=TwoWay}" />
+                        <TextBlock Margin="0,3">X</TextBlock>
+                        <TextBox Margin="0,3"
+                                 Text="{Binding EditPool.NewPicX, Mode=TwoWay}" />
+                        <TextBlock Margin="0,3">Y</TextBlock>
+                        <TextBox Margin="0,3,0,0"
+                                 Text="{Binding EditPool.NewPicY, Mode=TwoWay}" />
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
+        </ScrollViewer>
+    </hc:TransitioningContentControl>
 </Page>

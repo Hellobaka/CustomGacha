@@ -290,7 +290,7 @@
             <RowDefinition Height="20*" />
         </Grid.RowDefinitions>
         <Menu Margin="5,0,0,0">
-            <MenuItem Header="文件" >
+            <MenuItem Header="文件">
                 <MenuItem Header="新建"
                           Icon="{iconPacks:Material Kind=File}" />
                 <MenuItem Header="打开"
@@ -306,7 +306,7 @@
                 <MenuItem Header="退出"
                           Icon="{iconPacks:Material Kind=Power}" />
             </MenuItem>
-            <MenuItem Header="关于" >
+            <MenuItem Header="关于">
                 <MenuItem Header="GitHub"
                           Icon="{iconPacks:Material Kind=Github}" />
                 <MenuItem Header="检查更新"
@@ -321,15 +321,16 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons Kind="SettingsGear"
-                                                   VerticalAlignment="Center"
-                                                   Height="20"
-                                                   Width="20"
-                                                   Margin="10,0,20,0" />
+                                                    VerticalAlignment="Center"
+                                                    Height="20"
+                                                    Width="20"
+                                                    Margin="10,0,20,0" />
                         <TextBlock VerticalAlignment="Center">基础设置</TextBlock>
                     </StackPanel>
                 </TabItem.Header>
-                <Frame NavigationUIVisibility="Hidden" LoadCompleted="Frame_LoadCompleted"
-                       Source="pack://application:,,,/View/ChildView/PoolBaseConfig.xaml"/>
+                <Frame NavigationUIVisibility="Hidden"
+                       LoadCompleted="Frame_LoadCompleted"
+                       Source="pack://application:,,,/View/ChildView/PoolBaseConfig.xaml" />
             </TabItem>
             <TabItem Width="200"
                      Height="60">
@@ -393,17 +394,17 @@
                 </TabItem.Header>
                 <Frame NavigationUIVisibility="Hidden"
                        LoadCompleted="Frame_LoadCompleted"
-                       Source="pack://application:,,,/View/ChildView/PoolBaseConfig.xaml" />
+                       Source="pack://application:,,,/View/ChildView/GachaContentConfig.xaml" />
             </TabItem>
             <TabItem Width="200"
                      Height="60">
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconUnicons Kind="Flask"
-                                                    VerticalAlignment="Center"
-                                                    Height="20"
-                                                    Width="20"
-                                                    Margin="10,0,20,0" />
+                                                   VerticalAlignment="Center"
+                                                   Height="20"
+                                                   Width="20"
+                                                   Margin="10,0,20,0" />
                         <TextBlock VerticalAlignment="Center">测试</TextBlock>
                     </StackPanel>
                 </TabItem.Header>

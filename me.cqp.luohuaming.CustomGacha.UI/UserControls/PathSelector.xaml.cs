@@ -1,7 +1,9 @@
 ﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Controls.Primitives;
 using System.Windows.Input;
+using me.cqp.luohuaming.CustomGacha.UI.ViewModel;
 using Microsoft.WindowsAPICodePack.Dialogs;
 using UserControl = System.Windows.Controls.UserControl;
 
@@ -17,6 +19,13 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
             InitializeComponent();
         }
         #region ---依赖属性---
+        private string reletivePath;
+        public string ReletivePath
+        {
+            get { reletivePath = (this.DataContext as WorkbenchViewModel).EditPool.RelativePath; return reletivePath; }
+            set { reletivePath = value; }
+        }
+
         public OpenTypeEnum OpenType
         {
             get { return (OpenTypeEnum)GetValue(OpenTypeProperty); }
@@ -33,14 +42,17 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
         public static readonly DependencyProperty FilePathProperty =
             DependencyProperty.Register("FilePath", typeof(string), typeof(PathSelector), new PropertyMetadata(""));
 
-        public string ReletivePath
+        public static readonly RoutedEvent OnPathSelectedEvent = EventManager.RegisterRoutedEvent("OnPathSelected", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(PathSelector));
+        public event RoutedEventHandler OnPathSelected
         {
-            get { return (string)GetValue(ReletivePathProperty); }
-            set { SetValue(ReletivePathProperty, value); }
+            add { AddHandler(OnPathSelectedEvent, value); }
+            remove { RemoveHandler(OnPathSelectedEvent, value); }
         }
-        public static readonly DependencyProperty ReletivePathProperty =
-            DependencyProperty.Register("ReletivePath", typeof(string), typeof(PathSelector), new PropertyMetadata(""));
         #endregion
+        private void HandleOnPathSelected(object sender,RoutedEventArgs e)
+        {
+            this.RaiseEvent(new RoutedEventArgs(PathSelector.OnPathSelectedEvent, this));
+        }
         public enum OpenTypeEnum
         {
             File,
@@ -49,22 +61,30 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             ShowDialog();
+            HandleOnPathSelected(sender, e);
         }
         private void ShowDialog()
         {
             CommonOpenFileDialog dialog = new CommonOpenFileDialog
             {
                 Multiselect = false,
-            };
+            }; 
+            string baseDir = Path.Combine(ReletivePath, FilePath);
+            var flag = File.GetAttributes(baseDir);
+            if (flag.HasFlag(FileAttributes.Directory) is false)
+            {
+                FileInfo info = new FileInfo(baseDir);
+                baseDir = info.DirectoryName;
+            }
             switch (OpenType)
             {
                 case OpenTypeEnum.File:
-                    dialog.InitialDirectory = ReletivePath;
+                    dialog.InitialDirectory = baseDir;
                     dialog.Filters.Add(new CommonFileDialogFilter("图像文件", "*.png;*.jpg"));
                     dialog.Filters.Add(new CommonFileDialogFilter("插件文件", "*.dll"));
                     if (string.IsNullOrWhiteSpace(FilePath) is false)
                     {
-                        dialog.InitialDirectory = Path.Combine(ReletivePath, FilePath);
+                        dialog.InitialDirectory = baseDir;
                         if (FilePath.EndsWith(".dll"))
                         {
                             dialog.Filters.Clear();
@@ -75,7 +95,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
                     break;
                 case OpenTypeEnum.Folder:
                     dialog.IsFolderPicker = true;
-                    dialog.InitialDirectory = ReletivePath;
+                    dialog.InitialDirectory = baseDir;
                     break;
             }
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
@@ -98,7 +118,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
             if (e.Key == Key.F4)
             {
                 ShowDialog();
+                HandleOnPathSelected(sender, e);
             }
+        }
+
+        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            FilePath = (sender as TextBox).Text;
+            HandleOnPathSelected(sender, e);
         }
     }
 }

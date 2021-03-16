@@ -21,48 +21,50 @@
     <Page.DataContext>
         <viewModel:WorkbenchViewModel />
     </Page.DataContext>
-
-    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                  CanContentScroll="True">
-        <StackPanel Margin="10">
-            <TextBlock Margin="0,3">子项目绘制顺序设置</TextBlock>
-            <ComboBox Margin="0,5,0,15" SelectedIndex="{Binding EditPool.ImageConfig.DrawOrder, Mode=TwoWay, Converter={StaticResource e2iConverter}}">
-                <ComboBoxItem>核心图片晚于背景绘制</ComboBoxItem>
-                <ComboBoxItem>背景晚于核心图片绘制</ComboBoxItem>
-            </ComboBox>
-            <Expander Margin="5"
-                      Header="子项目背景设置"
-                      Background="LightGray"
-                      Foreground="Black">
-                <StackPanel Margin="15,5,15,5">
-                    <TextBlock Margin="0,3">宽度</TextBlock>
-                    <TextBox Margin="0,3"
-                             Text="{Binding EditPool.ImageConfig.BackgroundImageWidth, Mode=TwoWay}" />
-                    <TextBlock Margin="0,3">高度</TextBlock>
-                    <TextBox Margin="0,3,0,0"
-                             Text="{Binding EditPool.ImageConfig.BackgroundImageHeight, Mode=TwoWay}" />
-                </StackPanel>
-            </Expander>
-            <Expander Margin="5"
-                      Header="子项目主图片设置"
-                      Background="LightGray"
-                      Foreground="Black">
-                <StackPanel Margin="15,5,15,5">
-                    <TextBlock Margin="0,3">宽度</TextBlock>
-                    <TextBox Margin="0,3"
-                             Text="{Binding EditPool.ImageConfig.ImageWidth, Mode=TwoWay}" />
-                    <TextBlock Margin="0,3">高度</TextBlock>
-                    <TextBox Margin="0,3,0,0"
-                             Text="{Binding EditPool.ImageConfig.ImageHeight, Mode=TwoWay}" />
-                    <hc:Divider />
-                    <TextBlock Margin="0,3">绘制坐标X</TextBlock>
-                    <TextBox Margin="0,3"
-                             Text="{Binding EditPool.ImageConfig.ImagePointX, Mode=TwoWay}" />
-                    <TextBlock Margin="0,3">绘制坐标Y</TextBlock>
-                    <TextBox Margin="0,3,0,0"
-                             Text="{Binding EditPool.ImageConfig.ImagePointY, Mode=TwoWay}" />
-                </StackPanel>
-            </Expander>
-        </StackPanel>
-    </ScrollViewer>
+    <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      CanContentScroll="True">
+            <StackPanel Margin="10">
+                <TextBlock Margin="0,3">子项目绘制顺序设置</TextBlock>
+                <ComboBox Margin="0,5,0,15"
+                          SelectedIndex="{Binding EditPool.ImageConfig.DrawOrder, Mode=TwoWay, Converter={StaticResource e2iConverter}}">
+                    <ComboBoxItem>核心图片晚于背景绘制</ComboBoxItem>
+                    <ComboBoxItem>背景晚于核心图片绘制</ComboBoxItem>
+                </ComboBox>
+                <Expander Margin="5"
+                          Header="子项目背景设置"
+                          Background="LightGray"
+                          Foreground="Black">
+                    <StackPanel Margin="15,5,15,5">
+                        <TextBlock Margin="0,3">宽度</TextBlock>
+                        <TextBox Margin="0,3"
+                                 Text="{Binding EditPool.ImageConfig.BackgroundImageWidth, Mode=TwoWay}" />
+                        <TextBlock Margin="0,3">高度</TextBlock>
+                        <TextBox Margin="0,3,0,0"
+                                 Text="{Binding EditPool.ImageConfig.BackgroundImageHeight, Mode=TwoWay}" />
+                    </StackPanel>
+                </Expander>
+                <Expander Margin="5"
+                          Header="子项目主图片设置"
+                          Background="LightGray"
+                          Foreground="Black">
+                    <StackPanel Margin="15,5,15,5">
+                        <TextBlock Margin="0,3">宽度</TextBlock>
+                        <TextBox Margin="0,3"
+                                 Text="{Binding EditPool.ImageConfig.ImageWidth, Mode=TwoWay}" />
+                        <TextBlock Margin="0,3">高度</TextBlock>
+                        <TextBox Margin="0,3,0,0"
+                                 Text="{Binding EditPool.ImageConfig.ImageHeight, Mode=TwoWay}" />
+                        <hc:Divider />
+                        <TextBlock Margin="0,3">绘制坐标X</TextBlock>
+                        <TextBox Margin="0,3"
+                                 Text="{Binding EditPool.ImageConfig.ImagePointX, Mode=TwoWay}" />
+                        <TextBlock Margin="0,3">绘制坐标Y</TextBlock>
+                        <TextBox Margin="0,3,0,0"
+                                 Text="{Binding EditPool.ImageConfig.ImagePointY, Mode=TwoWay}" />
+                    </StackPanel>
+                </Expander>
+            </StackPanel>
+        </ScrollViewer>
+    </hc:TransitioningContentControl>
 </Page>

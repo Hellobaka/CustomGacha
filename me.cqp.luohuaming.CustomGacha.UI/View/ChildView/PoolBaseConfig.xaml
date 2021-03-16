@@ -13,31 +13,33 @@
     <Page.DataContext>
         <viewModel:WorkbenchViewModel />
     </Page.DataContext>
-    <ScrollViewer VerticalScrollBarVisibility="Auto"
-                  CanContentScroll="True">
-        <StackPanel Margin="10">
-            <TextBlock Margin="0,3">卡池名称</TextBlock>
-            <TextBox Margin="0,3"
-                     Text="{Binding EditPool.Name,Mode=TwoWay}" />
-            <TextBlock Margin="0,3">单抽指令</TextBlock>
-            <TextBox Margin="0,3"
-                     Text="{Binding EditPool.SingalGachaOrder,Mode=TwoWay}" />
-            <TextBlock Margin="0,3">多抽指令</TextBlock>
-            <TextBox Margin="0,3"
-                     Text="{Binding EditPool.MultiOrder,Mode=TwoWay}" />
-            <TextBlock Margin="0,3">多抽次数</TextBlock>
-            <TextBox Margin="0,3"
-                     Text="{Binding EditPool.MultiGachaNumber,Mode=TwoWay}" />
-            <TextBlock Margin="0,3"
-                       Text="{Binding EditPool.BaodiCount, StringFormat={}保底所需次数: {0}次 }" />
-            <Slider Margin="0,3"
-                    Maximum="{Binding EditPool.MultiGachaNumber}"
-                    Minimum="1"
-                    TickFrequency="1"
-                    TickPlacement="BottomRight"
-                    hc:TipElement.Placement="Top"
-                    hc:TipElement.Visibility="Visible"
-                    Value="{Binding EditPool.BaodiCount, Mode=TwoWay}" />
-        </StackPanel>
-    </ScrollViewer>
+    <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
+        <ScrollViewer VerticalScrollBarVisibility="Auto"
+                      CanContentScroll="True">
+            <StackPanel Margin="10">
+                <TextBlock Margin="0,3">卡池名称</TextBlock>
+                <TextBox Margin="0,3"
+                         Text="{Binding EditPool.Name,Mode=TwoWay}" />
+                <TextBlock Margin="0,3">单抽指令</TextBlock>
+                <TextBox Margin="0,3"
+                         Text="{Binding EditPool.SingalGachaOrder,Mode=TwoWay}" />
+                <TextBlock Margin="0,3">多抽指令</TextBlock>
+                <TextBox Margin="0,3"
+                         Text="{Binding EditPool.MultiOrder,Mode=TwoWay}" />
+                <TextBlock Margin="0,3">多抽次数</TextBlock>
+                <TextBox Margin="0,3"
+                         Text="{Binding EditPool.MultiGachaNumber,Mode=TwoWay}" />
+                <TextBlock Margin="0,3"
+                           Text="{Binding EditPool.BaodiCount, StringFormat={}保底所需次数: {0}次 }" />
+                <Slider Margin="0,3"
+                        Maximum="{Binding EditPool.MultiGachaNumber}"
+                        Minimum="1"
+                        TickFrequency="1"
+                        TickPlacement="BottomRight"
+                        hc:TipElement.Placement="Top"
+                        hc:TipElement.Visibility="Visible"
+                        Value="{Binding EditPool.BaodiCount, Mode=TwoWay}" />
+            </StackPanel>
+        </ScrollViewer>
+    </hc:TransitioningContentControl>
 </Page>

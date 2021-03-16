@@ -1,0 +1,139 @@
+﻿<Page x:Class="me.cqp.luohuaming.CustomGacha.UI.View.ChildView.GachaContentConfig"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:local="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.View.ChildView"
+      mc:Ignorable="d"
+      xmlns:hc="https://handyorg.github.io/handycontrol"
+      xmlns:viewModel="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.ViewModel"
+      xmlns:usercontrols="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.UserControls"
+      xmlns:b2i="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.Converter"
+      d:DesignHeight="450"
+      d:DesignWidth="800"
+      Title="PoolBaseConfig">
+    <Page.Resources>
+        <b2i:Bool2IntConverter x:Key="b2iConverter" />
+    </Page.Resources>
+    <Page.DataContext>
+        <viewModel:WorkbenchViewModel />
+    </Page.DataContext>
+    <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="5*" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="15*" />
+            </Grid.ColumnDefinitions>
+            <TextBlock Grid.Row="0"
+                       Grid.Column="0"
+                       Margin="0,3"
+                       HorizontalAlignment="Left"
+                       Style="{StaticResource TextBlockTitle}">目录列表</TextBlock>
+            <ListBox Grid.Row="1"
+                     ItemsSource="{Binding Categories}"
+                     SelectedItem="{Binding SelectCategory}">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <Grid>
+                            <StackPanel Margin="3">
+                                <TextBlock Text="{Binding Path=Name}" />
+                                <TextBlock Text="{Binding Path=Probablity, StringFormat=概率: {0} %}"
+                                           FontSize="10" />
+                            </StackPanel>
+                        </Grid>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+            <hc:Divider LineStrokeThickness="2"
+                        Grid.Column="1"
+                        Grid.RowSpan="2"
+                        Orientation="Vertical" />
+            <Grid Grid.Row="0"
+                  Grid.Column="2"
+                  Grid.RowSpan="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*" />
+                    <ColumnDefinition Width="7*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
+                <TextBlock Margin="0,3"
+                           HorizontalAlignment="Left"
+                           Style="{StaticResource TextBlockTitle}"
+                           Grid.Row="0">内容列表</TextBlock>
+                <ListBox Grid.Row="1"
+                         ItemsSource="{Binding GachaItems}"
+                         SelectedItem="{Binding SelectGachaItem}">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid>
+                                <Border BorderBrush="#FFFF4600"
+                                        BorderThickness="{Binding IsUp, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource b2iConverter}}"
+                                        CornerRadius="5">
+                                    <StackPanel Margin="3">
+                                        <TextBlock Text="{Binding Path=Name}" />
+                                        <TextBlock Text="{Binding Path=Probablity, StringFormat=概率: {0} %}"
+                                                   FontSize="10" />
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <TextBlock Margin="15,3"
+                           Grid.Row="0"
+                           HorizontalAlignment="Left"
+                           Style="{StaticResource TextBlockTitle}"
+                           Grid.Column="1">项目信息</TextBlock>
+                <ScrollViewer Grid.Row="1"
+                              Grid.Column="1"
+                              Grid.RowSpan="2">
+                    <Border Margin="15,0,0,0"
+                            Padding="15"
+                            CornerRadius="10"
+                            BorderThickness="1"
+                            BorderBrush="LightGray">
+                        <StackPanel>
+                            <TextBlock Margin="3,3">ID</TextBlock>
+                            <TextBox Margin="0,3"
+                                     IsEnabled="False"
+                                     Text="{Binding SelectGachaItem.ItemID}" />
+                            <TextBlock Margin="3,3">名称</TextBlock>
+                            <TextBox Margin="0,3"
+                                     Text="{Binding SelectGachaItem.Name,Mode=TwoWay}" />
+                            <TextBlock Margin="3,3">概率</TextBlock>
+                            <TextBox Margin="0,3"
+                                     Text="{Binding SelectGachaItem.Probablity,Mode=TwoWay}" />
+                            <TextBlock Margin="3,3">UP后概率</TextBlock>
+                            <TextBox Margin="0,3"
+                                     Text="{Binding SelectGachaItem.UpProbablity,Mode=TwoWay}" />
+                            <TextBlock Margin="3,3">主图片</TextBlock>
+                            <usercontrols:ImageSelector ImagePath="{Binding SelectGachaItem.ImagePath,Mode=TwoWay}" />
+                            <TextBlock Margin="3,3">背景图片</TextBlock>
+                            <usercontrols:ImageSelector ImagePath="{Binding SelectGachaItem.BackgroundImagePath,Mode=TwoWay}" />
+                            <TextBlock Margin="3,3">获取时数量下限</TextBlock>
+                            <TextBox Margin="0,3"
+                                     Text="{Binding SelectGachaItem.CountFloor,Mode=TwoWay}" />
+                            <TextBlock Margin="3,3">获取时数量上限</TextBlock>
+                            <TextBox Margin="0,3"
+                                     Text="{Binding SelectGachaItem.CountCeil,Mode=TwoWay}" />
+                            <TextBlock Margin="3,3">物品价值</TextBlock>
+                            <TextBox Margin="0,3"
+                                     Text="{Binding SelectGachaItem.Value,Mode=TwoWay}" />
+                            <TextBlock Margin="3,3">备注</TextBlock>
+                            <TextBox Margin="0,3"
+                                     Text="{Binding SelectGachaItem.Remark}" />
+                        </StackPanel>
+                    </Border>
+                </ScrollViewer>
+            </Grid>
+        </Grid>
+    </hc:TransitioningContentControl>
+</Page>

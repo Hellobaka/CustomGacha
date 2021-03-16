@@ -15,9 +15,9 @@
             <ColumnDefinition Width="*" />
             <ColumnDefinition Width="Auto" />
         </Grid.ColumnDefinitions>
-        <TextBox Margin="0,3"
-                 Text="{Binding FilePath, ElementName=pathSelector, Mode=TwoWay}" />
-        <Button Grid.Column="1"
+        <TextBox Margin="0,3" TextChanged="TextBox_TextChanged"
+                 Text="{Binding FilePath, ElementName=pathSelector, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+        <Button x:Name="OpenPathDialog" Grid.Column="1"
                 Margin="5,0,0,0"
                 Click="Button_Click"
                 Style="{StaticResource ButtonPrimary}"

@@ -33,10 +33,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
             {
                 //新建窗口
                 Workbench fm = new Workbench();
+                (fm.DataContext as WorkbenchViewModel).EditPool = (c as RecentSoluction).Object;
                 fm.InitializeComponent();
                 fm.Show();
                 //传递
-                (fm.DataContext as WorkbenchViewModel).EditPool = (c as RecentSoluction).Object;
             }
             this.Hide();
         }
