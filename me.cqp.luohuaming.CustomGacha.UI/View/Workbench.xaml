@@ -291,26 +291,54 @@
         </Grid.RowDefinitions>
         <Menu Margin="5,0,0,0">
             <MenuItem Header="文件">
-                <MenuItem Header="新建"
-                          Icon="{iconPacks:Material Kind=File}" />
-                <MenuItem Header="打开"
-                          Icon="{iconPacks:Material Kind=FileCog}" />
-                <MenuItem Header="保存"
-                          Icon="{iconPacks:Material Kind=ContentSave}" />
+                <MenuItem Header="新建">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="File"
+                                                    Foreground="{StaticResource PrimaryBrush}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="打开">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="FileCog"
+                                                    Foreground="{StaticResource PrimaryBrush}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="保存">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="ContentSave"
+                                                    Foreground="{StaticResource PrimaryBrush}" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator />
-                <MenuItem Header="导入"
-                          Icon="{iconPacks:Material Kind=Import}" />
-                <MenuItem Header="导出"
-                          Icon="{iconPacks:Material Kind=Export}" />
+                <MenuItem Header="导入">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="Import"
+                                                    Foreground="{StaticResource PrimaryBrush}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+                <MenuItem Header="导出">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="Export"
+                                                    Foreground="{StaticResource PrimaryBrush}" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <Separator />
-                <MenuItem Header="退出"
-                          Icon="{iconPacks:Material Kind=Power}" />
+                <MenuItem Header="退出">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="Power"
+                                                    Foreground="{StaticResource AccentBrush}" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
             <MenuItem Header="关于">
                 <MenuItem Header="GitHub"
                           Icon="{iconPacks:Material Kind=Github}" />
-                <MenuItem Header="检查更新"
-                          Icon="{iconPacks:Material Kind=Update}" />
+                <MenuItem Header="检查更新">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="Update"
+                                                    Foreground="{StaticResource SuccessBrush}" />
+                    </MenuItem.Icon>
+                </MenuItem>
             </MenuItem>
         </Menu>
         <TabControl TabStripPlacement="Left"
@@ -321,6 +349,7 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconCodicons Kind="SettingsGear"
+                                                    Foreground="{DynamicResource PrimaryBrush}"
                                                     VerticalAlignment="Center"
                                                     Height="20"
                                                     Width="20"
@@ -337,6 +366,7 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconMaterial Kind="Draw"
+                                                    Foreground="{DynamicResource PrimaryBrush}"
                                                     VerticalAlignment="Center"
                                                     Height="20"
                                                     Width="20"
@@ -353,6 +383,7 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconMaterial Kind="Pencil"
+                                                    Foreground="{DynamicResource PrimaryBrush}"
                                                     VerticalAlignment="Center"
                                                     Height="20"
                                                     Width="20"
@@ -369,6 +400,7 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconMaterial Kind="NewBox"
+                                                    Foreground="{DynamicResource PrimaryBrush}"
                                                     VerticalAlignment="Center"
                                                     Height="20"
                                                     Width="20"
@@ -385,6 +417,7 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconMaterial Kind="Bookshelf"
+                                                    Foreground="{DynamicResource PrimaryBrush}"
                                                     VerticalAlignment="Center"
                                                     Height="20"
                                                     Width="20"
@@ -401,6 +434,7 @@
                 <TabItem.Header>
                     <StackPanel Orientation="Horizontal">
                         <iconPacks:PackIconUnicons Kind="Flask"
+                                                   Foreground="{DynamicResource PrimaryBrush}"
                                                    VerticalAlignment="Center"
                                                    Height="20"
                                                    Width="20"

@@ -1,17 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Windows.Controls;
+using HandyControl.Controls;
+using me.cqp.luohuaming.CustomGacha.UI.ViewModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.View.ChildView
 {
@@ -22,7 +13,16 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View.ChildView
     {
         public GachaContentConfig()
         {
+            dataContext = DataContext as WorkbenchViewModel;
             InitializeComponent();
+        }
+        private WorkbenchViewModel dataContext;
+        private void Transfer_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            dataContext.UpContents.Clear();
+            var c = (sender as Transfer).SelectedItems;
+            foreach (var item in c)
+                dataContext.UpContents.Add((GachaItem)item);
         }
     }
 }
