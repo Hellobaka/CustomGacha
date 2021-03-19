@@ -189,6 +189,7 @@
     <Compile Include="UserControls\PathSelector.xaml.cs">
       <DependentUpon>PathSelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\NewPoolViewModel.cs" />
     <Compile Include="ViewModel\WorkbenchViewModel.cs" />
     <Compile Include="ViewModel\GachaItemQueryDialogViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
@@ -199,6 +200,9 @@
     </Compile>
     <Compile Include="View\ChildView\NewPicConfig.xaml.cs">
       <DependentUpon>NewPicConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ChildView\NewPoolPage.xaml.cs">
+      <DependentUpon>NewPoolPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ChildView\PoolBaseConfig.xaml.cs">
       <DependentUpon>PoolBaseConfig.xaml</DependentUpon>
@@ -244,6 +248,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ChildView\NewPicConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ChildView\NewPoolPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -148,7 +148,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     return;
                 var c = SQLHelper.GetGachaItemsByIDs(value.Content);
                 c.Where(x => value.UpContent.Any(o => o == x.ItemID)).Do(x => x.IsUp = true);
-                GachaItems = Helper.List2ObservableCollection(c);                
+                GachaItems = Helper.List2ObservableCollection(c);
             }
         }
 
@@ -239,7 +239,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         public DelegateCommand PoolDrawTest { get; set; }
         private void poolDrawTest(object peremeter)
         {
-            Thread thread = new Thread(()=>
+            Thread thread = new Thread(() =>
             {
                 //TODO: 进度条请求
                 if (SelectPool == null)
@@ -313,7 +313,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             {
                 GachaItemQueryDialogViewModel.RelateivePath = SelectPool.RelativePath;
                 Dialog.Show<GachaItemQueryDialog>()
-                .Initialize<GachaItemQueryDialogViewModel>(vm => { vm.Result = GachaItems.ToList(); vm.OpenMode = "Query";  })
+                .Initialize<GachaItemQueryDialogViewModel>(vm => { vm.Result = GachaItems.ToList(); vm.OpenMode = "Query"; })
                 .GetResultAsync<List<GachaItem>>().ContinueWith(x =>
                 {
                     Application.Current.Dispatcher.Invoke(()
@@ -333,12 +333,12 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 Dialog.Show<GachaItemQueryDialog>()
                 .Initialize<GachaItemQueryDialogViewModel>(vm =>
                     {
-                        vm.GachaItems = GachaItems; 
-                        vm.UpContent = SelectCategory.UpContent; 
+                        vm.GachaItems = GachaItems;
+                        vm.UpContent = SelectCategory.UpContent;
                         vm.OpenMode = "SelectUp";
                     })
                 .GetResultAsync<List<GachaItem>>().ContinueWith(x =>
-                    {
+                {
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             SelectCategory.UpContent.Clear();
@@ -352,7 +352,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                             GachaItems.Where(o => x.Result.Any(i => i.ItemID == o.ItemID)).Do(o => o.IsUp = true);
                             this.RaisePropertyChanged("GachaItems");
                         });
-                    });
+                 });
             }
         }
         #endregion

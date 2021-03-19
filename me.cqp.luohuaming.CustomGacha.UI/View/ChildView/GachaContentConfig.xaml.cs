@@ -17,12 +17,5 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View.ChildView
             InitializeComponent();
         }
         private WorkbenchViewModel dataContext;
-        private void Transfer_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            dataContext.UpContents.Clear();
-            var c = (sender as Transfer).SelectedItems;
-            foreach (var item in c)
-                dataContext.UpContents.Add((GachaItem)item);
-        }
     }
 }

@@ -12,14 +12,33 @@ namespace me.cqp.luohuaming.CustomGacha.UI
 {
     public static class Helper
     {
-        public static void ShowGrowlMsg(string msg, int showTime = 1)
+        public enum NoticeEnum
+        {
+            Error,
+            Info,
+            Success,
+        }
+        public static void ShowGrowlMsg(string msg, NoticeEnum notice = NoticeEnum.Success, int showTime = 1)
         {
             GrowlInfo info = new GrowlInfo
             {
                 Message = msg,
                 WaitTime = showTime
             };
-            Growl.Success(info);
+            switch (notice)
+            {
+                case NoticeEnum.Error:
+                    Growl.Error(info);
+                    break;
+                case NoticeEnum.Info:
+                    Growl.Info(info);
+                    break;
+                case NoticeEnum.Success:
+                    Growl.Success(info);
+                    break;
+                default:
+                    break;
+            }
         }
         public static ObservableCollection<T> List2ObservableCollection<T>(List<T> content)
         {

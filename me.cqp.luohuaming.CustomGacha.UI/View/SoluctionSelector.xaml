@@ -245,7 +245,8 @@
                                                        VerticalAlignment="Center"
                                                        HorizontalAlignment="Center"
                                                        Height="20"
-                                                       Width="20" />
+                                                       Width="20"
+                                                       Foreground="{StaticResource PrimaryBrush}" />
                             <TextBlock Grid.Column="1"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Left"
@@ -292,7 +293,8 @@
                                                            VerticalAlignment="Center"
                                                            HorizontalAlignment="Center"
                                                            Height="30"
-                                                           Width="30" />
+                                                           Width="30"
+                                                           Foreground="{StaticResource PrimaryBrush}"/>
                                 <TextBlock Grid.Column="1"
                                            FontSize="20"
                                            HorizontalAlignment="Left"

@@ -13,6 +13,10 @@
         CornerRadius="10"
         Background="{DynamicResource RegionBrush}"
         Loaded="Border_Loaded">
+    <Border.DataContext>
+        <vm:GachaItemQueryDialogViewModel />
+    </Border.DataContext>
+
     <Border.Resources>
         <ResourceDictionary>
             <s2s:RelativePath2FullPathConverter x:Key="s2sConverter"/>
@@ -27,6 +31,7 @@
             <RowDefinition Height="1*" />
             <RowDefinition Height="9*" />
             <RowDefinition Height="1*" />
+            <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <hc:SearchBar Margin="10,0"
                       ShowClearButton="True"
@@ -40,17 +45,17 @@
                   HeadersVisibility="All"
                   RowHeaderWidth="60"
                   AutoGenerateColumns="False"
-                  EnableRowVirtualization="False"
-                  ItemsSource="{Binding GachaItems, Mode=TwoWay}"
-                  Grid.Row="1">
+                  EnableRowVirtualization="True"
+                  ItemsSource="{Binding GachaItems}"
+                  Grid.Row="1" >
             <DataGrid.RowHeaderTemplate>
                 <DataTemplate>
                     <CheckBox IsChecked="{Binding IsSelected,RelativeSource={RelativeSource AncestorType=DataGridRow}}" />
                 </DataTemplate>
-            </DataGrid.RowHeaderTemplate>
+            </DataGrid.RowHeaderTemplate>            
             <DataGrid.Columns>
                 <DataGridTextColumn IsReadOnly="True"
-                                    Width="80"
+                                    Width="80"                                    
                                     CanUserResize="False"
                                     Binding="{Binding ItemID}"
                                     Header="ID" />
@@ -60,23 +65,30 @@
                 <DataGridTextColumn IsReadOnly="True"
                                     Binding="{Binding Probablity}"
                                     Header="概率" />
-                <DataGridTemplateColumn Width="60"
-                                        CanUserResize="False">
-                    <DataGridTemplateColumn.CellTemplate>
-                        <DataTemplate>
-                            <Image Source="{Binding ImagePath, Converter={StaticResource s2sConverter}}"
-                                   Width="32"
-                                   Height="32"
-                                   Stretch="Uniform" />
-                        </DataTemplate>
-                    </DataGridTemplateColumn.CellTemplate>
-                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
-        <StackPanel Grid.Row="2"
+        <hc:Pagination MaxPageCount="{Binding MaxPageCount}" Grid.Row="2" HorizontalAlignment="Center"
+                       PageIndex="{Binding PageIndex, Mode=TwoWay}"
+                       IsJumpEnabled="True">
+            <hc:Interaction.Triggers>
+                <hc:EventTrigger EventName="PageUpdated">
+                    <hc:EventToCommand Command="{Binding PageUpdatedCmd}"
+                                       PassEventArgsToCommand="True" />
+                </hc:EventTrigger>
+            </hc:Interaction.Triggers>
+        </hc:Pagination>
+        <StackPanel Grid.Row="3" Margin="0,10,0,0"
                     Orientation="Horizontal"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center">
+            <Button Margin="3"
+                    Width="60"
+                    Tag="DeleteFromDB"
+                    Click="Button_Click" Style="{StaticResource ButtonDanger}">删除</Button>
+            <hc:Divider LineStrokeThickness="2"
+                        LineStroke="{DynamicResource DarkPrimaryBrush}"
+                        Orientation="Vertical"
+                        MaxHeight="16" />
             <Button Margin="3"
                     Width="60"
                     Tag="AllSelect"
@@ -89,10 +101,10 @@
                     Width="60"
                     Tag="AntiSelect"
                     Click="Button_Click">反选</Button>
-            <hc:Divider LineStrokeThickness="2"
+            <!--<hc:Divider LineStrokeThickness="2"
                         LineStroke="{DynamicResource DarkPrimaryBrush}"
                         Orientation="Vertical"
-                        MaxHeight="16" />
+                        MaxHeight="16" />-->
             <Button Margin="3"
                     Style="{StaticResource ButtonPrimary}"
                     Click="Quit_Click">退出不保存</Button>

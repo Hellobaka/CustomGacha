@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using me.cqp.luohuaming.CustomGacha.UI.ViewModel;
@@ -13,9 +15,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
     {
         public GachaItemQueryDialog()
         {
-            InitializeComponent();
-            this.DataContext = new GachaItemQueryDialogViewModel();
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
+            InitializeComponent(); 
+            sw.Stop();
+            Debug.WriteLine(sw.ElapsedMilliseconds);
         }
+        GachaItemQueryDialogViewModel datacontext;
+        public static DataGrid DataGrid_Export { get; set; }
         //TODO: 分页控件请求
         private void Button_Click(object sender, RoutedEventArgs e)
         {
@@ -45,6 +52,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
                             c.IsSelected = !c.IsSelected;
                     }
                     break;
+                case "DeleteFromDB":
+                    if (HandyControl.Controls.MessageBox.Ask("确认从数据库中删除此项目吗？此操作不可逆！", "提示") == MessageBoxResult.Cancel)
+                        return;
+
+                    break;
                 default:
                     break;
             }
@@ -62,36 +74,33 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
         }
         private void Quit_Click(object sender, RoutedEventArgs e)
         {
-            ((GachaItemQueryDialogViewModel)this.DataContext).Result = new List<GachaItem>();
+            ((GachaItemQueryDialogViewModel)this.DataContext).Result = null;
             ((GachaItemQueryDialogViewModel)this.DataContext).CloseCmd.Execute(null);
         }
         private void Border_Loaded(object sender, RoutedEventArgs e)
         {
-            var c = (GachaItemQueryDialogViewModel)this.DataContext;
-            if (c.OpenMode == "Query")
+            DataGrid_Export = DataGrid_Main; 
+            datacontext = (GachaItemQueryDialogViewModel)this.DataContext; 
+            if (datacontext.OpenMode == "Query")
             {
-                foreach (var item in c.Result)
-                {
-                    for (int i = 0; i < DataGrid_Main.Items.Count; i++)
-                    {
-                        if ((DataGrid_Main.Items[i] as GachaItem).ItemID == item.ItemID)
-                            ((DataGridRow)DataGrid_Main.ItemContainerGenerator.ContainerFromIndex(i)).IsSelected = true;
-                    }
-                }
+                List<int> c = datacontext.GachaItems.Where(x => datacontext.Result.Any(o => x.ItemID == o.ItemID))
+                                               .Select(x => datacontext.GachaItems.IndexOf(x)).ToList();
+                SelectItemsByIDs(c);
             }
-            else if (c.OpenMode == "SelectUp")
+            else if (datacontext.OpenMode == "SelectUp")
             {
-                foreach (var item in c.UpContent)
-                {
-                    for (int i = 0; i < DataGrid_Main.Items.Count; i++)
-                    {
-                        if ((DataGrid_Main.Items[i] as GachaItem).ItemID == item)
-                            ((DataGridRow)DataGrid_Main.ItemContainerGenerator.ContainerFromIndex(i)).IsSelected = true;
-                    }
-                }
+                List<int> c = datacontext.GachaItems.Where(x => datacontext.UpContent.Any(o => x.ItemID == o))
+                                                            .Select(x => datacontext.GachaItems.IndexOf(x)).ToList();
+                SelectItemsByIDs(c);
             }
         }
-
+        public static void SelectItemsByIDs(List<int> ids)
+        {
+            foreach (var item in ids)
+            {
+                //((DataGridRow)DataGrid_Export.ItemContainerGenerator.ContainerFromIndex(item)).IsSelected = true;
+            }
+        }
         private void SearchBar_SearchStarted(object sender, HandyControl.Data.FunctionEventArgs<string> e)
         {
             string key = e.Info;

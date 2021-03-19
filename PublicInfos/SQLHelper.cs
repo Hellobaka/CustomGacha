@@ -242,6 +242,13 @@ namespace PublicInfos
                 return db.Queryable<GachaItem>().ToList();
             }
         }
+        public static List<GachaItem> GetPageGachaItem(int pageIndex,int pageCount = 50)
+        {
+            using (var db = GetInstance())
+            {
+                return db.Queryable<GachaItem>().ToPageList(pageIndex,pageCount);
+            }
+        }
         public static int InsertOrUpdateGachaItem(GachaItem item)
         {
             if (item == null)

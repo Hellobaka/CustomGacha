@@ -30,6 +30,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
             set
             {
                 SetValue(ImagePathProperty, value);
+                if (string.IsNullOrWhiteSpace(value))
+                    imageViewer.Source = new BitmapImage();
                 pathSelector.FilePath = value;
                 string path = Path.Combine(ReletivePath, value);
                 if (File.Exists(path) && (path.EndsWith(".png") || path.EndsWith(".jpg")))

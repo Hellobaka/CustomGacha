@@ -41,7 +41,21 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 this.RaisePropertyChanged("UpContent");
             }
         }
-
+        private int pageIndex = 1;
+        public int PageIndex
+        {
+            get { return pageIndex; }
+            set
+            {
+                pageIndex = value;
+                this.RaisePropertyChanged("PageIndex");
+            }
+        }
+        public DelegateCommand PageUpdatedCmd { get; set; }
+        private void pageUpdatedCmd(object peremeter)
+        {
+            GachaItems = Helper.List2ObservableCollection(SQLHelper.GetPageGachaItem(PageIndex));
+        }
         private string openMode;
         public string OpenMode
         {
@@ -53,16 +67,31 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 switch (openMode)
                 {
                     case "Query":
-                        var c = SQLHelper.GetAllGachaItem();
-                        c.ForEach(x => GachaItems.Add(x));
+                        //var c = SQLHelper.GetPageGachaItem(1);
+                        GachaItems = Helper.List2ObservableCollection(SQLHelper.GetAllGachaItem());
                         break;
                 }
+            }
+        }
+        private int maxPageCount;
+        public int MaxPageCount
+        {
+            get { return maxPageCount; }
+            set
+            {
+                maxPageCount = value;
+                this.RaisePropertyChanged("MaxPageCount");
             }
         }
 
         public GachaItemQueryDialogViewModel()
         {
             GachaItems = new ObservableCollection<GachaItem>();
+            //MaxPageCount = (int)Math.Ceiling(SQLHelper.GetAllGachaItem().Count / (double)50);
+            PageUpdatedCmd = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(pageUpdatedCmd)
+            };
         }
         private void closeAction(object permerter)
         {

@@ -1,0 +1,34 @@
+﻿<Border x:Class="me.cqp.luohuaming.CustomGacha.UI.View.ChildView.NewPoolPage"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.View.ChildView"
+        mc:Ignorable="d"
+        xmlns:viewmodel="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.ViewModel"
+        d:DesignHeight="230"
+        d:DesignWidth="300"
+        CornerRadius="15"
+        Background="White" BorderBrush="Black" BorderThickness="1">
+    <Border.DataContext>
+        <viewmodel:NewPoolViewModel />
+    </Border.DataContext>
+    <StackPanel Margin="20" Width="250">
+        <TextBlock Margin="3,3">名称</TextBlock>
+        <TextBox Margin="0,3"
+                 Text="{Binding NowCategory.Name ,Mode=TwoWay}" />
+        <TextBlock Margin="3,3">概率 (%)</TextBlock>
+        <TextBox Margin="0,3"
+                 Text="{Binding NowCategory.Probablity ,Mode=TwoWay}" />
+        <TextBlock Margin="3,3">是否为保底</TextBlock>
+        <TextBox Margin="0,3"
+                 Text="{Binding NowCategory.Probablity ,Mode=TwoWay}" />
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Margin="5"
+                    Command="{Binding CloseCmd}">取消</Button>
+            <Button Margin="5"
+                    Style="{StaticResource ButtonPrimary}"
+                    Command="{Binding CloseCmd}">保存</Button>
+        </StackPanel>
+    </StackPanel>
+</Border>
