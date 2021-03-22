@@ -13,9 +13,8 @@ namespace PluginInterface
         /// 自定义重新绘制结果子图片
         /// </summary>
         /// <param name="item">描述需要绘制图片的类</param>
-        /// <param name="relativePath">所有路径的相对路径</param>
-        /// <param name="ImageConfig">绘制设置</param>
+        /// <param name="pool">目标池</param>
         /// <returns>自定义绘制图片</returns>
-        Bitmap DrawPicItem(GachaItem item, string relativePath, ItemDrawConfig ImageConfig);
+        Bitmap DrawPicItem(GachaItem item, Pool pool);
     }
 }

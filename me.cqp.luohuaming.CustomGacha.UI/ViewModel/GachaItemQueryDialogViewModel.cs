@@ -10,9 +10,13 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
     public class GachaItemQueryDialogViewModel : NotifyicationObject, IDialogResultable<List<GachaItem>>
     {
         public static string RelateivePath { get; set; }
-
-        private ObservableCollection<GachaItem> gachaItems;
-        public ObservableCollection<GachaItem> GachaItems
+        public class VMArray : NotifyicationObject
+        {
+            public GachaItem Object { get; set; }
+            public bool IsSelected { get; set; }
+        }
+        private ObservableCollection<VMArray> gachaItems;
+        public ObservableCollection<VMArray> GachaItems
         {
             get { return gachaItems; }
             set
@@ -21,6 +25,17 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 this.RaisePropertyChanged("GachaItems");
             }
         }
+        private ObservableCollection<VMArray> queryItems;
+        public ObservableCollection<VMArray> QueryItems
+        {
+            get { return queryItems; }
+            set
+            {
+                queryItems = value;
+                this.RaisePropertyChanged("QueryItems");
+            }
+        }
+
         private List<GachaItem> result;
         public List<GachaItem> Result
         {
@@ -54,7 +69,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         public DelegateCommand PageUpdatedCmd { get; set; }
         private void pageUpdatedCmd(object peremeter)
         {
-            GachaItems = Helper.List2ObservableCollection(SQLHelper.GetPageGachaItem(PageIndex));
+            QueryItems = Helper.ToPageList(GachaItems, PageIndex, PageCount);
         }
         private string openMode;
         public string OpenMode
@@ -67,8 +82,9 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 switch (openMode)
                 {
                     case "Query":
-                        //var c = SQLHelper.GetPageGachaItem(1);
-                        GachaItems = Helper.List2ObservableCollection(SQLHelper.GetAllGachaItem());
+                        var c = SQLHelper.GetAllGachaItem();
+                        GachaItems = new ObservableCollection<VMArray>();
+                        c.ForEach(x => GachaItems.Add(new VMArray { Object = x, IsSelected = false }));
                         break;
                 }
             }
@@ -83,11 +99,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 this.RaisePropertyChanged("MaxPageCount");
             }
         }
-
+        public int PageCount { get; set; } = 30;
         public GachaItemQueryDialogViewModel()
         {
-            GachaItems = new ObservableCollection<GachaItem>();
-            //MaxPageCount = (int)Math.Ceiling(SQLHelper.GetAllGachaItem().Count / (double)50);
+            GachaItems = new ObservableCollection<VMArray>();
             PageUpdatedCmd = new DelegateCommand
             {
                 ExecuteAction = new Action<object>(pageUpdatedCmd)

@@ -304,7 +304,7 @@
                                                     Foreground="{StaticResource PrimaryBrush}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="保存">
+                <MenuItem Header="保存" Command="{Binding SaveAction}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="ContentSave"
                                                     Foreground="{StaticResource PrimaryBrush}" />

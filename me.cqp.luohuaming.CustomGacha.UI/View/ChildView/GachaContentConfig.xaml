@@ -43,8 +43,8 @@
                     <ContextMenu>
                         <MenuItem Header="新建"
                                   Command="{Binding OpenNewCategoryDialog}"/>
-                        <MenuItem Header="从库中添加子项目"
-                                  Command="{Binding QueryItemDialog}"/>
+                        <MenuItem Header="设置UP项目"
+                                  Command="{Binding SetUpContentDialog}"/>
                         <Separator />
                         <MenuItem Header="清空"
                                   Command="{Binding ClearCategories}" />

@@ -29,6 +29,6 @@ namespace me.cqp.luohuaming.CustomGacha.Code
             MainSave.Instances.Add(new Sign());
             MainSave.Instances.Add(new MultiGacha());
         }
-        private protected class G7TUJSM2 : IDrawItem{ public Bitmap DrawPicItem(GachaItem item, string relativePath, ItemDrawConfig ImageConfig){ return null; }}
+        private protected class G7TUJSM2 : IDrawItem{ public Bitmap DrawPicItem(GachaItem item, Pool pool){ return null; } }
     }
 }

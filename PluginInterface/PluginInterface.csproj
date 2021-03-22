@@ -61,9 +61,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IDrawAllItems.cs" />
     <Compile Include="IDrawItem.cs" />
     <Compile Include="IDrawMainImage.cs" />
     <Compile Include="IDrawPoints.cs" />
+    <Compile Include="IFinallyDraw.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

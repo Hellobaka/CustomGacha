@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using HandyControl.Controls;
 using HandyControl.Tools.Extension;
@@ -80,9 +81,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             {
                 ExecuteAction = new Action<object>(clearCategories)
             };
+            SaveAction = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(saveAction)
+            };
         }
 
         #region ---绑定属性---
+        public Dictionary<Category, List<GachaItem>> GachaitemsInCategory { get; set; }
         private Pool editPool;
         public Pool EditPool
         {
@@ -112,6 +118,32 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 if (categories == null && EditPool != null)
                 {
                     categories = Helper.List2ObservableCollection(SQLHelper.GetCategoriesByIDs(EditPool.Content));
+                    Thread thread = new Thread(() =>
+                    {
+                        GachaitemsInCategory = new Dictionary<Category, List<GachaItem>>();
+                        foreach (var item in categories)
+                        {
+                            var c = SQLHelper.GetGachaItemsByIDs(item.Content);
+                            if (c.Any(x => x == null))
+                            {
+                                int count = 0;
+                                for (int i = 0; i < c.Count; i++)
+                                {
+                                    if (c[i] == null)
+                                    {
+                                        c.RemoveAt(i);
+                                        item.Content.RemoveAt(i);
+                                        SQLHelper.UpdateOrAddCategory(item);
+                                        count++;
+                                    }
+                                }
+                                Helper.ShowGrowlMsg($"检测到目录 {item.Name} 存在无效项目，共清理了 {count} 个无效项目", Helper.NoticeEnum.Info);
+                            }
+                            c.Where(x => item.UpContent.Any(o => o == x.ItemID)).Do(x => x.IsUp = true);
+                            GachaitemsInCategory.Add(item, c);
+                        }
+                    });
+                    thread.Start();
                 }
                 return categories;
             }
@@ -141,9 +173,12 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 this.RaisePropertyChanged("SelectCategory");
                 if (value == null)
                     return;
-                var c = SQLHelper.GetGachaItemsByIDs(value.Content);
-                c.Where(x => value.UpContent.Any(o => o == x.ItemID)).Do(x => x.IsUp = true);
-                GachaItems = Helper.List2ObservableCollection(c);
+                if (GachaitemsInCategory.ContainsKey(value) is false)
+                {
+                    GachaItems = new ObservableCollection<GachaItem>();
+                    return;
+                }
+                GachaItems = Helper.List2ObservableCollection(GachaitemsInCategory[value]);
             }
         }
         #endregion
@@ -154,12 +189,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         {
             //TODO: 数据库操作
             var c = SelectCategory.ID;
-            Categories.Clear();
-            Categories = Helper.List2ObservableCollection(SQLHelper.GetCategoriesByIDs(EditPool.Content));
             var o = Categories.First(x => x.ID == c);
             o.IsBaodi = true;
-            SelectCategory = o;
+            //Categories2Change.Add(new ChangedCategory{Object = o,Action = ObjectAction.Update});
             RaisePropertyChanged("Categories");
+            ReloadCategroies();
             Helper.ShowGrowlMsg($"设置子项目 {o.Name} 的保底属性为 True");
         }
         public DelegateCommand EditCategory { get; set; }
@@ -167,13 +201,55 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         private void copyCategory(object parameter)
         {
             var c = SelectCategory.Clone();
+            c.ID = -1;
             int index = Categories.IndexOf(SelectCategory);
-            ReloadCategroies();
             Categories.Insert(index, c);
+            GachaitemsInCategory.Add(c, SQLHelper.GetGachaItemsByIDs(c.Content));
             SelectCategory = c;
             RaisePropertyChanged("Categories");
+            ReloadCategroies();
             //TODO: 数据库操作
             Helper.ShowGrowlMsg($"成功复制目录 {c.Name}");
+        }
+        public DelegateCommand SaveAction { get; set; }
+        private void saveAction(object parameter)
+        {
+            int count = 0;
+            foreach (var item in Categories)
+            {
+                if (item.ID == -1)
+                {
+                    item.ID = SQLHelper.UpdateOrAddCategory(item, true);
+                    count++;
+                }
+            }
+            if (count > 0)
+            {
+                Helper.ShowGrowlMsg($"在数据库新建了 {count} 个目录");
+                count = 0;
+            }
+            EditPool.Content = Categories.Select(x => x.ID).ToList();
+            foreach (var item in GachaitemsInCategory)
+            {
+                int index = 0;
+                foreach (var items in item.Value)
+                {
+                    if (items.ItemID == -1)
+                    {
+                        items.ItemID = SQLHelper.InsertOrUpdateGachaItem(items);
+                        item.Key.Content[index] = items.ItemID;
+                        count++;
+                    }
+                    index++;
+                }
+                SQLHelper.UpdateOrAddCategory(item.Key);
+            }
+            if (count > 0)
+            {
+                Helper.ShowGrowlMsg($"在数据库新建了 {count} 个子项目");
+            }
+            SQLHelper.UpdatePool(EditPool);
+            Helper.ShowGrowlMsg("保存完成");
         }
         public DelegateCommand ClearCategories { get; set; }
         private void clearCategories(object parameter)
@@ -181,6 +257,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             if (HandyControl.Controls.MessageBox.Ask("确认清空吗？此操作将会从数据库中删除这些目录，但不会影响内容", "提示") == MessageBoxResult.Cancel)
                 return;
             Categories.Clear();
+            GachaitemsInCategory.Clear();
             SelectCategory = new Category();
             RaisePropertyChanged("Categories");
             Helper.ShowGrowlMsg($"已将目录列表清空", Helper.NoticeEnum.Info);
@@ -193,11 +270,12 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 return;
             string name = SelectCategory.Name;
             var c = SelectCategory.ID;
-            ReloadCategroies();
+            GachaitemsInCategory.Remove(SelectCategory);
             Categories.Remove(Categories.First(x => x.ID == c));
             RaisePropertyChanged("Categories");
             SelectCategory = new Category();
             GachaItems.Clear();
+            ReloadCategroies();
             Helper.ShowGrowlMsg($"已删除目录 {name}", Helper.NoticeEnum.Info);
 
             //TODO: 数据库操作
@@ -206,11 +284,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         private void unSetCategoryBaodi(object parameter)
         {
             var c = SelectCategory.ID;
-            ReloadCategroies();
             var o = Categories.First(x => x.ID == c);
             o.IsBaodi = false;
             SelectCategory = o;
-            RaisePropertyChanged("Categories"); 
+            RaisePropertyChanged("Categories");
+            ReloadCategroies();
             Helper.ShowGrowlMsg($"设置目录 {o.Name} 的保底属性为 False");
         }
         public DelegateCommand NewItem { get; set; }
@@ -223,12 +301,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             var c = new GachaItem
             {
                 Name = "新项目",
+                ItemID = -1
             };
-            ReloadItems();
             //c.ItemID = SQLHelper.InsertOrUpdateGachaItem(c);
             GachaItems.Add(c);
             SelectGachaItem = c;
             SelectCategory.Content.Add(c.ItemID);
+            GachaitemsInCategory[SelectCategory].Add(c);
+            ReloadItems();
             RaisePropertyChanged("GachaItems");
             Helper.ShowGrowlMsg($"成功新建了一个模板项目");
             //TODO: DataBase Action
@@ -240,9 +320,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 return;
             string name = SelectGachaItem.Name;
             var c = SelectGachaItem.ItemID;
-            ReloadItems();
-            GachaItems.Remove(GachaItems.First(x => x.ItemID == c));
+            SelectCategory.Content.Remove(c);
+            if (SelectCategory.UpContent.Any(x => c == x))
+            {
+                SelectCategory.UpContent.Remove(c);
+            }
+            GachaitemsInCategory[SelectCategory].Remove(SelectGachaItem);
             RaisePropertyChanged("GachaItems");
+            ReloadItems();
             SelectGachaItem = new GachaItem();
             Helper.ShowGrowlMsg($"从 {SelectCategory.Name} 目录中成功删除了子项目 {name}");
             //TODO: 数据库操作
@@ -251,7 +336,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         private void deleteCategoryFromDB(object parameter)
         {
             if (HandyControl.Controls.MessageBox.Ask("确认从数据库中删除此项目吗？此操作不可逆！", "提示") == MessageBoxResult.Cancel)
-                return; 
+                return;
             string name = SelectGachaItem.Name;
             var c = SelectGachaItem.ItemID;
             deleteItem(null);
@@ -263,17 +348,18 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         {
             var c = SelectGachaItem.Clone();
             int index = GachaItems.IndexOf(SelectGachaItem);
-            ReloadItems();
             GachaItems.Insert(index, c);
             c.ItemID = -1;
             //c.ItemID = SQLHelper.InsertOrUpdateGachaItem(c);
             SelectCategory.Content.Add(c.ItemID);
+            GachaitemsInCategory[SelectCategory].Add(c);
             SelectGachaItem = c;
-            RaisePropertyChanged("GachaItems");
             if (c.IsUp)
             {
                 setItemUp(null);
             }
+            RaisePropertyChanged("GachaItems");
+            ReloadItems();
             //TODO: 数据库操作
             Helper.ShowGrowlMsg($"成功复制 {c.Name} 子项目");
         }
@@ -281,12 +367,13 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         private void unsetItemUp(object parameter)
         {
             var c = SelectGachaItem.ItemID;
-            ReloadItems();
             var o = GachaItems.First(x => x.ItemID == c);
             o.IsUp = false;
             SelectCategory.UpContent.Remove(o.ItemID);
             SelectGachaItem = o;
+            GachaitemsInCategory[SelectCategory].First(x => x.ItemID == o.ItemID).IsUp = false;
             RaisePropertyChanged("GachaItems");
+            ReloadItems();
             //TODO: 数据库操作
             Helper.ShowGrowlMsg($"设置子项目 {o.Name} 的Up属性为 False");
         }
@@ -294,12 +381,13 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         private void setItemUp(object parameter)
         {
             var c = SelectGachaItem.ItemID;
-            ReloadItems();
             var o = GachaItems.First(x => x.ItemID == c);
             o.IsUp = true;
             SelectCategory.UpContent.Add(o.ItemID);
             SelectGachaItem = o;
+            GachaitemsInCategory[SelectCategory].First(x => x.ItemID == o.ItemID).IsUp = true;
             RaisePropertyChanged("GachaItems");
+            ReloadItems();
             //TODO: 数据库操作
             Helper.ShowGrowlMsg($"设置子项目 {o.Name} 的Up属性为 True");
         }
@@ -314,6 +402,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 return;
             SelectCategory.Content.Clear();
             SelectCategory.UpContent.Clear();
+            GachaitemsInCategory[SelectCategory].Clear();
             GachaItems.Clear();
             RaisePropertyChanged("GachaItems");
             //TODO: 数据库操作
@@ -350,7 +439,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         Application.Current.Dispatcher.Invoke(() =>
                         {
                             if (x.Result != null)
+                            {
                                 Categories.Add(x.Result);
+                                GachaitemsInCategory.Add(x.Result, new List<GachaItem>());
+                            }
                             //TODO: 数据库操作
                         });
                     });
@@ -359,7 +451,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     Dialog.Show<GachaItemQueryDialog>()
                     .Initialize<GachaItemQueryDialogViewModel>(vm =>
                     {
-                        vm.GachaItems = GachaItems;
+                        GachaItems.ToList().ForEach(x => vm.GachaItems.Add(new GachaItemQueryDialogViewModel.VMArray { Object = x, IsSelected = selectCategory.UpContent.Any(o => o == x.ItemID) }));
                         vm.UpContent = SelectCategory.UpContent;
                         vm.OpenMode = "SelectUp";
                     })
@@ -373,16 +465,16 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                             int count = 0;
                             x.Result.ForEach(o =>
                             {
-                                if (SelectCategory.UpContent.Any(c=>c == o.ItemID) is false)
+                                if (SelectCategory.UpContent.Any(c => c == o.ItemID) is false)
                                 {
                                     SelectCategory.UpContent.Add(o.ItemID);
+                                    GachaitemsInCategory[SelectCategory].First(c => c.ItemID == o.ItemID).IsUp = true;
+                                    ReloadItems();
                                     count++;
                                 }
                             });
                             //SQLHelper.UpdateOrAddCategory(SelectCategory);
-                            GachaItems.Clear();
-                            GachaItems = Helper.List2ObservableCollection(SQLHelper.GetGachaItemsByIDs(SelectCategory.Content));
-                            GachaItems.Where(o => x.Result.Any(i => i.ItemID == o.ItemID)).Do(o => o.IsUp = true);
+                            ReloadItems();
                             this.RaisePropertyChanged("GachaItems");
                             Helper.ShowGrowlMsg($"共设置了 {count} 个Up项");
                         });
@@ -399,11 +491,13 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         {
                             if (x.Result != null)
                             {
-                                ReloadCategroies();
                                 var c = Categories.First(o => o.ID == x.Result.ID);
                                 Categories.Insert(Categories.IndexOf(c), x.Result);
                                 Categories.Remove(c);
+                                GachaitemsInCategory.Remove(c);
+                                GachaitemsInCategory.Add(c, SQLHelper.GetGachaItemsByIDs(x.Result.Content));
                                 SelectCategory = c;
+                                ReloadCategroies();
                                 //TODO: 数据库操作
                                 RaisePropertyChanged("Categories");
                             }
@@ -424,7 +518,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                           vm.Result = GachaItems.ToList(); vm.OpenMode = "Query";
                       }).GetResultAsync<List<GachaItem>>().ContinueWith(x =>
                     {
-                        Application.Current.Dispatcher.Invoke(() => 
+                        Application.Current.Dispatcher.Invoke(() =>
                         {
                             if (x.Result != null)
                             {
@@ -433,15 +527,15 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                                 {
                                     if (GachaItems.Any(z => z.ItemID == o.ItemID) is false)
                                     {
-                                        GachaItems.Add(o);
-                                        SelectCategory.Content.Add(o.ItemID);
+                                        GachaitemsInCategory[SelectCategory].Add(o);
+                                        ReloadItems();
                                         count++;
                                         //SQLHelper.UpdateOrAddCategory(SelectCategory);
                                     }
                                 });
-                                Helper.ShowGrowlMsg($"共设置了 {count} 个Up项");
+                                Helper.ShowGrowlMsg($"共添加了 {count} 个项");
                             }
-                        }); 
+                        });
                     });
                     break;
                 default:
@@ -451,13 +545,21 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         #endregion
         private void ReloadCategroies()
         {
-            Categories.Clear();
-            Categories = Helper.List2ObservableCollection(SQLHelper.GetCategoriesByIDs(EditPool.Content));
+            var c = new ObservableCollection<Category>();
+            foreach (var item in Categories)
+            {
+                c.Add(item);
+            }
+            Categories = c;
         }
         private void ReloadItems()
         {
-            GachaItems.Clear();
-            GachaItems = Helper.List2ObservableCollection(SQLHelper.GetGachaItemsByIDs(SelectCategory.Content));
+            var c = new ObservableCollection<GachaItem>();
+            foreach (var item in GachaitemsInCategory[SelectCategory])
+            {
+                c.Add(item);
+            }
+            GachaItems = c;
         }
     }
 }

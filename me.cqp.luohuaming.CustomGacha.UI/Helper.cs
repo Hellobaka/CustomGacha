@@ -18,7 +18,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI
             Info,
             Success,
         }
-        public static void ShowGrowlMsg(string msg, NoticeEnum notice = NoticeEnum.Success, int showTime = 1)
+        public static void ShowGrowlMsg(string msg, NoticeEnum notice = NoticeEnum.Success, int showTime = 2)
         {
             GrowlInfo info = new GrowlInfo
             {
@@ -45,6 +45,26 @@ namespace me.cqp.luohuaming.CustomGacha.UI
             ObservableCollection<T> tmp = new ObservableCollection<T>();
             content.ForEach(x => tmp.Add(x));
             return tmp;
+        }
+        public static ObservableCollection<T> ToPageList<T>(ObservableCollection<T> ls, int pageIndex, int pageCount)
+        {
+            return List2ObservableCollection(ToPageList<T>(ls.ToList(), pageIndex, pageCount));
+        }
+
+        public static List<T> ToPageList<T>(List<T> ls, int pageIndex, int pageCount)
+        {
+            List<T> result = new List<T>();
+            if (ls.Count < pageIndex  * pageCount)
+            {
+                int index = (pageIndex - 1) * pageCount;
+                result = ls.GetRange(index, ls.Count - (index));
+            }
+            else
+            {
+                int index = (pageIndex - 1) * pageCount;
+                result = ls.GetRange(index, pageCount);
+            }
+            return result;
         }
     }
 }

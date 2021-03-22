@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using PublicInfos;
 
 namespace PluginInterface
 {
@@ -12,7 +13,8 @@ namespace PluginInterface
         /// 重新绘制抽卡子元素中的中心图片
         /// </summary>
         /// <param name="mainImage">未经处理的中心图片</param>
+        /// <param name="pool">目标池</param>
         /// <returns>处理后的图片</returns>
-        Bitmap RedrawMainImage(Bitmap mainImage);
+        Bitmap RedrawMainImage(Bitmap mainImage, Pool pool);
     }
 }

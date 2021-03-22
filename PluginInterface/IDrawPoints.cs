@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using PublicInfos;
 
 namespace PluginInterface
 {
@@ -12,6 +13,6 @@ namespace PluginInterface
         /// 获取绘制的坐标
         /// </summary>
         /// <returns>坐标数组</returns>
-        Point[] GetDrawPoints(int count = 10);
+        Point[] GetDrawPoints(Pool pool,int count = 10);
     }
 }
