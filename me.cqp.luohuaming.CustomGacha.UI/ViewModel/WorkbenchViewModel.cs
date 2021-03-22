@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Windows;
@@ -85,6 +87,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             {
                 ExecuteAction = new Action<object>(saveAction)
             };
+            PoolDrawTest = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(poolDrawTest)
+            };
+
         }
 
         #region ---绑定属性---
@@ -137,7 +144,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                                         count++;
                                     }
                                 }
-                                Helper.ShowGrowlMsg($"检测到目录 {item.Name} 存在无效项目，共清理了 {count} 个无效项目", Helper.NoticeEnum.Info);
+                                Helper.ShowGrowlMsg($"检测到目录 {item.Name} 存在无效项目，共清理了 {count} 个无效项目", Helper.NoticeEnum.Info, 3);
                             }
                             c.Where(x => item.UpContent.Any(o => o == x.ItemID)).Do(x => x.IsUp = true);
                             GachaitemsInCategory.Add(item, c);
@@ -249,6 +256,20 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 Helper.ShowGrowlMsg($"在数据库新建了 {count} 个子项目");
             }
             SQLHelper.UpdatePool(EditPool);
+            try
+            {
+                EditPool.PluginInit();
+            }
+            catch (Exception e)
+            {
+                Helper.ShowGrowlMsg($"插件初始化失败，错误信息: {e.Message}", Helper.NoticeEnum.Error, 2);
+                EditPool.DrawAllItems = null;
+                EditPool.DrawItem = null;
+                EditPool.DrawMainImage = null;
+                EditPool.DrawPoints = null;
+                EditPool.FinallyDraw = null;
+            }
+
             Helper.ShowGrowlMsg("保存完成");
         }
         public DelegateCommand ClearCategories { get; set; }
@@ -542,6 +563,19 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     break;
             }
         }
+        public DelegateCommand PoolDrawTest { get; set; }
+        private void poolDrawTest(object peremeter)
+        {
+            Directory.CreateDirectory("DrawTest");
+            long testQQ = 8863450594;
+            var c = GachaCore.DoGacha(EditPool, EditPool.MultiGachaNumber);
+            c = SQLHelper.UpdateGachaItemsNewStatus(c, testQQ);
+            SQLHelper.InsertGachaItem2Repo(c, testQQ);
+            string filename = Guid.NewGuid().ToString() + ".jpg";
+            GachaCore.DrawGachaResult(c, EditPool).Save("DrawTest\\" + filename);
+            Process.Start("DrawTest\\" + filename);
+        }
+
         #endregion
         private void ReloadCategroies()
         {

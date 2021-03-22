@@ -34,6 +34,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         #region ---构造函数---
         public SoluctionSelectorViewModel()
         {
+            SQLHelper.CreateDB();
             if (MainSave.PoolInstances == null)
                 MainSave.PoolInstances = SQLHelper.GetAllPools();
             RecentList = new List<RecentSoluction>();

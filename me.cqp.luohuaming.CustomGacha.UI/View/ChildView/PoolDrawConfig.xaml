@@ -29,10 +29,10 @@
                            Margin="0,3"
                            HorizontalAlignment="Left">注：相对路径是指 此卡池的根目录，之后的所有路径均是相对于此相对路径</TextBlock>
                 <TextBlock Margin="0,3">相对路径</TextBlock>
-                <usercontrols:PathSelector FilePath="{Binding EditPool.RelativePath,Mode=TwoWay}"
+                <usercontrols:PathSelector FilePath="{Binding EditPool.RelativePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                            OpenType="Folder" />
                 <TextBlock Margin="0,3">自定义插件</TextBlock>
-                <usercontrols:PathSelector FilePath="{Binding EditPool.PluginPath,Mode=TwoWay}"
+                <usercontrols:PathSelector FilePath="{Binding EditPool.PluginPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                            OpenType="File" />
                 <Expander Margin="5"
                           Header="背景设置"
@@ -40,9 +40,9 @@
                           Foreground="Black">
                     <StackPanel Margin="15,5,15,5">
                         <TextBlock Margin="0,3">背景图片路径</TextBlock>
-                        <usercontrols:PathSelector FilePath="{Binding EditPool.BackgroundImagePath,Mode=TwoWay}" />
+                        <usercontrols:PathSelector FilePath="{Binding EditPool.BackgroundImagePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Margin="0,3">子项目排序设置</TextBlock>
-                        <ComboBox SelectedIndex="{Binding EditPool.PoolDrawConfig.OrderOptional,Mode=TwoWay, Converter={StaticResource e2iConverter}}">
+                        <ComboBox SelectedIndex="{Binding EditPool.PoolDrawConfig.OrderOptional,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource e2iConverter}}">
                             <ComboBoxItem>升序，从小到大</ComboBoxItem>
                             <ComboBoxItem>降序，从大到小</ComboBoxItem>
                             <ComboBoxItem>不排序</ComboBoxItem>
@@ -56,10 +56,10 @@
                     <StackPanel Margin="15,5,15,5">
                         <TextBlock Margin="0,3">起始点坐标 X</TextBlock>
                         <TextBox Margin="0,3"
-                                 Text="{Binding EditPool.PoolDrawConfig.StartPointX,Mode=TwoWay}" />
+                                 Text="{Binding EditPool.PoolDrawConfig.StartPointX,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Margin="0,3">起始点坐标 Y</TextBlock>
                         <TextBox Margin="0,3"
-                                 Text="{Binding EditPool.PoolDrawConfig.StartPointY,Mode=TwoWay}" />
+                                 Text="{Binding EditPool.PoolDrawConfig.StartPointY,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </Expander>
                 <Expander Margin="5"
@@ -69,10 +69,10 @@
                     <StackPanel Margin="15,5,15,5">
                         <TextBlock Margin="0,3">每次绘制后 X 偏移量</TextBlock>
                         <TextBox Margin="0,3"
-                                 Text="{Binding EditPool.PoolDrawConfig.DrawXInterval,Mode=TwoWay}" />
+                                 Text="{Binding EditPool.PoolDrawConfig.DrawXInterval,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Margin="0,3">每次绘制后 Y 偏移量</TextBlock>
                         <TextBox Margin="0,3"
-                                 Text="{Binding EditPool.PoolDrawConfig.DrawYInterval,Mode=TwoWay}" />
+                                 Text="{Binding EditPool.PoolDrawConfig.DrawYInterval,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </Expander>
                 <Expander Margin="5"
@@ -82,13 +82,13 @@
                     <StackPanel Margin="15,5,15,5">
                         <TextBlock Margin="0,3">换行的临界 X 值</TextBlock>
                         <TextBox Margin="0,3"
-                                 Text="{Binding EditPool.PoolDrawConfig.MaxX,Mode=TwoWay}" />
+                                 Text="{Binding EditPool.PoolDrawConfig.MaxX,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Margin="0,3">换行发生时 X 偏移量</TextBlock>
                         <TextBox Margin="0,3"
-                                 Text="{Binding EditPool.PoolDrawConfig.XChangeValue,Mode=TwoWay}" />
+                                 Text="{Binding EditPool.PoolDrawConfig.XChangeValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Margin="0,3">换行发生时 Y 偏移量</TextBlock>
                         <TextBox Margin="0,3"
-                                 Text="{Binding EditPool.PoolDrawConfig.YChangeValue,Mode=TwoWay}" />
+                                 Text="{Binding EditPool.PoolDrawConfig.YChangeValue,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </Expander>
             </StackPanel>

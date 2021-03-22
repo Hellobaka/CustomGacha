@@ -233,6 +233,9 @@
     <Compile Include="View\ChildView\SubItemDrawConfig.xaml.cs">
       <DependentUpon>SubItemDrawConfig.xaml</DependentUpon>
     </Compile>
+    <Compile Include="View\ChildView\TestPage.xaml.cs">
+      <DependentUpon>TestPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\GachaItemQueryDialog.xaml.cs">
       <DependentUpon>GachaItemQueryDialog.xaml</DependentUpon>
     </Compile>
@@ -284,6 +287,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ChildView\SubItemDrawConfig.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ChildView\TestPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

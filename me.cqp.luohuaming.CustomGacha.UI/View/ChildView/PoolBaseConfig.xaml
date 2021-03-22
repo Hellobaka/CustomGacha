@@ -19,16 +19,36 @@
             <StackPanel Margin="10">
                 <TextBlock Margin="0,3">卡池名称</TextBlock>
                 <TextBox Margin="0,3"
-                         Text="{Binding EditPool.Name,Mode=TwoWay}" />
+                         Text="{Binding EditPool.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock Margin="0,3">单抽指令</TextBlock>
                 <TextBox Margin="0,3"
-                         Text="{Binding EditPool.SingalGachaOrder,Mode=TwoWay}" />
+                         Text="{Binding EditPool.SingalGachaOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock Margin="0,3">多抽指令</TextBlock>
                 <TextBox Margin="0,3"
-                         Text="{Binding EditPool.MultiOrder,Mode=TwoWay}" />
+                         Text="{Binding EditPool.MultiOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                <hc:Divider Margin="10"/>
+                <TextBlock Margin="0,3">单抽发送文本</TextBlock>
+                <TextBlock FontSize="10">注：可用变量参照Wiki</TextBlock>
+                <TextBox Margin="0,3"
+                         Text="{Binding EditPool.SingalGachaText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         Height="60"
+                         VerticalScrollBarVisibility="Visible" />
+                <TextBlock Margin="0,3">多抽发送文本</TextBlock>
+                <TextBox Margin="0,3"
+                         TextWrapping="Wrap"
+                         AcceptsReturn="True"
+                         Height="60"
+                         VerticalScrollBarVisibility="Visible"
+                         Text="{Binding EditPool.MultiGachaText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                <TextBlock Margin="0,3">备注</TextBlock>
+                <TextBox Margin="0,3"
+                         Text="{Binding EditPool.Remark,Mode=TwoWay}" />
+                <hc:Divider Margin="10" />
                 <TextBlock Margin="0,3">多抽次数</TextBlock>
                 <TextBox Margin="0,3"
-                         Text="{Binding EditPool.MultiGachaNumber,Mode=TwoWay}" />
+                         Text="{Binding EditPool.MultiGachaNumber,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                 <TextBlock Margin="0,3"
                            Text="{Binding EditPool.BaodiCount, StringFormat={}保底所需次数: {0}次 }" />
                 <Slider Margin="0,3"

@@ -16,13 +16,13 @@
     <StackPanel Margin="20" Width="250">
         <TextBlock Margin="3,3">名称</TextBlock>
         <TextBox Margin="0,3"
-                 Text="{Binding NowCategory.Name ,Mode=TwoWay}" />
+                 Text="{Binding NowCategory.Name ,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock Margin="3,3">概率 (%)</TextBlock>
         <TextBox Margin="0,3"
-                 Text="{Binding NowCategory.Probablity ,Mode=TwoWay}" />
+                 Text="{Binding NowCategory.Probablity ,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
         <TextBlock Margin="3,3">是否为保底</TextBlock>
         <TextBox Margin="0,3"
-                 Text="{Binding NowCategory.Probablity ,Mode=TwoWay}" />
+                 Text="{Binding NowCategory.Probablity ,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Button Margin="5"
                     Command="{Binding CloseCmd}">取消</Button>

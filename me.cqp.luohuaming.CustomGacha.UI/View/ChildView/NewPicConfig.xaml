@@ -32,20 +32,20 @@
                           IsExpanded="True">
                     <StackPanel Margin="15,5,15,5">
                         <TextBlock Margin="0,3">图片路径</TextBlock>
-                        <usercontrols:PathSelector FilePath="{Binding EditPool.NewPicPath,Mode=TwoWay}"
+                        <usercontrols:PathSelector FilePath="{Binding EditPool.NewPicPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                                    OpenType="File" />
                         <TextBlock Margin="0,3">宽度</TextBlock>
                         <TextBox Margin="0,3"
-                                 Text="{Binding EditPool.NewPicWidth, Mode=TwoWay}" />
+                                 Text="{Binding EditPool.NewPicWidth, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Margin="0,3">高度</TextBlock>
                         <TextBox Margin="0,3,0,0"
-                                 Text="{Binding EditPool.NewPicHeight, Mode=TwoWay}" />
+                                 Text="{Binding EditPool.NewPicHeight, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Margin="0,3">X</TextBlock>
                         <TextBox Margin="0,3"
-                                 Text="{Binding EditPool.NewPicX, Mode=TwoWay}" />
+                                 Text="{Binding EditPool.NewPicX, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Margin="0,3">Y</TextBlock>
                         <TextBox Margin="0,3,0,0"
-                                 Text="{Binding EditPool.NewPicY, Mode=TwoWay}" />
+                                 Text="{Binding EditPool.NewPicY, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </Expander>
             </StackPanel>

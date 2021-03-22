@@ -11,6 +11,8 @@
         mc:Ignorable="d"
         Height="700"
         Width="1200"
+        MinHeight="600"
+        MinWidth="800"
         Closing="Window_Closing"
         Title="{Binding EditPool.Name, StringFormat=\{0\} - 工作台}"
         WindowStartupLocation="CenterScreen">
@@ -331,6 +333,14 @@
                     </MenuItem.Icon>
                 </MenuItem>
             </MenuItem>
+            <MenuItem Header="设置">
+                <MenuItem Header="控制台设置">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="Cog"
+                                                    Foreground="{StaticResource PrimaryBrush}" />
+                    </MenuItem.Icon>
+                </MenuItem>
+            </MenuItem>
             <MenuItem Header="关于">
                 <MenuItem Header="GitHub"
                           Icon="{iconPacks:Material Kind=Github}" />
@@ -445,7 +455,7 @@
                 </TabItem.Header>
                 <Frame NavigationUIVisibility="Hidden"
                        LoadCompleted="Frame_LoadCompleted"
-                       Source="pack://application:,,,/View/ChildView/PoolBaseConfig.xaml" />
+                       Source="pack://application:,,,/View/ChildView/TestPage.xaml" />
             </TabItem>
         </TabControl>
         <ScrollViewer VerticalScrollBarVisibility="Hidden"

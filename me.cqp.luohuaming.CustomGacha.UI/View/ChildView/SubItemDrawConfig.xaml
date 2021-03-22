@@ -38,10 +38,10 @@
                     <StackPanel Margin="15,5,15,5">
                         <TextBlock Margin="0,3">宽度</TextBlock>
                         <TextBox Margin="0,3"
-                                 Text="{Binding EditPool.ImageConfig.BackgroundImageWidth, Mode=TwoWay}" />
+                                 Text="{Binding EditPool.ImageConfig.BackgroundImageWidth, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Margin="0,3">高度</TextBlock>
                         <TextBox Margin="0,3,0,0"
-                                 Text="{Binding EditPool.ImageConfig.BackgroundImageHeight, Mode=TwoWay}" />
+                                 Text="{Binding EditPool.ImageConfig.BackgroundImageHeight, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </Expander>
                 <Expander Margin="5"
@@ -51,17 +51,17 @@
                     <StackPanel Margin="15,5,15,5">
                         <TextBlock Margin="0,3">宽度</TextBlock>
                         <TextBox Margin="0,3"
-                                 Text="{Binding EditPool.ImageConfig.ImageWidth, Mode=TwoWay}" />
+                                 Text="{Binding EditPool.ImageConfig.ImageWidth, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Margin="0,3">高度</TextBlock>
                         <TextBox Margin="0,3,0,0"
-                                 Text="{Binding EditPool.ImageConfig.ImageHeight, Mode=TwoWay}" />
+                                 Text="{Binding EditPool.ImageConfig.ImageHeight, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         <hc:Divider />
                         <TextBlock Margin="0,3">绘制坐标X</TextBlock>
                         <TextBox Margin="0,3"
-                                 Text="{Binding EditPool.ImageConfig.ImagePointX, Mode=TwoWay}" />
+                                 Text="{Binding EditPool.ImageConfig.ImagePointX, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                         <TextBlock Margin="0,3">绘制坐标Y</TextBlock>
                         <TextBox Margin="0,3,0,0"
-                                 Text="{Binding EditPool.ImageConfig.ImagePointY, Mode=TwoWay}" />
+                                 Text="{Binding EditPool.ImageConfig.ImagePointY, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                     </StackPanel>
                 </Expander>
             </StackPanel>

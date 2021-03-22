@@ -171,26 +171,26 @@
                                      Text="{Binding SelectGachaItem.ItemID}" />
                             <TextBlock Margin="3,3">名称</TextBlock>
                             <TextBox Margin="0,3"
-                                     Text="{Binding SelectGachaItem.Name,Mode=TwoWay}" />
+                                     Text="{Binding SelectGachaItem.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock Margin="3,3">概率</TextBlock>
                             <TextBox Margin="0,3"
-                                     Text="{Binding SelectGachaItem.Probablity,Mode=TwoWay}" />
+                                     Text="{Binding SelectGachaItem.Probablity,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock Margin="3,3">UP后概率</TextBlock>
                             <TextBox Margin="0,3"
-                                     Text="{Binding SelectGachaItem.UpProbablity,Mode=TwoWay}" />
+                                     Text="{Binding SelectGachaItem.UpProbablity,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock Margin="3,3">主图片</TextBlock>
-                            <usercontrols:ImageSelector ImagePath="{Binding SelectGachaItem.ImagePath,Mode=TwoWay}" />
+                            <usercontrols:ImageSelector ImagePath="{Binding SelectGachaItem.ImagePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock Margin="3,3">背景图片</TextBlock>
-                            <usercontrols:ImageSelector ImagePath="{Binding SelectGachaItem.BackgroundImagePath,Mode=TwoWay}" />
+                            <usercontrols:ImageSelector ImagePath="{Binding SelectGachaItem.BackgroundImagePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock Margin="3,3">获取时数量下限</TextBlock>
                             <TextBox Margin="0,3"
-                                     Text="{Binding SelectGachaItem.CountFloor,Mode=TwoWay}" />
+                                     Text="{Binding SelectGachaItem.CountFloor,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock Margin="3,3">获取时数量上限</TextBlock>
                             <TextBox Margin="0,3"
-                                     Text="{Binding SelectGachaItem.CountCeil,Mode=TwoWay}" />
+                                     Text="{Binding SelectGachaItem.CountCeil,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock Margin="3,3">物品价值</TextBlock>
                             <TextBox Margin="0,3"
-                                     Text="{Binding SelectGachaItem.Value,Mode=TwoWay}" />
+                                     Text="{Binding SelectGachaItem.Value,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock Margin="3,3">备注</TextBlock>
                             <TextBox Margin="0,3"
                                      Text="{Binding SelectGachaItem.Remark}" />
