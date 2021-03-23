@@ -1,0 +1,118 @@
+﻿<Border x:Class="me.cqp.luohuaming.CustomGacha.UI.View.ForeConfig"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.View"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:vm="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.ViewModel"
+        xmlns:s2s="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.Converter"
+        mc:Ignorable="d"
+        Height="300"
+        Width="400"
+        CornerRadius="10"
+        Background="{DynamicResource RegionBrush}"
+        Loaded="Border_Loaded">
+    <Border.DataContext>
+        <vm:WorkbenchViewModel />
+    </Border.DataContext>
+    <Border.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Border.Resources>
+    <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="1*" />
+                <RowDefinition Height="8*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Button Width="22"
+                    Height="22"
+                    Command="hc:ControlCommands.Close"
+                    Style="{StaticResource ButtonIcon}"
+                    Foreground="{DynamicResource PrimaryBrush}"
+                    hc:IconElement.Geometry="{StaticResource ErrorGeometry}"
+                    Padding="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top"
+                    Margin="0,0,0,0" />
+            <ScrollViewer Grid.Row="1">
+                <StackPanel>
+                    <Grid Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="99*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center">签到货币下限：</TextBlock>
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding Config.SignFloor}" />
+                    </Grid>
+                    <Grid Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="99*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center">签到货币上限：</TextBlock>
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding Config.SignCeil}" />
+                    </Grid>
+                    <Grid Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="99*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center">签到重置时间：</TextBlock>
+                        <hc:TimePicker ShowClearButton="True"
+                                       Grid.Column="1"
+                                       SelectedTime="{Binding Config.SignResetTime}" />
+                    </Grid>
+                    <hc:Divider Margin="5" />
+                    <Grid Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="99*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center">签到指令：</TextBlock>
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding OrderConfig.Sign}" />
+                    </Grid>
+                    <Grid Margin="0,5">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="99*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock VerticalAlignment="Center">注册指令：</TextBlock>
+                        <TextBox Grid.Column="1"
+                                 Text="{Binding OrderConfig.Register}" />
+                    </Grid>
+                </StackPanel>
+            </ScrollViewer>
+            <StackPanel Grid.Row="2"
+                        Margin="0,10,0,0"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center">
+                <Button Margin="3"
+                        Width="60"
+                        Click="DefaultValue_Click">默认值</Button>
+                <hc:Divider LineStrokeThickness="2"
+                            LineStroke="{DynamicResource DarkPrimaryBrush}"
+                            Orientation="Vertical"
+                            MaxHeight="16" />
+                <Button Margin="3"
+                        Width="60"
+                        Style="{StaticResource ButtonPrimary}"
+                        Command="hc:ControlCommands.Close">取消</Button>
+                <Button Margin="3"
+                        Width="60"
+                        Style="{StaticResource ButtonPrimary}"
+                        Click="Save_Click">保存</Button>
+            </StackPanel>
+        </Grid>
+    </hc:TransitioningContentControl>
+</Border>

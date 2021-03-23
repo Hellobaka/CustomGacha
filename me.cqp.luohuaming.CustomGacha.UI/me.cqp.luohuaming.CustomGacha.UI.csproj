@@ -209,20 +209,27 @@
     <Compile Include="UserControls\PathSelector.xaml.cs">
       <DependentUpon>PathSelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\NewPoolStepViewModel.cs" />
     <Compile Include="ViewModel\NewPoolViewModel.cs" />
     <Compile Include="ViewModel\WorkbenchViewModel.cs" />
     <Compile Include="ViewModel\GachaItemQueryDialogViewModel.cs" />
     <Compile Include="ViewModel\MainWindowViewModel.cs" />
     <Compile Include="ViewModel\NotificationObject.cs" />
     <Compile Include="ViewModel\SoluctionSelectorViewModel.cs" />
+    <Compile Include="View\ChildView\NewPoolStep.xaml.cs">
+      <DependentUpon>NewPoolStep.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\ChildView\GachaContentConfig.xaml.cs">
       <DependentUpon>GachaContentConfig.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\ChildView\ForeConfig.xaml.cs">
+      <DependentUpon>ForeConfig.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ChildView\NewPicConfig.xaml.cs">
       <DependentUpon>NewPicConfig.xaml</DependentUpon>
     </Compile>
-    <Compile Include="View\ChildView\NewPoolPage.xaml.cs">
-      <DependentUpon>NewPoolPage.xaml</DependentUpon>
+    <Compile Include="View\ChildView\NewCategoryPage.xaml.cs">
+      <DependentUpon>NewCategoryPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\ChildView\PoolBaseConfig.xaml.cs">
       <DependentUpon>PoolBaseConfig.xaml</DependentUpon>
@@ -266,15 +273,23 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="View\ChildView\NewPoolStep.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="View\ChildView\GachaContentConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\ChildView\ForeConfig.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="View\ChildView\NewPicConfig.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\ChildView\NewPoolPage.xaml">
+    <Page Include="View\ChildView\NewCategoryPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -1,0 +1,456 @@
+﻿<Border x:Class="me.cqp.luohuaming.CustomGacha.UI.View.NewPoolStep"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.View"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:vm="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.ViewModel"
+        xmlns:s2s="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.Converter"
+        mc:Ignorable="d"
+        Height="400"
+        Width="500"
+        CornerRadius="10"
+        Background="{DynamicResource RegionBrush}"
+        Loaded="Border_Loaded">
+    <Border.DataContext>
+        <vm:NewPoolStepViewModel />
+    </Border.DataContext>
+    <Border.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="TabControlNoHeader"
+                   TargetType="{x:Type TabControl}">
+                <Setter Property="BorderBrush"
+                        Value="{DynamicResource BorderBrush}" />
+                <Setter Property="Background"
+                        Value="{DynamicResource RegionBrush}" />
+                <Setter Property="BorderThickness"
+                        Value="0" />
+                <Setter Property="Foreground"
+                        Value="White" />
+                <Setter Property="ItemContainerStyle">
+                    <Setter.Value>
+                        <Style TargetType="{x:Type TabItem}">
+                            <Setter Property="FocusVisualStyle"
+                                    Value="{x:Null}" />
+                            <Setter Property="Foreground"
+                                    Value="{DynamicResource PrimaryTextBrush}" />
+                            <Setter Property="Background"
+                                    Value="{DynamicResource RegionBrush}" />
+                            <Setter Property="BorderBrush"
+                                    Value="{DynamicResource PrimaryBrush}" />
+                            <Setter Property="Margin"
+                                    Value="0" />
+                            <Setter Property="Padding"
+                                    Value="10,6" />
+                            <Setter Property="MinHeight"
+                                    Value="30" />
+                            <Setter Property="HorizontalContentAlignment"
+                                    Value="Stretch" />
+                            <Setter Property="VerticalContentAlignment"
+                                    Value="Stretch" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type TabItem}">
+                                        <hc:SimplePanel x:Name="templateRoot"
+                                                        SnapsToDevicePixels="True">
+                                            <Border x:Name="mainBorder"
+                                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                                    BorderThickness="0"
+                                                    Background="{TemplateBinding Background}"
+                                                    Margin="0" />
+                                            <ContentPresenter x:Name="contentPresenter"
+                                                              ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                                              Content="{TemplateBinding Header}"
+                                                              ContentStringFormat="{TemplateBinding HeaderStringFormat}"
+                                                              ContentSource="Header"
+                                                              TextElement.Foreground="{DynamicResource PrimaryTextBrush}"
+                                                              Focusable="False"
+                                                              HorizontalAlignment="Center"
+                                                              Margin="{TemplateBinding Padding}"
+                                                              RecognizesAccessKey="True"
+                                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                              VerticalAlignment="Center" />
+                                        </hc:SimplePanel>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsSelected"
+                                                     Value="False">
+                                                <Setter Property="BorderThickness"
+                                                        TargetName="mainBorder"
+                                                        Value="0" />
+                                            </Trigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                                               Value="true" />
+                                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type TabControl}}}"
+                                                               Value="Top" />
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Panel.ZIndex"
+                                                        Value="1" />
+                                                <Setter Property="TextElement.Foreground"
+                                                        TargetName="contentPresenter"
+                                                        Value="{DynamicResource PrimaryBrush}" />
+                                                <Setter Property="BorderThickness"
+                                                        TargetName="mainBorder"
+                                                        Value="0,0,0,3" />
+                                            </MultiDataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                                               Value="true" />
+                                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type TabControl}}}"
+                                                               Value="Left" />
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Panel.ZIndex"
+                                                        Value="1" />
+                                                <Setter Property="TextElement.Foreground"
+                                                        TargetName="contentPresenter"
+                                                        Value="{DynamicResource PrimaryBrush}" />
+                                                <Setter Property="BorderThickness"
+                                                        TargetName="mainBorder"
+                                                        Value="0,0,3,0" />
+                                            </MultiDataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                                               Value="true" />
+                                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type TabControl}}}"
+                                                               Value="Bottom" />
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Panel.ZIndex"
+                                                        Value="1" />
+                                                <Setter Property="TextElement.Foreground"
+                                                        TargetName="contentPresenter"
+                                                        Value="{DynamicResource PrimaryBrush}" />
+                                                <Setter Property="BorderThickness"
+                                                        TargetName="mainBorder"
+                                                        Value="0,3,0,0" />
+                                            </MultiDataTrigger>
+                                            <MultiDataTrigger>
+                                                <MultiDataTrigger.Conditions>
+                                                    <Condition Binding="{Binding IsSelected, RelativeSource={RelativeSource Self}}"
+                                                               Value="true" />
+                                                    <Condition Binding="{Binding TabStripPlacement, RelativeSource={RelativeSource FindAncestor, AncestorLevel=1, AncestorType={x:Type TabControl}}}"
+                                                               Value="Right" />
+                                                </MultiDataTrigger.Conditions>
+                                                <Setter Property="Panel.ZIndex"
+                                                        Value="1" />
+                                                <Setter Property="TextElement.Foreground"
+                                                        TargetName="contentPresenter"
+                                                        Value="{DynamicResource PrimaryBrush}" />
+                                                <Setter Property="BorderThickness"
+                                                        TargetName="mainBorder"
+                                                        Value="3,0,0,0" />
+                                            </MultiDataTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </Setter.Value>
+                </Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type TabControl}">
+                            <Border BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}">
+                                <Grid x:Name="templateRoot"
+                                      Background="{TemplateBinding Background}"
+                                      ClipToBounds="True"
+                                      SnapsToDevicePixels="True"
+                                      KeyboardNavigation.TabNavigation="Local">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition x:Name="ColumnDefinition0" />
+                                        <ColumnDefinition x:Name="ColumnDefinition1"
+                                                          Width="0" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition x:Name="RowDefinition0"
+                                                       Height="Auto" />
+                                        <RowDefinition x:Name="RowDefinition1"
+                                                       Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <TabPanel x:Name="headerPanel"
+                                              Background="Transparent"
+                                              Grid.Column="0"
+                                              IsItemsHost="True"
+                                              Margin="0"
+                                              Grid.Row="0"
+                                              Height="0"
+                                              KeyboardNavigation.TabIndex="1"
+                                              Panel.ZIndex="1" />
+                                    <Border x:Name="contentPanel"
+                                            BorderBrush="{DynamicResource BorderBrush}"
+                                            BorderThickness="0,1,0,0"
+                                            Background="{TemplateBinding Background}"
+                                            Grid.Column="0"
+                                            KeyboardNavigation.DirectionalNavigation="Contained"
+                                            HorizontalAlignment="Stretch"
+                                            Grid.Row="1"
+                                            KeyboardNavigation.TabIndex="2"
+                                            KeyboardNavigation.TabNavigation="Local"
+                                            VerticalAlignment="Stretch">
+                                        <ContentPresenter x:Name="PART_SelectedContentHost"
+                                                          ContentTemplate="{TemplateBinding SelectedContentTemplate}"
+                                                          Content="{TemplateBinding SelectedContent}"
+                                                          ContentStringFormat="{TemplateBinding SelectedContentStringFormat}"
+                                                          ContentSource="SelectedContent"
+                                                          Margin="0"
+                                                          SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
+                                    </Border>
+                                </Grid>
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="TabStripPlacement"
+                                         Value="Bottom">
+                                    <Setter Property="Height"
+                                            TargetName="RowDefinition0"
+                                            Value="*" />
+                                    <Setter Property="Height"
+                                            TargetName="RowDefinition1"
+                                            Value="Auto" />
+                                    <Setter Property="Grid.Row"
+                                            TargetName="headerPanel"
+                                            Value="1" />
+                                    <Setter Property="Grid.Row"
+                                            TargetName="contentPanel"
+                                            Value="0" />
+                                    <Setter Property="BorderThickness"
+                                            TargetName="contentPanel"
+                                            Value="0,0,0,1" />
+                                </Trigger>
+                                <Trigger Property="TabStripPlacement"
+                                         Value="Left">
+                                    <Setter Property="Height"
+                                            TargetName="RowDefinition0"
+                                            Value="*" />
+                                    <Setter Property="Height"
+                                            TargetName="RowDefinition1"
+                                            Value="0" />
+                                    <Setter Property="Width"
+                                            TargetName="ColumnDefinition0"
+                                            Value="Auto" />
+                                    <Setter Property="Width"
+                                            TargetName="ColumnDefinition1"
+                                            Value="*" />
+                                    <Setter Property="Grid.Column"
+                                            TargetName="headerPanel"
+                                            Value="0" />
+                                    <Setter Property="Grid.Row"
+                                            TargetName="headerPanel"
+                                            Value="0" />
+                                    <Setter Property="Grid.Column"
+                                            TargetName="contentPanel"
+                                            Value="1" />
+                                    <Setter Property="Grid.Row"
+                                            TargetName="contentPanel"
+                                            Value="0" />
+                                    <Setter Property="BorderThickness"
+                                            TargetName="contentPanel"
+                                            Value="1,0,0,0" />
+                                </Trigger>
+                                <Trigger Property="TabStripPlacement"
+                                         Value="Right">
+                                    <Setter Property="Height"
+                                            TargetName="RowDefinition0"
+                                            Value="*" />
+                                    <Setter Property="Height"
+                                            TargetName="RowDefinition1"
+                                            Value="0" />
+                                    <Setter Property="Width"
+                                            TargetName="ColumnDefinition0"
+                                            Value="*" />
+                                    <Setter Property="Width"
+                                            TargetName="ColumnDefinition1"
+                                            Value="Auto" />
+                                    <Setter Property="Grid.Column"
+                                            TargetName="headerPanel"
+                                            Value="1" />
+                                    <Setter Property="Grid.Row"
+                                            TargetName="headerPanel"
+                                            Value="0" />
+                                    <Setter Property="Grid.Column"
+                                            TargetName="contentPanel"
+                                            Value="0" />
+                                    <Setter Property="Grid.Row"
+                                            TargetName="contentPanel"
+                                            Value="0" />
+                                    <Setter Property="BorderThickness"
+                                            TargetName="contentPanel"
+                                            Value="0,0,1,0" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Storyboard x:Key="Custom3Transition"
+                        x:Shared="False">
+                <DoubleAnimation From=".8"
+                                 To="1"
+                                 Duration="0:0:0.4"
+                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[0].(ScaleTransform.ScaleX)">
+                    <DoubleAnimation.EasingFunction>
+                        <ElasticEase Oscillations="1" />
+                    </DoubleAnimation.EasingFunction>
+                </DoubleAnimation>
+            </Storyboard>
+        </ResourceDictionary>
+    </Border.Resources>
+    <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
+        <Grid Margin="10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="8*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Button Width="22"
+                    Height="22"
+                    Command="{Binding CloseWithoutPool}"
+                    Style="{StaticResource ButtonIcon}"
+                    Foreground="{DynamicResource PrimaryBrush}"
+                    hc:IconElement.Geometry="{StaticResource ErrorGeometry}"
+                    Padding="0"
+                    HorizontalAlignment="Right"
+                    VerticalAlignment="Top" />
+
+            <hc:StepBar Grid.Row="1"
+                        x:Name="stepBar"
+                        StepIndex="{Binding StepIndex}">
+                <hc:StepBarItem>欢迎</hc:StepBarItem>
+                <hc:StepBarItem>新建名称</hc:StepBarItem>
+                <hc:StepBarItem>触发指令</hc:StepBarItem>
+                <hc:StepBarItem>应答文本</hc:StepBarItem>
+                <hc:StepBarItem>完成</hc:StepBarItem>
+            </hc:StepBar>
+            <TabControl Grid.Row="2"
+                        SelectedIndex="{Binding StepIndex}"
+                        Style="{DynamicResource TabControlNoHeader}">
+                <TabItem>
+                    <hc:TransitioningContentControl TransitionStoryboard="{StaticResource Custom3Transition}">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource TextBlockTitle}"
+                                       VerticalAlignment="Top">欢迎你使用水银抽卡机</TextBlock>
+                            <TextBlock Style="{StaticResource TextBlockSubTitle}"
+                                       Margin="0,10,0,0">让我们通过几个简单步骤创建一个卡池</TextBlock>
+                            <TextBlock Style="{StaticResource TextBlockSubTitle}">点击下方的 下一步 按钮以继续</TextBlock>
+                        </StackPanel>
+                    </hc:TransitioningContentControl>
+                </TabItem>
+                <TabItem>
+                    <hc:TransitioningContentControl TransitionStoryboard="{StaticResource Custom3Transition}">
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource TextBlockTitle}"
+                                       Margin="0,10,0,0">你想给你的卡池起什么名字？</TextBlock>
+                            <Grid Margin="0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="99*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center">卡池名称：</TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding EditPool.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+                        </StackPanel>
+                    </hc:TransitioningContentControl>
+                </TabItem>
+                <TabItem>
+                    <hc:TransitioningContentControl>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource TextBlockTitle}"
+                                       Margin="0,10,0,0">设置单抽与十连的触发文本</TextBlock>
+                            <Grid Margin="0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="99*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center">单抽指令：</TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding EditPool.SingalGachaOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+                            <Grid Margin="0,15">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="99*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center">十连指令：</TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding EditPool.MultiOrder,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                            </Grid>
+                        </StackPanel>
+                    </hc:TransitioningContentControl>
+                </TabItem>
+                <TabItem>
+                    <hc:TransitioningContentControl>
+                        <StackPanel>
+                            <TextBlock Style="{StaticResource TextBlockTitle}"
+                                       Margin="0,10,0,0">设置指令触发后的应答文本</TextBlock>
+                            <Grid Margin="0,15,0,3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="99*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center">单抽发送文本：</TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding EditPool.SingalGachaText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                         TextWrapping="Wrap"
+                                         AcceptsReturn="True"
+                                         Height="60"
+                                         VerticalScrollBarVisibility="Visible" />
+                            </Grid>
+                            <Grid Margin="0,3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="99*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center">十连发送文本：</TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding EditPool.MultiGachaText,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                         TextWrapping="Wrap"
+                                         AcceptsReturn="True"
+                                         Height="60"
+                                         VerticalScrollBarVisibility="Visible" />
+                            </Grid>
+                        </StackPanel>
+                    </hc:TransitioningContentControl>
+                </TabItem>
+                <TabItem>
+                    <hc:TransitioningContentControl TransitionStoryboard="{StaticResource Custom3Transition}">
+                        <StackPanel VerticalAlignment="Center">
+                            <TextBlock Style="{StaticResource TextBlockTitle}"
+                                       VerticalAlignment="Top">感谢你使用水银抽卡机</TextBlock>
+                            <TextBlock Style="{StaticResource TextBlockSubTitle}"
+                                       Margin="0,10,0,0">进入编辑器以对卡池进行详细设置</TextBlock>
+                            <TextBlock Style="{StaticResource TextBlockSubTitle}">点击下方的 保存 按钮以继续</TextBlock>
+                            <Button Margin="0,15,0,0"
+                                    Style="{StaticResource ButtonPrimary}"
+                                    x:Name="Save"
+                                    Click="Save_Click">
+                                保存
+                            </Button>
+                        </StackPanel>
+                    </hc:TransitioningContentControl>
+                </TabItem>
+            </TabControl>
+            <StackPanel  Orientation="Horizontal"
+                         Grid.Column="0"
+                         Grid.Row="3"
+                         HorizontalAlignment="Center">
+                <Button Command="{Binding PrevCmd}"
+                        Width="80"
+                        Margin="5,0"
+                        Style="{StaticResource ButtonPrimary}">上一步</Button>
+                <Button Command="{Binding NextCmd}"
+                        Width="80"
+                        Margin="5,0"
+                        Style="{StaticResource ButtonPrimary}">下一步</Button>
+            </StackPanel>
+        </Grid>
+    </hc:TransitioningContentControl>
+</Border>

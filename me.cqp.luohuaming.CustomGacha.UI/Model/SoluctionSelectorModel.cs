@@ -1,4 +1,5 @@
 ﻿using MahApps.Metro.IconPacks;
+using me.cqp.luohuaming.CustomGacha.UI.Command;
 using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.Model
@@ -15,5 +16,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.Model
         public string Title { get; set; }
         public string Remark { get; set; }
         public PackIconUniconsKind ImageKind { get; set; }
+        public DelegateCommand Action { get; set; }
     }
 }

@@ -91,7 +91,24 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             {
                 ExecuteAction = new Action<object>(poolDrawTest)
             };
-
+            ForeConfigDialog = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(o => { ShowInteractiveDialog(DialogAction.ForeConfig); })
+            };
+            NewPoolDialog = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(o =>
+                {
+                    if (bool.Parse(o.ToString()))
+                    {
+                        if (HandyControl.Controls.MessageBox.Ask("如果数据未保存将会失去所有未保存数据！", "提示") == MessageBoxResult.Cancel)
+                        {
+                            return;
+                        }
+                    }
+                    ShowInteractiveDialog(DialogAction.NewPool);
+                })
+            };
         }
 
         #region ---绑定属性---
@@ -188,6 +205,37 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 GachaItems = Helper.List2ObservableCollection(GachaitemsInCategory[value]);
             }
         }
+        private Config config;
+        public Config Config
+        {
+            get { return config; }
+            set
+            {
+                config = value;
+                this.RaisePropertyChanged("Config");
+            }
+        }
+        private OrderConfig orderConfig;
+        public OrderConfig OrderConfig
+        {
+            get { return orderConfig; }
+            set
+            {
+                orderConfig = value;
+                this.RaisePropertyChanged("OrderConfig");
+            }
+        }
+        private OpenType dialogType;
+        public OpenType DialogType
+        {
+            get { return dialogType; }
+            set
+            {
+                dialogType = value;
+                this.RaisePropertyChanged("DialogType");
+            }
+        }
+
         #endregion
 
         #region ---绑定命令---
@@ -221,6 +269,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         public DelegateCommand SaveAction { get; set; }
         private void saveAction(object parameter)
         {
+            if (EditPool.PoolID == -1)
+            {
+                Helper.ShowGrowlMsg("保存之前请先新建或者打开一个项目", Helper.NoticeEnum.Error);
+                return;
+            }
             int count = 0;
             foreach (var item in Categories)
             {
@@ -436,8 +489,13 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             SetUpContent,
             EditCategory,
             NewGachaItem,
-            QueryGachaItem
+            QueryGachaItem,
+            ForeConfig,
+            WorkBenchConfig,
+            NewPool
         }
+        public DelegateCommand ForeConfigDialog { get; set; }
+        public DelegateCommand NewPoolDialog { get; set; }
         public DelegateCommand QueryItemDialog { get; set; }
         public DelegateCommand OpenNewCategoryDialog { get; set; }
         public DelegateCommand SetUpContentDialog { get; set; }
@@ -446,7 +504,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             switch ((DialogAction)peremeter)
             {
                 case DialogAction.NewCategory:
-                    Dialog.Show<NewPoolPage>()
+                    Dialog.Show<NewCategoryPage>()
                     .Initialize<NewPoolViewModel>(vm =>
                     {
                         vm.NowCategory = new Category
@@ -502,7 +560,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     });
                     break;
                 case DialogAction.EditCategory:
-                    Dialog.Show<NewPoolPage>()
+                    Dialog.Show<NewCategoryPage>()
                     .Initialize<NewPoolViewModel>(vm =>
                     {
                         vm.NowCategory = SelectCategory.Clone();
@@ -524,8 +582,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                             }
                         });
                     });
-                    break;
-                case DialogAction.NewGachaItem:
                     break;
                 case DialogAction.QueryGachaItem:
                     if (SelectCategory == null)
@@ -551,10 +607,33 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                                         GachaitemsInCategory[SelectCategory].Add(o);
                                         ReloadItems();
                                         count++;
-                                        //SQLHelper.UpdateOrAddCategory(SelectCategory);
                                     }
                                 });
                                 Helper.ShowGrowlMsg($"共添加了 {count} 个项");
+                            }
+                        });
+                    });
+                    break;
+                case DialogAction.ForeConfig:
+                    Dialog.Show<ForeConfig>().Initialize<WorkbenchViewModel>(c =>
+                    {
+                        c.Config = Config.Clone();
+                        c.OrderConfig = OrderConfig.Clone();
+                    });
+                    break;
+                case DialogAction.WorkBenchConfig:
+                    break;
+                case DialogAction.NewPool:
+                    Dialog.Show<NewPoolStep>().GetResultAsync<Pool>().ContinueWith(x =>
+                    {
+                        Application.Current.Dispatcher.Invoke(() =>
+                        {
+                            if (x.Result != null)
+                            {
+                                EditPool = x.Result;
+                                EditPool.PoolID = SQLHelper.AddPool(x.Result);
+                                Helper.ShowGrowlMsg($"成功新建了卡池 {x.Result.Name}");
+                                Workbench.contentTab_Export.IsEnabled = true;
                             }
                         });
                     });
@@ -567,7 +646,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         private void poolDrawTest(object peremeter)
         {
             Directory.CreateDirectory("DrawTest");
-            long testQQ = 8863450594;
+            long testQQ = 1145141919;
             var c = GachaCore.DoGacha(EditPool, EditPool.MultiGachaNumber);
             c = SQLHelper.UpdateGachaItemsNewStatus(c, testQQ);
             SQLHelper.InsertGachaItem2Repo(c, testQQ);
@@ -594,6 +673,12 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 c.Add(item);
             }
             GachaItems = c;
+        }
+        public enum OpenType
+        {
+            Normal,
+            NoPool,
+            NewPool
         }
     }
 }

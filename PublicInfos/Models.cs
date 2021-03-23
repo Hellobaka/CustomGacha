@@ -404,7 +404,8 @@ namespace PublicInfos
         public string Remark { get; set; }
         public DateTime CreateDt { get; set; } = DateTime.Now;
         public DateTime UpdateDt { get; set; }
-        [SugarColumn(IsIgnore = true)] public bool IsNew { get; set; }
+        [SugarColumn(IsIgnore = true)] 
+        public bool IsNew { get; set; }
         public GachaItem Clone()
         {
             return (GachaItem)this.MemberwiseClone();
@@ -434,6 +435,10 @@ namespace PublicInfos
         /// </summary>
         [SugarColumn(IsNullable = false)]
         public int SignFloor { get; set; }
+        public Config Clone()
+        {
+            return (Config)this.MemberwiseClone();
+        }
     }
 
     /// <summary>
@@ -484,5 +489,10 @@ namespace PublicInfos
         /// 签到指令
         /// </summary>
         public string Sign { get; set; }
+        public OrderConfig Clone()
+        {
+            return (OrderConfig)this.MemberwiseClone();
+        }
+
     }
 }

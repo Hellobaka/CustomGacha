@@ -53,12 +53,12 @@ namespace PublicInfos
                 DB_User user = db.Queryable<DB_User>().First(x => x.QQID == QQID);
                 var t = DateTime.Now;
                 var dt = new DateTime(t.Year, t.Month, t.Day,
-                    MainSave.SignResetTime.Hour,
-                    MainSave.SignResetTime.Minute,
-                    MainSave.SignResetTime.Second);
+                    MainSave.ApplicationConfig.SignResetTime.Hour,
+                    MainSave.ApplicationConfig.SignResetTime.Minute,
+                    MainSave.ApplicationConfig.SignResetTime.Second);
                 if (user.LastSignTime < dt)
                 {
-                    int signMoney = new Random().Next(MainSave.SignFloor, MainSave.SignCeil + 1);
+                    int signMoney = new Random().Next(MainSave.ApplicationConfig.SignFloor, MainSave.ApplicationConfig.SignCeil + 1);
                     user.Money += signMoney;
                     user.SignTotalCount++;
                     user.LastSignTime = DateTime.Now;
@@ -137,12 +137,15 @@ namespace PublicInfos
                 return c;
             }
         }
-        public static void AddPool(Pool pool)
+        public static int AddPool(Pool pool)
         {
             using (var db = GetInstance())
             {
                 if (db.Queryable<Pool>().Any(x => x.PoolID == pool.PoolID) is false)
-                    db.Insertable(pool).ExecuteCommand();
+                { 
+                    return db.Insertable(pool).ExecuteReturnIdentity(); 
+                }
+                return -1;
             }
         }
         public static void UpdatePool(Pool pool)
@@ -175,11 +178,9 @@ namespace PublicInfos
                         SignCeil = 3200,
                         SignResetTime = new DateTime(1970, 1, 1, 0, 0, 0)
                     };
-                    db.Insertable(c).ExecuteCommand();
+                    c.RowID = db.Insertable(c).ExecuteReturnIdentity();
                 }
-                MainSave.SignResetTime = c.SignResetTime;
-                MainSave.SignCeil = c.SignCeil;
-                MainSave.SignFloor = c.SignFloor;
+                MainSave.ApplicationConfig = c;
 
                 var o = db.Queryable<OrderConfig>().First(x => true);
                 MainSave.OrderConfig = o;
@@ -192,6 +193,22 @@ namespace PublicInfos
                     };
                     db.Insertable(o).ExecuteCommand();
                 }
+            }
+        }
+        public static void UpdateConfig(Config config)
+        {
+            MainSave.ApplicationConfig = config.Clone();
+            using(var db = GetInstance())
+            {
+                db.Updateable(config).ExecuteCommand();
+            }
+        }
+        public static void UpdateOrderConfig(OrderConfig config)
+        {
+            MainSave.OrderConfig = config.Clone();
+            using(var db = GetInstance())
+            {
+                db.Updateable(config).ExecuteCommand();
             }
         }
         #region ---Category---

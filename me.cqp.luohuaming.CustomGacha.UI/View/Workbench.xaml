@@ -14,6 +14,7 @@
         MinHeight="600"
         MinWidth="800"
         Closing="Window_Closing"
+        Loaded="Window_Loaded"
         Title="{Binding EditPool.Name, StringFormat=\{0\} - 工作台}"
         WindowStartupLocation="CenterScreen">
     <Window.Resources>
@@ -294,15 +295,10 @@
         </Grid.RowDefinitions>
         <Menu Margin="5,0,0,0">
             <MenuItem Header="文件">
-                <MenuItem Header="新建">
+                <MenuItem Header="新建"
+                          Command="{Binding NewPoolDialog}" CommandParameter="True">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="File"
-                                                    Foreground="{StaticResource PrimaryBrush}" />
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="打开">
-                    <MenuItem.Icon>
-                        <iconPacks:PackIconMaterial Kind="FileCog"
                                                     Foreground="{StaticResource PrimaryBrush}" />
                     </MenuItem.Icon>
                 </MenuItem>
@@ -334,6 +330,13 @@
                 </MenuItem>
             </MenuItem>
             <MenuItem Header="设置">
+                <MenuItem Header="前置设置"
+                          Command="{Binding ForeConfigDialog}">
+                    <MenuItem.Icon>
+                        <iconPacks:PackIconMaterial Kind="Cogs"
+                                                    Foreground="{StaticResource PrimaryBrush}" />
+                    </MenuItem.Icon>
+                </MenuItem>
                 <MenuItem Header="控制台设置">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="Cog"
@@ -352,7 +355,7 @@
                 </MenuItem>
             </MenuItem>
         </Menu>
-        <TabControl TabStripPlacement="Left"
+        <TabControl x:Name="contentTab" TabStripPlacement="Left"
                     Grid.Row="1"
                     Style="{DynamicResource LeftContent}">
             <TabItem Width="200"

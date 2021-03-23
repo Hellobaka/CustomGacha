@@ -1,18 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using me.cqp.luohuaming.CustomGacha.UI.Model;
 using me.cqp.luohuaming.CustomGacha.UI.ViewModel;
+using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.View
 {
@@ -24,8 +14,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
         public SoluctionSelector()
         {
             InitializeComponent();
+            SQLHelper.LoadConfig();
+            SoluctionSelector_Export = this;
         }
-
+        public static SoluctionSelector SoluctionSelector_Export;
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             object c = (sender as ListBox).SelectedItem;
@@ -33,12 +25,22 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
             {
                 //新建窗口
                 Workbench fm = new Workbench();
-                (fm.DataContext as WorkbenchViewModel).EditPool = (c as RecentSoluction).Object;
+                WorkbenchViewModel vm = (fm.DataContext as WorkbenchViewModel);
+                vm.EditPool = (c as RecentSoluction).Object;
+                vm.Config = MainSave.ApplicationConfig.Clone();
+                vm.OrderConfig = MainSave.OrderConfig.Clone();
                 fm.InitializeComponent();
                 fm.Show();
                 //传递
             }
             this.Hide();
+        }
+
+        private void OrderButtonPressed(object sender, SelectionChangedEventArgs e)
+        {
+            ButtonItem item = (ButtonItem)(sender as ListBox).SelectedItem;
+            if(item.Action!=null)
+                item.Action.Execute(null);
         }
     }
 }

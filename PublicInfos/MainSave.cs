@@ -17,9 +17,7 @@ namespace PublicInfos
         public static string DBPath { get; set; } = @"E:\酷Q机器人插件开发\学习\OPQBot-Native\Launcher\bin\x86\Debug\data\app\me.cqp.luohuaming.CustomGacha\data.db";
         public static string GachaResultRootPath { get; set; }
         public static OrderConfig OrderConfig { get; set; }
-        public static DateTime SignResetTime { get; set; }
-        public static int SignCeil { get; set; }
-        public static int SignFloor { get; set; }
+        public static Config ApplicationConfig { get; set; }
         public static List<Pool> PoolInstances { get; set; } 
     }
 }

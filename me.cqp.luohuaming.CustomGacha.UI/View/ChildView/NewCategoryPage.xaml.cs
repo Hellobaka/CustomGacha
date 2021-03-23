@@ -9,9 +9,9 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View.ChildView
     /// <summary>
     /// NewPoolPage.xaml 的交互逻辑
     /// </summary>
-    public partial class NewPoolPage
+    public partial class NewCategoryPage
     {
-        public NewPoolPage()
+        public NewCategoryPage()
         {
             InitializeComponent();
         }
