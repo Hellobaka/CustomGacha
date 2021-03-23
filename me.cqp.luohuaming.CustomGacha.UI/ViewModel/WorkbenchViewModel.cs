@@ -235,7 +235,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 this.RaisePropertyChanged("DialogType");
             }
         }
-
         #endregion
 
         #region ---绑定命令---
@@ -632,6 +631,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                             {
                                 EditPool = x.Result;
                                 EditPool.PoolID = SQLHelper.AddPool(x.Result);
+                                EditPool.CreateDt = DateTime.Now;
+                                EditPool.UpdateDt = DateTime.Now;
                                 Helper.ShowGrowlMsg($"成功新建了卡池 {x.Result.Name}");
                                 Workbench.contentTab_Export.IsEnabled = true;
                             }
