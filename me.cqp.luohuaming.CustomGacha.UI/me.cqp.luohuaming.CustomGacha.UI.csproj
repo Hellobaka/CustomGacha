@@ -203,12 +203,16 @@
     <Compile Include="Converter\RelativePath2FullPathConverter.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Model\SoluctionSelectorModel.cs" />
+    <Compile Include="UserControls\ChatBox.xaml.cs">
+      <DependentUpon>ChatBox.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\ImageSelector.xaml.cs">
       <DependentUpon>ImageSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\PathSelector.xaml.cs">
       <DependentUpon>PathSelector.xaml</DependentUpon>
     </Compile>
+    <Compile Include="ViewModel\ChatBoxViewModel.cs" />
     <Compile Include="ViewModel\NewPoolStepViewModel.cs" />
     <Compile Include="ViewModel\NewPoolViewModel.cs" />
     <Compile Include="ViewModel\WorkbenchViewModel.cs" />
@@ -265,6 +269,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UserControls\ChatBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UserControls\ImageSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -350,6 +358,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\me.cqp.luohuaming.CustomGacha.Code\me.cqp.luohuaming.CustomGacha.Code.csproj">
+      <Project>{7a675aac-50c1-49a8-a663-9caa6674c614}</Project>
+      <Name>me.cqp.luohuaming.CustomGacha.Code</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Native.Sdk\Native.Sdk.csproj">
       <Project>{d7a958b3-79d9-49f8-8bb4-9619bab6ecba}</Project>
       <Name>Native.Sdk</Name>

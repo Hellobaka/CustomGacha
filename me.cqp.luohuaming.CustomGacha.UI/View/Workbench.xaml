@@ -346,7 +346,8 @@
             </MenuItem>
             <MenuItem Header="关于">
                 <MenuItem Header="GitHub"
-                          Icon="{iconPacks:Material Kind=Github}" />
+                          Icon="{iconPacks:Material Kind=Github}"
+                          Command="{Binding OpenGitHub}"/>
                 <MenuItem Header="检查更新">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="Update"

@@ -91,6 +91,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             {
                 ExecuteAction = new Action<object>(poolDrawTest)
             };
+            OpenGitHub = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(openGitHub)
+            };
             ForeConfigDialog = new DelegateCommand
             {
                 ExecuteAction = new Action<object>(o => { ShowInteractiveDialog(DialogAction.ForeConfig); })
@@ -655,7 +659,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             GachaCore.DrawGachaResult(c, EditPool).Save("DrawTest\\" + filename);
             Process.Start("DrawTest\\" + filename);
         }
-
+        public DelegateCommand OpenGitHub { get; set; }
+        private void openGitHub(object peremeter)
+        {
+            Process.Start("https://github.com/Hellobaka/CustomGacha");
+        }
         #endregion
         private void ReloadCategroies()
         {

@@ -1,0 +1,67 @@
+﻿<UserControl x:Class="me.cqp.luohuaming.CustomGacha.UI.UserControls.ChatBox"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.UserControls"
+             xmlns:hc="https://handyorg.github.io/handycontrol"
+             xmlns:viewmodel="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.ViewModel"
+             mc:Ignorable="d"  
+             Loaded="UserControl_Loaded"
+             d:DesignHeight="700" d:DesignWidth="450">
+    <UserControl.DataContext>
+        <viewmodel:ChatBoxViewModel />
+    </UserControl.DataContext>
+    <Grid Background="{StaticResource RegionBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition  Height="Auto" />
+            <RowDefinition Height="9*" />
+            <RowDefinition  Height="*" />
+        </Grid.RowDefinitions>
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="99*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock VerticalAlignment="Center">测试QQ：</TextBlock>
+            <TextBox Grid.Column="1" Text="{Binding TestQQ,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+        </Grid>
+        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                 Style="{StaticResource StackPanelVerticalListBox}"
+                 ItemsSource="{Binding ChatInfos}"
+                 ScrollViewer.CanContentScroll="False" Grid.Row="1">
+            <hc:Interaction.Triggers>
+                <hc:RoutedEventTrigger RoutedEvent="hc:ChatBubble.Selected">
+                    <hc:EventToCommand Command="{Binding ReadMessage}"
+                                       PassEventArgsToCommand="True" />
+                </hc:RoutedEventTrigger>
+            </hc:Interaction.Triggers>
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <hc:ChatBubble MaxWidth="300"
+                                   Role="{Binding Role}"
+                                   Type="{Binding Type}"
+                                   Content="{Binding Message}"
+                                   Tag="{Binding}" />
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <Grid Grid.Row="2"
+              Background="{DynamicResource DarkDefaultBrush}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="7*"/>
+                <ColumnDefinition />
+            </Grid.ColumnDefinitions>
+            <TextBox Margin="10"
+                     Text="{Binding ChatString,UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" KeyUp="TextBox_KeyUp">
+                <hc:Interaction.Triggers>
+                    <hc:EventTrigger EventName="KeyDown">
+                        <hc:EventToCommand Command="{Binding SendString}"
+                                           PassEventArgsToCommand="True" />
+                    </hc:EventTrigger>
+                </hc:Interaction.Triggers>
+            </TextBox>
+            <Button Grid.Column="1" Style="{StaticResource ButtonPrimary}" Command="{Binding SendString}">发送</Button>
+        </Grid>
+    </Grid>
+</UserControl>

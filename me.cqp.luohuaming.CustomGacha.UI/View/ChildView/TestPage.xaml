@@ -27,5 +27,6 @@
                     Grid.Column="1"
                     Grid.RowSpan="2"
                     Orientation="Vertical" />
+        <usercontrols:ChatBox Grid.Column="2"/>
     </Grid>
 </Page>
