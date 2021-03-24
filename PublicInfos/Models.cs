@@ -136,7 +136,7 @@ namespace PublicInfos
         /// <summary>
         /// 总消耗代币数
         /// </summary>
-        public int MoneyTotalCount { get; set; } = 0;
+        public long MoneyTotalCount { get; set; } = 0;
         /// <summary>
         /// 抽卡次数, 保底后重置
         /// </summary>
@@ -435,6 +435,11 @@ namespace PublicInfos
         /// </summary>
         [SugarColumn(IsNullable = false)]
         public int SignFloor { get; set; }
+        /// <summary>
+        /// 每抽消耗货币数
+        /// </summary>
+        public int GachaCost { get; set; }
+        public int RegisterMoney { get; set; }
         public Config Clone()
         {
             return (Config)this.MemberwiseClone();
@@ -484,11 +489,17 @@ namespace PublicInfos
         /// <summary>
         /// 注册指令
         /// </summary>
-        public string Register { get; set; }
+        public string RegisterOrder { get; set; }
         /// <summary>
         /// 签到指令
         /// </summary>
-        public string Sign { get; set; }
+        public string SignOrder { get; set; }
+        public string DuplicateRegisterText { get; set; }
+        public string SuccessfulRegisterText { get; set; }
+        public string LeakMoneyText { get; set; }
+        public string SuccessfulSignText { get; set; }
+        public string DuplicateSignText { get; set; }
+
         public OrderConfig Clone()
         {
             return (OrderConfig)this.MemberwiseClone();

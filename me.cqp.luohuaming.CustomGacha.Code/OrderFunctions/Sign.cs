@@ -6,7 +6,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
 {
     public class Sign : IOrderModel
     {
-        public string GetOrderStr() => MainSave.OrderConfig.Sign;
+        public string GetOrderStr() => MainSave.OrderConfig.SignOrder;
 
         public bool Judge(string destStr) => destStr.Replace("＃", "#").Equals(GetOrderStr());//这里判断是否能触发指令
 
@@ -22,13 +22,14 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
                 SendID = e.FromGroup,
             };
             int signMoney = SQLHelper.Sign(e.FromQQ);
+            DB_User user = SQLHelper.GetUser(e.FromQQ);
             if (signMoney > 0)
             {
-                sendText.MsgToSend.Add($"{e.FromQQ.CQCode_At()} 签到成功, 获得 {signMoney} 通用货币");
+                sendText.MsgToSend.Add(Helper.HandleModelString(MainSave.OrderConfig.SuccessfulSignText, e.FromQQ, user, signMoney));
             }
             else
             {
-                sendText.MsgToSend.Add($"{e.FromQQ.CQCode_At()} 重复签到");
+                sendText.MsgToSend.Add(Helper.HandleModelString(MainSave.OrderConfig.DuplicateSignText, e.FromQQ, user));
             }
             result.SendObject.Add(sendText);
             return result;

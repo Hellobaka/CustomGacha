@@ -28,6 +28,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code
             MainSave.Instances.Add(new Register());//这里需要将指令实例化填在这里
             MainSave.Instances.Add(new Sign());
             MainSave.Instances.Add(new MultiGacha());
+            MainSave.Instances.Add(new SingalGacha());
         }
         private protected class G7TUJSM2 : IDrawItem{ public Bitmap DrawPicItem(GachaItem item, Pool pool){ return null; } }
     }

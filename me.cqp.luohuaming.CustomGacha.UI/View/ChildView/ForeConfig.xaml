@@ -8,7 +8,7 @@
         xmlns:vm="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.ViewModel"
         xmlns:s2s="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.Converter"
         mc:Ignorable="d"
-        Height="300"
+        Height="500"
         Width="400"
         CornerRadius="10"
         Background="{DynamicResource RegionBrush}"
@@ -27,7 +27,7 @@
     <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
         <Grid Margin="10">
             <Grid.RowDefinitions>
-                <RowDefinition Height="1*" />
+                <RowDefinition Height="Auto" />
                 <RowDefinition Height="8*" />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
@@ -77,19 +77,98 @@
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="99*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center">签到指令：</TextBlock>
+                        <TextBlock VerticalAlignment="Center">注册获得货币：</TextBlock>
                         <TextBox Grid.Column="1"
-                                 Text="{Binding OrderConfig.Sign}" />
+                                 Text="{Binding Config.RegisterMoney}" />
                     </Grid>
                     <Grid Margin="0,5">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
                             <ColumnDefinition Width="99*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock VerticalAlignment="Center">注册指令：</TextBlock>
+                        <TextBlock VerticalAlignment="Center">每抽消耗货币：</TextBlock>
                         <TextBox Grid.Column="1"
-                                 Text="{Binding OrderConfig.Register}" />
+                                 Text="{Binding Config.GachaCost}" />
                     </Grid>
+                    <hc:Divider Margin="5" />
+                    
+                    <Expander Margin="5"
+                              Header="指令设置"
+                              Background="LightGray"
+                              Foreground="Black">
+                        <StackPanel Margin="5">
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="99*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center">签到指令：</TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding OrderConfig.SignOrder}" />
+                            </Grid>
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="99*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center">注册指令：</TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding OrderConfig.RegisterOrder}" />
+                            </Grid>
+                        </StackPanel>
+                    </Expander>
+                    <Expander Margin="5"
+                              Header="回复文本设置"
+                              Background="LightGray"
+                              Foreground="Black">
+                        <StackPanel Margin="5">
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="99*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center">成功注册：</TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding OrderConfig.SuccessfulRegisterText}" />
+                            </Grid>
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="99*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center">重复注册：</TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding OrderConfig.DuplicateRegisterText}" />
+                            </Grid>
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="99*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center">货币不足：</TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding OrderConfig.LeakMoneyText}" />
+                            </Grid>
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="99*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center">重复签到：</TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding OrderConfig.DuplicateSignText}" />
+                            </Grid>
+                            <Grid Margin="0,5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="99*" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock VerticalAlignment="Center">签到成功：</TextBlock>
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding OrderConfig.SuccessfulSignText}" />
+                            </Grid>
+                        </StackPanel>
+                    </Expander>
                 </StackPanel>
             </ScrollViewer>
             <StackPanel Grid.Row="2"

@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using HandyControl.Tools;
 using me.cqp.luohuaming.CustomGacha.UI.ViewModel;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
@@ -14,7 +15,18 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
         public ChatBox()
         {
             InitializeComponent();
+            ListBoxChat.ItemContainerGenerator.ItemsChanged += ItemContainerGenerator_ItemsChanged;
         }
+        private ScrollViewer _scrollViewer;
+        private void ItemContainerGenerator_ItemsChanged(object sender, System.Windows.Controls.Primitives.ItemsChangedEventArgs e)
+        {
+            if (_scrollViewer == null)
+            {
+                _scrollViewer = VisualHelper.GetChild<ScrollViewer>(ListBoxChat);
+            }
+            _scrollViewer?.ScrollToBottom();
+        }
+
         public static ChatBox chatbox_Export;
         ChatBoxViewModel datacontext;
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
@@ -47,7 +59,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
                 var c = datacontext.HistoryChatStrings.Reverse<string>().ToList();
                 if (c.Count == 0)
                     return;
-                datacontext.ChatString = c[datacontext.historyIndex];                
+                datacontext.ChatString = c[datacontext.historyIndex];
             }
             else
             {

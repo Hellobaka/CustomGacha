@@ -41,6 +41,7 @@ namespace PublicInfos
                 db.CodeFirst.InitTables(typeof(Category));
             }
         }
+        #region ---Functions---
         /// <summary>
         /// 进行签到
         /// </summary>
@@ -82,12 +83,15 @@ namespace PublicInfos
                 DB_User user = new DB_User
                 {
                     QQID = QQID,
-                    Money = 3200
+                    Money = MainSave.ApplicationConfig.RegisterMoney
                 };
                 db.Insertable(user).ExecuteCommand();
                 return user;
             }
         }
+        #endregion
+
+        #region ---Users---
         public static void InsertGachaItem2Repo(List<GachaItem> ls, long QQID)
         {
             using (var db = GetInstance())
@@ -128,6 +132,9 @@ namespace PublicInfos
                 return db.Queryable<DB_User>().First(x => x.QQID == QQID).Money;
             }
         }
+        #endregion
+
+        #region ---Pools---
         public static List<Pool> GetAllPools()
         {
             using (var db = GetInstance())
@@ -142,8 +149,8 @@ namespace PublicInfos
             using (var db = GetInstance())
             {
                 if (db.Queryable<Pool>().Any(x => x.PoolID == pool.PoolID) is false)
-                { 
-                    return db.Insertable(pool).ExecuteReturnIdentity(); 
+                {
+                    return db.Insertable(pool).ExecuteReturnIdentity();
                 }
                 return -1;
             }
@@ -165,6 +172,9 @@ namespace PublicInfos
                 db.Deleteable(pool).ExecuteCommand();
             }
         }
+        #endregion
+
+        #region ---Configs---
         public static void LoadConfig()
         {
             using (var db = GetInstance())
@@ -176,7 +186,9 @@ namespace PublicInfos
                     {
                         SignFloor = 1600,
                         SignCeil = 3200,
-                        SignResetTime = new DateTime(1970, 1, 1, 0, 0, 0)
+                        SignResetTime = new DateTime(1970, 1, 1, 0, 0, 0),
+                        RegisterMoney = 6400,
+                        GachaCost = 160
                     };
                     c.RowID = db.Insertable(c).ExecuteReturnIdentity();
                 }
@@ -188,17 +200,23 @@ namespace PublicInfos
                 {
                     o = new OrderConfig
                     {
-                        Register = "#抽卡注册",
-                        Sign = "#抽卡签到"
+                        RegisterOrder = "#抽卡注册",
+                        SignOrder = "#抽卡签到",
+                        SuccessfulSignText = "<@>签到成功，获得通用货币<$0>",
+                        DuplicateSignText = "<@>你今天签过到了",
+                        SuccessfulRegisterText = "<@>注册成功，获得通用货币<current_money>",
+                        DuplicateRegisterText = "<@>重复注册是打咩的",
+                        LeakMoneyText = "<@>剩余货币不足以抽卡了呢~\n你目前还有<current_money>通用货币",
                     };
                     db.Insertable(o).ExecuteCommand();
+                    MainSave.OrderConfig = o;
                 }
             }
         }
         public static void UpdateConfig(Config config)
         {
             MainSave.ApplicationConfig = config.Clone();
-            using(var db = GetInstance())
+            using (var db = GetInstance())
             {
                 db.Updateable(config).ExecuteCommand();
             }
@@ -206,11 +224,13 @@ namespace PublicInfos
         public static void UpdateOrderConfig(OrderConfig config)
         {
             MainSave.OrderConfig = config.Clone();
-            using(var db = GetInstance())
+            using (var db = GetInstance())
             {
                 db.Updateable(config).ExecuteCommand();
             }
         }
+        #endregion
+
         #region ---Category---
         public static List<Category> GetCategoriesByIDs(List<int> id)
         {
@@ -224,13 +244,13 @@ namespace PublicInfos
                 return c;
             }
         }
-        public static int UpdateOrAddCategory(Category item, bool addFlag=false)
+        public static int UpdateOrAddCategory(Category item, bool addFlag = false)
         {
             if (item == null)
                 return -1;
             using (var db = GetInstance())
             {
-                if(addFlag)
+                if (addFlag)
                 {
                     return db.Insertable(item).ExecuteReturnIdentity();
                 }
@@ -259,11 +279,11 @@ namespace PublicInfos
                 return db.Queryable<GachaItem>().ToList();
             }
         }
-        public static List<GachaItem> GetPageGachaItem(int pageIndex,int pageCount = 50)
+        public static List<GachaItem> GetPageGachaItem(int pageIndex, int pageCount = 50)
         {
             using (var db = GetInstance())
             {
-                return db.Queryable<GachaItem>().ToPageList(pageIndex,pageCount);
+                return db.Queryable<GachaItem>().ToPageList(pageIndex, pageCount);
             }
         }
         public static int InsertOrUpdateGachaItem(GachaItem item)
@@ -318,7 +338,7 @@ namespace PublicInfos
                 {
                     if (ls.Any(x => x.ItemID == item.ItemID && x.IsNew))
                         continue;
-                    item.IsNew = ! db.Queryable<DB_Repo>().Any(x => x.QQID == QQ && x.ItemID == item.ItemID);
+                    item.IsNew = !db.Queryable<DB_Repo>().Any(x => x.QQID == QQ && x.ItemID == item.ItemID);
                 }
                 return ls;
             }

@@ -6,9 +6,9 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
 {
     public class Register : IOrderModel
     {
-        public string GetOrderStr() => MainSave.OrderConfig.Register;
+        public string GetOrderStr() => MainSave.OrderConfig.RegisterOrder;
 
-        public bool Judge(string destStr) => destStr.Replace("＃","#").Equals(GetOrderStr());//这里判断是否能触发指令
+        public bool Judge(string destStr) => destStr.Replace("＃", "#").Equals(GetOrderStr());//这里判断是否能触发指令
 
         public FunctionResult Progress(CQGroupMessageEventArgs e)//群聊处理
         {
@@ -21,13 +21,15 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
             {
                 SendID = e.FromGroup,
             };
-            if(SQLHelper.IDExists(e.FromQQ))
+            if (SQLHelper.IDExists(e.FromQQ))
             {
-                sendText.MsgToSend.Add($"{e.FromQQ.CQCode_At()} 注册重复");
+                DB_User user = SQLHelper.GetUser(e.FromQQ);
+                sendText.MsgToSend.Add(Helper.HandleModelString(MainSave.OrderConfig.DuplicateRegisterText, e.FromQQ, user));
+                result.SendObject.Add(sendText);
                 return result;
             }
             var c = SQLHelper.Register(e.FromQQ);
-            sendText.MsgToSend.Add($"{e.FromQQ.CQCode_At()} 注册成功，初始货币{c.Money}");
+            sendText.MsgToSend.Add(Helper.HandleModelString(MainSave.OrderConfig.SuccessfulRegisterText, e.FromQQ, c));
             result.SendObject.Add(sendText);
             return result;
         }

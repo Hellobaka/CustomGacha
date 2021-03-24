@@ -21,12 +21,12 @@ namespace me.cqp.luohuaming.CustomGacha.UI
                     {
                         App app = new App();
                         window = app;
-                        app.Exit += (A,B) => { window = null; };
+                        app.Exit += (A, B) => { window = null; };
                         app.InitializeComponent();
                         app.Run();
                     });
                     thread.SetApartmentState(ApartmentState.STA);
-                    thread.Start();                    
+                    thread.Start();
                 }
                 else
                 {

@@ -32,8 +32,7 @@
                           IsExpanded="True">
                     <StackPanel Margin="15,5,15,5">
                         <TextBlock Margin="0,3">图片路径</TextBlock>
-                        <usercontrols:PathSelector FilePath="{Binding EditPool.NewPicPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                                   OpenType="File" />
+                        <usercontrols:ImageSelector ImagePath="{Binding EditPool.NewPicPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Margin="0,3">宽度</TextBlock>
                         <TextBox Margin="0,3"
                                  Text="{Binding EditPool.NewPicWidth, Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />

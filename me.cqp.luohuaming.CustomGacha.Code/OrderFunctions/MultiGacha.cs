@@ -24,16 +24,43 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
             {
                 SendID = e.FromGroup,
             };
+            //检索能够应答指令的卡池
             var destPool = MainSave.PoolInstances.Find(x => x.MultiOrder == e.Message.Text);
+            //预构建图片保存目录
             string resultPicPath = Path.Combine(MainSave.GachaResultRootPath, destPool.Name);
             Directory.CreateDirectory(resultPicPath);
 
-            var c = GachaCore.DoGacha(destPool, destPool.MultiGachaNumber);
+            //检索用户
+            DB_User user = SQLHelper.GetUser(e.FromQQ);
+            long gachaCost = MainSave.ApplicationConfig.GachaCost * destPool.MultiGachaNumber;
+            if (user.Money < gachaCost)//货币不足以抽卡
+            {
+                sendText.MsgToSend.Add(Helper.HandleModelString(MainSave.OrderConfig.LeakMoneyText, e.FromQQ, user));
+                result.SendObject.Add(sendText);
+                return result;
+            }
+            else//减去所需货币并更新相关字段
+            {
+                user.Money -= gachaCost;
+                user.GachaTotalCount += destPool.MultiGachaNumber;
+                user.MoneyTotalCount += gachaCost;
+            }
+            //发送回复文本
+            Helper.SendTmpMsg(e.FromGroup, Helper.HandleModelString(destPool.MultiGachaText, e.FromQQ, user));
+            //进行抽卡
+            int baodiCount = user.GachaCount;
+            var c = GachaCore.DoGacha(destPool, destPool.MultiGachaNumber, ref baodiCount);
+            //从仓库检索项目是否为new
             c = SQLHelper.UpdateGachaItemsNewStatus(c, e.FromQQ);
+            //更新用户字段
+            user.GachaCount = baodiCount;
+            SQLHelper.UpdateUser(user);
+            //向仓库插入项目
             SQLHelper.InsertGachaItem2Repo(c, e.FromQQ);
+            //保存图片
             string filename = DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
             GachaCore.DrawGachaResult(c, destPool).Save(Path.Combine(resultPicPath, filename));
-            //TODO: 回复文本设置
+            //发送结果
             sendText.MsgToSend.Add(CQApi.CQCode_Image($@"CustomGacha\{destPool.Name}\{filename}").ToSendString());
             result.SendObject.Add(sendText);
             return result;

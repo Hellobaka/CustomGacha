@@ -4,19 +4,8 @@
              xmlns:local="clr-namespace:me.cqp.luohuaming.CustomGacha.UI"
              StartupUri="View/SoluctionSelector.xaml">
     <!--StartupUri="View/SoluctionSelector.xaml">-->
-    <Application.Resources>        
+    <Application.Resources>
         <ResourceDictionary>
-            <Storyboard x:Key="CustomTransition"
-                        x:Shared="False">
-                <DoubleAnimation From="50"
-                                 To="0"
-                                 Duration="0:0:0.4"
-                                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
-                    <DoubleAnimation.EasingFunction>
-                        <ElasticEase Oscillations="1" />
-                    </DoubleAnimation.EasingFunction>
-                </DoubleAnimation>
-            </Storyboard>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/SkinDefault.xaml" />
                 <ResourceDictionary Source="pack://application:,,,/HandyControl;component/Themes/Theme.xaml" />

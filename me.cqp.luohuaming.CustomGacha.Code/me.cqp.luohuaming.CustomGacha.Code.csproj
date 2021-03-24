@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="Event_GroupMessage.cs" />
     <Compile Include="Event_StartUp.cs" />
+    <Compile Include="Helper.cs" />
     <Compile Include="OrderFunctions\MultiGacha.cs" />
     <Compile Include="OrderFunctions\SingalGacha.cs" />
     <Compile Include="OrderFunctions\Sign.cs" />

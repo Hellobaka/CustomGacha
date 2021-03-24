@@ -652,7 +652,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         {
             Directory.CreateDirectory("DrawTest");
             long testQQ = 1145141919;
-            var c = GachaCore.DoGacha(EditPool, EditPool.MultiGachaNumber);
+            int baodiCount = 1;
+            var c = GachaCore.DoGacha(EditPool, EditPool.MultiGachaNumber,ref baodiCount);
             c = SQLHelper.UpdateGachaItemsNewStatus(c, testQQ);
             SQLHelper.InsertGachaItem2Repo(c, testQQ);
             string filename = Guid.NewGuid().ToString() + ".jpg";

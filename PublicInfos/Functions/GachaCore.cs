@@ -9,7 +9,7 @@ namespace PublicInfos
 {
     public static class GachaCore
     {
-        public static List<GachaItem> DoGacha(Pool pool, int count, int gachaCount = 1)
+        public static List<GachaItem> DoGacha(Pool pool, int count, ref int gachaCount)
         {
             List<GachaItem> results = new List<GachaItem>();
             for (int i = 0; i < count; i++)
@@ -28,7 +28,6 @@ namespace PublicInfos
                         continue;
                     }
                 }
-
                 results.Add(gachaItem);
             }
 
@@ -43,12 +42,6 @@ namespace PublicInfos
                 case OrderOptional.None:
                     break;
             }
-
-            //TODO: 抽卡命令处写入数据库，保持模块功能单一
-            //TODO: 根据结果更新用户剩余保底数
-            //user.SignTotalCount += count;            
-            //SQLHelper.UpdateUser(user);
-            //SQLHelper.InsertGachaItem(results, user.QQID);
             return results;
         }
 

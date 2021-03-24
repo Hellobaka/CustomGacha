@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 using System.Windows.Controls;
 using me.cqp.luohuaming.CustomGacha.UI.Model;
 using me.cqp.luohuaming.CustomGacha.UI.ViewModel;
@@ -16,6 +17,9 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
             InitializeComponent();
             SQLHelper.LoadConfig();
             SoluctionSelector_Export = this;
+            
+            //Uri mainwindow = new Uri("View/Workbench.xaml", UriKind.Relative);
+            //Application.LoadComponent(mainwindow);
         }
         public static SoluctionSelector SoluctionSelector_Export;
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -29,11 +33,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
                 vm.EditPool = (c as RecentSoluction).Object;
                 vm.Config = MainSave.ApplicationConfig.Clone();
                 vm.OrderConfig = MainSave.OrderConfig.Clone();
-                fm.InitializeComponent();
+                //fm.InitializeComponent();
                 fm.Show();
-                //传递
+                this.Close();
             }
-            this.Hide();
         }
 
         private void OrderButtonPressed(object sender, SelectionChangedEventArgs e)

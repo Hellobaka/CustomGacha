@@ -14,19 +14,23 @@
     <Page.DataContext>
         <viewModel:WorkbenchViewModel />
     </Page.DataContext>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="3*" />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="6*" />
-        </Grid.ColumnDefinitions>
-        <StackPanel Margin="10">
-            <Button HorizontalAlignment="Stretch" Style="{StaticResource ButtonPrimary}" Click="TestDraw_Click">测试图片生成</Button>
-        </StackPanel>
-        <hc:Divider LineStrokeThickness="2"
-                    Grid.Column="1"
-                    Grid.RowSpan="2"
-                    Orientation="Vertical" />
-        <usercontrols:ChatBox Grid.Column="2"/>
-    </Grid>
+    <hc:TransitioningContentControl TransitionMode="Left2RightWithFade">
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="6*" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Margin="10">
+                <Button HorizontalAlignment="Stretch"
+                        Style="{StaticResource ButtonPrimary}"
+                        Click="TestDraw_Click">测试图片生成</Button>
+            </StackPanel>
+            <hc:Divider LineStrokeThickness="2"
+                        Grid.Column="1"
+                        Grid.RowSpan="2"
+                        Orientation="Vertical" />
+            <usercontrols:ChatBox Grid.Column="2" />
+        </Grid>
+    </hc:TransitioningContentControl>
 </Page>

@@ -16,7 +16,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code
             try
             {
                 if (SQLHelper.IDExists(e.FromQQ) is false 
-                    && e.Message.Text.Replace("＃", "#").Equals(MainSave.OrderConfig.Register) is false)
+                    && e.Message.Text.Replace("＃", "#").Equals(MainSave.OrderConfig.RegisterOrder) is false)
                 {
                     return result;
                 }

@@ -38,6 +38,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 MainSave.Instances.Add(new Register());//这里需要将指令实例化填在这里
                 MainSave.Instances.Add(new Sign());
                 MainSave.Instances.Add(new MultiGacha());
+                MainSave.Instances.Add(new SingalGacha());
             }
         }
         private long testQQ = 1145141919;

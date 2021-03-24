@@ -1,11 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Controls;
-using HandyControl.Controls;
-using HandyControl.Tools.Extension;
+using System.Windows.Input;
+using System.Windows.Navigation;
 using MahApps.Metro.IconPacks;
 using me.cqp.luohuaming.CustomGacha.UI.ViewModel;
-using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.View
 {
@@ -16,22 +17,18 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
     {
         public Workbench()
         {
+            Application.ResourceAssembly = Assembly.Load("me.cqp.luohuaming.CustomGacha.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null");
             PackIconCodicons o = new PackIconCodicons();
             PackIconMaterial oo = new PackIconMaterial();
             PackIconUnicons ooo = new PackIconUnicons();
             InitializeComponent();
         }
         WorkbenchViewModel datacontext;
-        public static System.Windows.Controls.TabControl contentTab_Export;
-        private void Frame_LoadCompleted(object sender, System.Windows.Navigation.NavigationEventArgs e)
+        public static TabControl contentTab_Export;
+        private void Frame_LoadCompleted(object sender, NavigationEventArgs e)
         {
             Page page = e.Content as Page;
             page.DataContext = this.DataContext;
-        }
-
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            Environment.Exit(0);
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
@@ -50,6 +47,26 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
                 default:
                     break;
             }
+        }
+
+        private void Window_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyboardDevice.IsKeyDown(Key.LeftCtrl) || e.KeyboardDevice.IsKeyDown(Key.RightCtrl))
+            {
+                switch (e.Key)//Ctrl + S
+                {
+                    case Key.S:
+                        datacontext.SaveAction.Execute(null);
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
+
+        private void ExitApplication(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }

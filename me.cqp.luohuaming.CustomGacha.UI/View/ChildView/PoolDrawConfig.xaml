@@ -40,7 +40,7 @@
                           Foreground="Black">
                     <StackPanel Margin="15,5,15,5">
                         <TextBlock Margin="0,3">背景图片路径</TextBlock>
-                        <usercontrols:PathSelector FilePath="{Binding EditPool.BackgroundImagePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                        <usercontrols:ImageSelector ImagePath="{Binding EditPool.BackgroundImagePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
                         <TextBlock Margin="0,3">子项目排序设置</TextBlock>
                         <ComboBox SelectedIndex="{Binding EditPool.PoolDrawConfig.OrderOptional,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged, Converter={StaticResource e2iConverter}}">
                             <ComboBoxItem>升序，从小到大</ComboBoxItem>

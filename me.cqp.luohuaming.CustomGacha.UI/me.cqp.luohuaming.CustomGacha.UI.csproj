@@ -70,6 +70,9 @@
     <ErrorReport>prompt</ErrorReport>
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>me.cqp.luohuaming.CustomGacha.UI.App</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="HandyControl, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\HandyControl.3.0.0\lib\net45\HandyControl.dll</HintPath>
