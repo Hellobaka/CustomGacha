@@ -47,8 +47,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View.ChildView
                 }
                 catch(Exception exc)
                 {
-                    Helper.ShowGrowlMsg($"图片合成失败，失败信息: {exc.Message}", Helper.NoticeEnum.Error, 3);
-                    this.Cursor = Cursors.Arrow;
+                    testPage.Dispatcher.Invoke(() =>
+                    {
+                        Helper.ShowGrowlMsg($"图片合成失败，失败信息: {exc.Message}", Helper.NoticeEnum.Error, 3);
+                        this.Cursor = Cursors.Arrow;
+                    });
                 }
             });
             thread.Start();

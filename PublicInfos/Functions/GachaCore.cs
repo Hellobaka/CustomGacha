@@ -198,7 +198,7 @@ namespace PublicInfos
             {
                 var o = pool.DrawPoints;
                 var method = o.GetType().GetMethod("FinallyDraw");
-                background = (Bitmap) method.Invoke(o, new object[] {background, QQ, pool});
+                background = (Bitmap) method.Invoke(o, new object[] {background, SQLHelper.GetUser(QQ), pool});
             }
 
             return background;

@@ -328,7 +328,7 @@ namespace PublicInfos
                                 FinallyDraw = plugin.CreateInstance(item.FullName);
                             }
 
-                            if (item.GetInterface("IFinallyDraw") != null)
+                            if (item.GetInterface("DrawAllItems") != null)
                             {
                                 DrawAllItems = plugin.CreateInstance(item.FullName);
                             }

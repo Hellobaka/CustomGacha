@@ -15,6 +15,6 @@ namespace PluginInterface
         /// <param name="QQ">调用者QQ</param>
         /// <param name="pool">目标池</param>
         /// <returns>自定义绘制图片</returns>
-        Bitmap FinallyDraw(Bitmap finPic, long QQ, Pool pool);
+        Bitmap FinallyDraw(Bitmap finPic, DB_User user, Pool pool);
     }
 }
