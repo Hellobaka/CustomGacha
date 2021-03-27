@@ -784,6 +784,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     contentID.Add(item.Value.ID);
                 }
                 pool_dest.Content = contentID;
+                pool_dest.RelativePath = relativePath;
                 pool_dest.PoolID = SQLHelper.AddPool(pool_dest);
                 EditPool = pool_dest;
                 Helper.ShowGrowlMsg($"导入卡池 {EditPool.Name} 成功, 重启编辑器以测试卡池");
