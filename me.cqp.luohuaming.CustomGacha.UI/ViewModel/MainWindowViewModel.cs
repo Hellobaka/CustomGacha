@@ -130,7 +130,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             set
             {
                 if (value != null)
-                    SQLHelper.InsertOrUpdateGachaItem(selectGachaItem);
+                    SQLHelper.UpdateOrAddGachaItem(selectGachaItem);
                 selectGachaItem = value;
                 this.RaisePropertyChanged("SelectGachaItem");
             }
@@ -190,7 +190,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 Name = "示例项目"
             };
             GachaItems.Add(c);
-            c.ItemID = SQLHelper.InsertOrUpdateGachaItem(c);
+            c.ItemID = SQLHelper.UpdateOrAddGachaItem(c);
             SelectCategory.Content.Add(c.ItemID);
             SQLHelper.UpdateOrAddCategory(SelectCategory);
             SelectGachaItem = c;
@@ -231,7 +231,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             var c = SelectGachaItem.Clone();
             c.ItemID = 0;
             GachaItems.Add(c);
-            c.ItemID = SQLHelper.InsertOrUpdateGachaItem(c);
+            c.ItemID = SQLHelper.UpdateOrAddGachaItem(c);
             SelectCategory.Content.Add(c.ItemID);
             SQLHelper.UpdatePool(SelectPool);
             SelectGachaItem = c;

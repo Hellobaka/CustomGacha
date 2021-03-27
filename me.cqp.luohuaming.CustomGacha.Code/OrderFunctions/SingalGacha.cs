@@ -59,7 +59,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
             SQLHelper.InsertGachaItem2Repo(c, e.FromQQ);
             //保存图片
             string filename = DateTime.Now.ToString("yyyyMMddHHmmss") + ".png";
-            GachaCore.DrawGachaResult(c, destPool).Save(Path.Combine(resultPicPath, filename));
+            GachaCore.DrawGachaResult(c, destPool, e.FromQQ).Save(Path.Combine(resultPicPath, filename));
             //发送结果
             sendText.MsgToSend.Add(CQApi.CQCode_Image($@"CustomGacha\{destPool.Name}\{filename}").ToSendString());
             result.SendObject.Add(sendText);

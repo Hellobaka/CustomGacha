@@ -11,6 +11,9 @@ using HandyControl.Tools.Extension;
 using me.cqp.luohuaming.CustomGacha.UI.Command;
 using me.cqp.luohuaming.CustomGacha.UI.View;
 using me.cqp.luohuaming.CustomGacha.UI.View.ChildView;
+using Microsoft.WindowsAPICodePack.Dialogs;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
@@ -94,6 +97,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             OpenGitHub = new DelegateCommand
             {
                 ExecuteAction = new Action<object>(openGitHub)
+            };
+            ExportPool = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(exportPool)
+            };
+            ImportPool = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(importPool)
             };
             ForeConfigDialog = new DelegateCommand
             {
@@ -299,7 +310,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 {
                     if (items.ItemID == -1)
                     {
-                        items.ItemID = SQLHelper.InsertOrUpdateGachaItem(items);
+                        items.ItemID = SQLHelper.UpdateOrAddGachaItem(items);
                         item.Key.Content[index] = items.ItemID;
                         count++;
                     }
@@ -653,7 +664,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             Directory.CreateDirectory("DrawTest");
             long testQQ = 1145141919;
             int baodiCount = 1;
-            var c = GachaCore.DoGacha(EditPool, EditPool.MultiGachaNumber,ref baodiCount);
+            var c = GachaCore.DoGacha(EditPool, EditPool.MultiGachaNumber, ref baodiCount);
             c = SQLHelper.UpdateGachaItemsNewStatus(c, testQQ);
             SQLHelper.InsertGachaItem2Repo(c, testQQ);
             string filename = Guid.NewGuid().ToString() + ".jpg";
@@ -665,7 +676,158 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         {
             Process.Start("https://github.com/Hellobaka/CustomGacha");
         }
+        public DelegateCommand ExportPool { get; set; }
+        private void exportPool(object peremeter)
+        {
+            if (HandyControl.Controls.MessageBox.Ask("确认导出此池吗？请确认所有的编辑工作已经保存", "提示") == MessageBoxResult.Cancel)
+                return;
+            JObject json = new JObject
+            {
+                new JProperty("Pool_Info",JsonConvert.SerializeObject(EditPool)),
+                new JProperty("Categories_Info",new JArray()),
+                new JProperty("Items_Info",new JArray())
+            };
+            foreach (var item in Categories)
+            {
+                JObject category = new JObject
+                {
+                    new JProperty("ID",item.ID),
+                    new JProperty("Content",JsonConvert.SerializeObject(item))
+                };
+                (json["Categories_Info"] as JArray).Add(category);
+                foreach (var gachaitem in GachaitemsInCategory[item])
+                {
+                    JObject tmp = new JObject
+                    {
+                        new JProperty("ID",gachaitem.ItemID),
+                        new JProperty("Content", JsonConvert.SerializeObject(gachaitem))
+                    };
+                    (json["Items_Info"] as JArray).Add(tmp);
+                }
+            }
+            string dirPath = Path.Combine(MainSave.AppDirectory, "Export", $"{EditPool.Name}_{EditPool.PoolID}");
+            string jsonPath = Path.Combine(dirPath, $"{EditPool.Name}.json");
+            Directory.CreateDirectory(dirPath);
+            File.WriteAllText(jsonPath, json.ToString());
+            Process.Start(dirPath);
+            HandyControl.Controls.MessageBox.Show("保存完成");
+        }
+        public DelegateCommand ImportPool { get; set; }
+        private void importPool(object peremeter)
+        {
+            if (HandyControl.Controls.MessageBox.Ask("确认导入吗？请确认所有的编辑工作已经保存", "提示") == MessageBoxResult.Cancel)
+                return;
+            EditPool = new Pool { Name = "未选择项目", PoolID = -1 };
+            string filePath = ShowSelectJsonDialog(MainSave.AppDirectory);
+            try
+            {
+                JObject json = JObject.Parse(File.ReadAllText(filePath));
+                string relativePath = ShowSelectDirDialog();
+                Helper.ShowGrowlMsg("相对目录读取成功");
+                if (VeifyJson(relativePath, json) is false)
+                {
+                    Helper.ShowGrowlMsg("路径验证失败，请检查相对目录是否设置正确", Helper.NoticeEnum.Error);
+                    return;
+                }
+                Pool pool_dest = JsonConvert.DeserializeObject<Pool>(json["Pool_Info"].ToString());
+                if (MainSave.PoolInstances.Any(x => x.Name == pool_dest.Name))
+                {
+                    if (HandyControl.Controls.MessageBox.Ask("似乎现在已经有一个相同名称的卡池了，是否继续导入？", "提示") == MessageBoxResult.Cancel)
+                        return;
+                    pool_dest.Name += "_2";
+                }
+                pool_dest.PoolID = -1;
+
+                Dictionary<int, Category> categories = new Dictionary<int, Category>();
+                foreach (var item in json["Categories_Info"] as JArray)
+                {
+                    Category category = JsonConvert.DeserializeObject<Category>(item["Content"].ToString());
+                    category.ID = -1;
+                    categories.Add(Convert.ToInt32(item["ID"]), category);
+                }
+
+                Dictionary<int, GachaItem> gachaItems = new Dictionary<int, GachaItem>();
+                foreach (var item in json["Items_Info"] as JArray)
+                {
+                    GachaItem gachaItem = JsonConvert.DeserializeObject<GachaItem>(item["Content"].ToString());
+                    gachaItem.ItemID = -1;
+                    gachaItems.Add(Convert.ToInt32(item["ID"].ToString()), gachaItem);
+                }
+                Helper.ShowGrowlMsg("Json读取成功");
+                foreach (var item in gachaItems)
+                {
+                    item.Value.ItemID = SQLHelper.UpdateOrAddGachaItem(item.Value);
+                }
+                foreach (var item in pool_dest.Content)
+                {
+                    List<int> itemID = new List<int>();
+                    foreach (var id in categories[item].Content)
+                    {
+                        itemID.Add(gachaItems[id].ItemID);
+                    }
+                    List<int> upID = new List<int>();
+                    foreach (var id in categories[item].UpContent)
+                    {
+                        try
+                        {
+                            upID.Add(gachaItems[id].ItemID);
+                        }
+                        catch (KeyNotFoundException) { }
+                    }
+                    categories[item].Content = itemID;
+                    categories[item].UpContent = upID;
+                    categories[item].ID = SQLHelper.UpdateOrAddCategory(categories[item], true);
+                }
+                List<int> contentID = new List<int>();
+                foreach (var item in categories)
+                {
+                    contentID.Add(item.Value.ID);
+                }
+                pool_dest.Content = contentID;
+                pool_dest.PoolID = SQLHelper.AddPool(pool_dest);
+                EditPool = pool_dest;
+                Helper.ShowGrowlMsg($"导入卡池 {EditPool.Name} 成功, 重启编辑器以测试卡池");
+            }
+            catch (Exception e)
+            {
+                Helper.ShowGrowlMsg("Json读取失败，请验证Json格式", Helper.NoticeEnum.Error);
+                Helper.ShowGrowlMsg($"错误信息: {e.Message}", Helper.NoticeEnum.Error);
+                return;
+            }
+        }
         #endregion
+        private bool VeifyJson(string relativePath, JObject json)
+        {
+            var array = (json["Items_Info"] as JArray);
+            if (array.Count < 1)
+                return true;
+            var c = JObject.Parse(array[0]["Content"].ToString());
+            string path = Path.Combine(relativePath, c["ImagePath"].ToString());
+            return File.Exists(path);
+        }
+        private string ShowSelectJsonDialog(string openDir = "")
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog
+            {
+                Multiselect = false,
+                Title = "请选择需要导入的Json"
+            };
+            dialog.InitialDirectory = openDir;
+            dialog.Filters.Add(new CommonFileDialogFilter("Json", "*.json"));
+            dialog.ShowDialog();
+            return dialog.FileName;
+        }
+        private string ShowSelectDirDialog()
+        {
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog
+            {
+                Multiselect = false,
+                Title = "请选择仓库迁移后 图片所在的相对根目录",
+                IsFolderPicker = true
+            };
+            dialog.ShowDialog();
+            return dialog.FileName;
+        }
         private void ReloadCategroies()
         {
             var c = new ObservableCollection<Category>();

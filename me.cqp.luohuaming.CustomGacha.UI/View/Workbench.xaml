@@ -315,13 +315,15 @@
                     </MenuItem.Icon>
                 </MenuItem>
                 <Separator />
-                <MenuItem Header="导入">
+                <MenuItem Header="导入"
+                          Command="{Binding ImportPool}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="Import"
                                                     Foreground="{StaticResource PrimaryBrush}" />
                     </MenuItem.Icon>
                 </MenuItem>
-                <MenuItem Header="导出">
+                <MenuItem Header="导出"
+                          Command="{Binding ExportPool}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="Export"
                                                     Foreground="{StaticResource PrimaryBrush}" />

@@ -286,7 +286,7 @@ namespace PublicInfos
                 return db.Queryable<GachaItem>().ToPageList(pageIndex, pageCount);
             }
         }
-        public static int InsertOrUpdateGachaItem(GachaItem item)
+        public static int UpdateOrAddGachaItem(GachaItem item)
         {
             if (item == null)
                 return -1;

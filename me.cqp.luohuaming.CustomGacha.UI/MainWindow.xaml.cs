@@ -73,7 +73,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI
                         else if (c is GachaItem)
                         {
                             SQLHelper.UpdatePool(MainSave.PoolInstances[Pools.SelectedIndex]);
-                            SQLHelper.InsertOrUpdateGachaItem(c as GachaItem);
+                            SQLHelper.UpdateOrAddGachaItem(c as GachaItem);
                         }
                         else if(c is Category)
                         {
