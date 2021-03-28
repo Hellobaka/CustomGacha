@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using Native.Sdk.Cqp;
+using CustomGacha.SDK.Sdk.Cqp;
 
 namespace PublicInfos
 {

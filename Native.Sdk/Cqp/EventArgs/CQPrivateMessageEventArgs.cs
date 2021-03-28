@@ -1,12 +1,12 @@
-﻿using Native.Sdk.Cqp.Enum;
-using Native.Sdk.Cqp.Model;
+﻿using CustomGacha.SDK.Sdk.Cqp.Enum;
+using CustomGacha.SDK.Sdk.Cqp.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Native.Sdk.Cqp.EventArgs
+namespace CustomGacha.SDK.Sdk.Cqp.EventArgs
 {
 	/// <summary>
 	/// 提供用于描述酷Q私聊消息事件参数的类

@@ -1,9 +1,9 @@
 ﻿using Unity;
 using me.cqp.luohuaming.CustomGacha.Code;
 using me.cqp.luohuaming.CustomGacha.UI;
-using Native.Sdk.Cqp.Interface;
+using CustomGacha.SDK.Sdk.Cqp.Interface;
 
-namespace Native.Core
+namespace CustomGacha.SDK.Core
 {
 	/// <summary>
 	/// 酷Q应用主入口类

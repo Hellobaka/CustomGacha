@@ -1,4 +1,4 @@
-## Native.SDK 更新日志
+## CustomGacha.SDK.Sdk 更新日志
 
 #### 2020年05月01日 版本: V4.2.2.0501
 
@@ -12,7 +12,7 @@
 
 #### 2020年04月24日 版本: V4.2.0.0424
 
-	1. 优化 Native.Sdk.Cqp.Model 下原有类的构造方式, 为所有类增加了抽象
+	1. 优化 CustomGacha.SDK.Sdk.Cqp.Model 下原有类的构造方式, 为所有类增加了抽象
 	2. 优化 QQ、Group、Discuss、QQMessage 和 QQRequest 类的转换方式 (现在支持转换为对应的封装数据类型, 例如: QQMessage 能直接赋值给 string 类型)
 	3. 移除 CQApi 传入封装数据类型的接口 (由于支持隐式转换, 所以精简该类)
 	4. 移除 QQ 类中包含群操作的接口
@@ -39,17 +39,17 @@
 
 #### 2020年02月16日 版本: V4.1.1.0216
 
-	1. 修复 Native.Tool 项目在 Release 项目下的编译问题
-	2. 优化 Native.Sdk 和 Native.Tool 项目首选平台为 x86
+	1. 修复 CustomGacha.SDK.Tool 项目在 Release 项目下的编译问题
+	2. 优化 CustomGacha.SDK.Sdk 和 CustomGacha.SDK.Tool 项目首选平台为 x86
 
 #### 2020年02月11日 版本: V4.1.0.0211
 
-	1. 将 Native.Csharp 项目更名为 Native.Core
-	2. 将 Native.Csharp.Sdk 项目更名为 Native.Sdk
-	3. 将 Native.Csharp.Tool 项目更名为 Native.Tool
+	1. 将 Native.Csharp 项目更名为 CustomGacha.SDK.Core
+	2. 将 Native.Csharp.Sdk 项目更名为 CustomGacha.SDK.Sdk
+	3. 将 Native.Csharp.Tool 项目更名为 CustomGacha.SDK.Tool
 	4. 新增 AppInfo 模型, 替代 AuthCode 支持获取应用基础信息
 	5. 新增 IniConfig 序列化与反序列化
-	6. 优化 Native.Core 的项目结构
+	6. 优化 CustomGacha.SDK.Core 的项目结构
 	7. 优化 生成事件, 不需要再重命名 json 文件
 
 #### 2020年02月06日 版本: V4.0.13.0206
@@ -237,7 +237,7 @@
 
 #### 2019年06月07日 版本: V3.0.7.0607
 
-	由于 酷Q 停止对 Windows XP/Vista 系统的支持, 所以 Native.SDK 将停止继续使用 .Net 4.0 
+	由于 酷Q 停止对 Windows XP/Vista 系统的支持, 所以 CustomGacha.SDK.Sdk 将停止继续使用 .Net 4.0 
 	并将此版本作为最终发布版归档处理, 下个版本开始仅对 .Net 4.5+ 更新
 
 	1. 修复 悬浮窗数据转换错误 (由 Pack -#### BinaryWriter)

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Native.Sdk.Cqp.EventArgs
+namespace CustomGacha.SDK.Sdk.Cqp.EventArgs
 {
 	/// <summary>
 	/// 提供用于描述应用停用事件参数的类

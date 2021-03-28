@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using Native.Sdk.Cqp.EventArgs;
+using CustomGacha.SDK.Sdk.Cqp.EventArgs;
 using Newtonsoft.Json;
 using SqlSugar;
 

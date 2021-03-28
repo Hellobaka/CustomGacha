@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Native.Sdk.Cqp.Enum
+namespace CustomGacha.SDK.Sdk.Cqp.Enum
 {
 	/// <summary>
 	/// 指示酷Q消息类事件的事件类型

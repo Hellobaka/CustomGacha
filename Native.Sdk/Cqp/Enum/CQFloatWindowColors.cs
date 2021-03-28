@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Native.Sdk.Cqp.Enum
+namespace CustomGacha.SDK.Sdk.Cqp.Enum
 {
 	/// <summary>
 	/// 指示 酷Q悬浮窗颜色 的枚举

@@ -1,11 +1,11 @@
-﻿using Native.Sdk.Cqp.EventArgs;
+﻿using CustomGacha.SDK.Sdk.Cqp.EventArgs;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Native.Sdk.Cqp.Interface
+namespace CustomGacha.SDK.Sdk.Cqp.Interface
 {
 	/// <summary>
 	/// 酷Q群成员减少事件接口

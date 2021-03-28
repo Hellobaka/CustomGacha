@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Native.Tool.IniConfig.Linq
+namespace CustomGacha.SDK.Tool.IniConfig.Linq
 {
 	/// <summary>
 	/// 描述 Ini 配置项值的类

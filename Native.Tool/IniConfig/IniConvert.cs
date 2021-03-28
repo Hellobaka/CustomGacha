@@ -1,6 +1,6 @@
-﻿using Native.Tool.IniConfig.Attribute;
-using Native.Tool.IniConfig.Exception;
-using Native.Tool.IniConfig.Linq;
+﻿using CustomGacha.SDK.Tool.IniConfig.Attribute;
+using CustomGacha.SDK.Tool.IniConfig.Exception;
+using CustomGacha.SDK.Tool.IniConfig.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +9,7 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Native.Tool.IniConfig
+namespace CustomGacha.SDK.Tool.IniConfig
 {
 	/// <summary>
 	/// 提供了普通对象针对 IniConfig 快速转换的类

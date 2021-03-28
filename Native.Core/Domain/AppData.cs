@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Native.Sdk.Cqp;
+using CustomGacha.SDK.Sdk.Cqp;
 using Unity;
 
-namespace Native.Core.Domain
+namespace CustomGacha.SDK.Core.Domain
 {
 	public static class AppData
 	{

@@ -5,10 +5,10 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using Native.Sdk.Cqp.Core;
-using Native.Sdk.Cqp.Interface;
+using CustomGacha.SDK.Sdk.Cqp.Core;
+using CustomGacha.SDK.Sdk.Cqp.Interface;
 
-namespace Native.Sdk.Cqp.Expand
+namespace CustomGacha.SDK.Sdk.Cqp.Expand
 {
 	/// <summary>
 	/// 其它类扩展方法集

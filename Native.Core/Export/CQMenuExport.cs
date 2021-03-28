@@ -4,10 +4,10 @@
 using System;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using Native.Core.Domain;
-using Native.Sdk.Cqp;
-using Native.Sdk.Cqp.EventArgs;
-using Native.Sdk.Cqp.Interface;
+using CustomGacha.SDK.Core.Domain;
+using CustomGacha.SDK.Sdk.Cqp;
+using CustomGacha.SDK.Sdk.Cqp.EventArgs;
+using CustomGacha.SDK.Sdk.Cqp.Interface;
 using Unity;
 
 namespace Native.App.Export

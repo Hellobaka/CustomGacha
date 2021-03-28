@@ -2,8 +2,8 @@
 using System.Drawing;
 using System.IO;
 using me.cqp.luohuaming.CustomGacha.Code.OrderFunctions;
-using Native.Sdk.Cqp.EventArgs;
-using Native.Sdk.Cqp.Interface;
+using CustomGacha.SDK.Sdk.Cqp.EventArgs;
+using CustomGacha.SDK.Sdk.Cqp.Interface;
 using PluginInterface;
 using PublicInfos;
 

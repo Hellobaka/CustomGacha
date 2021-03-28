@@ -3,8 +3,8 @@ using System.Threading;
 using System.Windows;
 using me.cqp.luohuaming.CustomGacha.UI.View;
 using me.cqp.luohuaming.CustomGacha.UI.ViewModel;
-using Native.Sdk.Cqp.EventArgs;
-using Native.Sdk.Cqp.Interface;
+using CustomGacha.SDK.Sdk.Cqp.EventArgs;
+using CustomGacha.SDK.Sdk.Cqp.Interface;
 using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.UI

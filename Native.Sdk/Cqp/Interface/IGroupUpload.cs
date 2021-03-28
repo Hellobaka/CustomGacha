@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Native.Sdk.Cqp.EventArgs;
+using CustomGacha.SDK.Sdk.Cqp.EventArgs;
 
-namespace Native.Sdk.Cqp.Interface
+namespace CustomGacha.SDK.Sdk.Cqp.Interface
 {
 	/// <summary>
 	/// 酷Q群上传事件接口

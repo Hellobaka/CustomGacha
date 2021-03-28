@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Web;
 
-namespace Native.Tool.Http
+namespace CustomGacha.SDK.Tool.Http
 {
 	/// <summary>
 	/// Http 工具类

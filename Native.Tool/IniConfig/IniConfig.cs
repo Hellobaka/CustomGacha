@@ -1,5 +1,5 @@
-﻿using Native.Tool.IniConfig.Attribute;
-using Native.Tool.IniConfig.Linq;
+﻿using CustomGacha.SDK.Tool.IniConfig.Attribute;
+using CustomGacha.SDK.Tool.IniConfig.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -11,7 +11,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Runtime.InteropServices;
 
-namespace Native.Tool.IniConfig
+namespace CustomGacha.SDK.Tool.IniConfig
 {
 	/// <summary>
 	/// 配置项 (Ini) 文件的操作类

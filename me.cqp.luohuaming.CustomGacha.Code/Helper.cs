@@ -1,5 +1,5 @@
 ﻿using System;
-using Native.Sdk.Cqp;
+using CustomGacha.SDK.Sdk.Cqp;
 using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.Code

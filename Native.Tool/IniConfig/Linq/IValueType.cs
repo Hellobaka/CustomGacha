@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Native.Tool.IniConfig.Linq
+namespace CustomGacha.SDK.Tool.IniConfig.Linq
 {
 	[DefaultValue (IValueType.String)]
 	public enum IValueType

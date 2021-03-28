@@ -5,8 +5,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Native.Sdk.Cqp.Model;
-using Native.Tool.IniConfig;
+using CustomGacha.SDK.Sdk.Cqp.Model;
+using CustomGacha.SDK.Tool.IniConfig;
 
 namespace PublicInfos
 {

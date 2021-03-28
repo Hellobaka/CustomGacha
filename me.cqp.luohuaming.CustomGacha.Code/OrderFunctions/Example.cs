@@ -1,5 +1,5 @@
 ﻿using System;
-using Native.Sdk.Cqp.EventArgs;
+using CustomGacha.SDK.Sdk.Cqp.EventArgs;
 using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions

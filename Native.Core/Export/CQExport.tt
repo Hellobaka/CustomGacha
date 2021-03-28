@@ -37,14 +37,14 @@
 		TemplateBuilder.UsingItems.Add ("System.Text");
 		TemplateBuilder.UsingItems.Add ("System.Reflection");
 		TemplateBuilder.UsingItems.Add ("System.Runtime.InteropServices");
-		TemplateBuilder.UsingItems.Add ("Native.Core");
-		TemplateBuilder.UsingItems.Add ("Native.Core.Domain");
-		TemplateBuilder.UsingItems.Add ("Native.Sdk.Cqp");
-		TemplateBuilder.UsingItems.Add ("Native.Sdk.Cqp.Enum");
-		TemplateBuilder.UsingItems.Add ("Native.Sdk.Cqp.EventArgs");
-		TemplateBuilder.UsingItems.Add ("Native.Sdk.Cqp.Interface");
-		TemplateBuilder.UsingItems.Add ("Native.Sdk.Cqp.Expand");
-		TemplateBuilder.UsingItems.Add ("Native.Sdk.Cqp.Model");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Core");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Core.Domain");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Sdk.Cqp");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Sdk.Cqp.Enum");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Sdk.Cqp.EventArgs");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Sdk.Cqp.Interface");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Sdk.Cqp.Expand");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Sdk.Cqp.Model");
 		TemplateBuilder.UsingItems.Add ("Unity");
 		TemplateBuilder.UsingItems.Add ("Unity.Injection");
 
@@ -519,10 +519,10 @@
 		TemplateBuilder.UsingItems.Add ("System");
 		TemplateBuilder.UsingItems.Add ("System.Reflection");
 		TemplateBuilder.UsingItems.Add ("System.Runtime.InteropServices");
-		TemplateBuilder.UsingItems.Add ("Native.Core.Domain");
-		TemplateBuilder.UsingItems.Add ("Native.Sdk.Cqp");
-		TemplateBuilder.UsingItems.Add ("Native.Sdk.Cqp.EventArgs");
-		TemplateBuilder.UsingItems.Add ("Native.Sdk.Cqp.Interface");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Core.Domain");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Sdk.Cqp");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Sdk.Cqp.EventArgs");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Sdk.Cqp.Interface");
 		TemplateBuilder.UsingItems.Add ("Unity");
 
 		TemplateBuilder.Namespace = "Native.App.Export";
@@ -618,11 +618,11 @@
 		TemplateBuilder.UsingItems.Add ("System");
 		TemplateBuilder.UsingItems.Add ("System.Reflection");
 		TemplateBuilder.UsingItems.Add ("System.Runtime.InteropServices");
-		TemplateBuilder.UsingItems.Add ("Native.Core.Domain");
-		TemplateBuilder.UsingItems.Add ("Native.Sdk.Cqp");
-		TemplateBuilder.UsingItems.Add ("Native.Sdk.Cqp.EventArgs");
-		TemplateBuilder.UsingItems.Add ("Native.Sdk.Cqp.Interface");
-		TemplateBuilder.UsingItems.Add ("Native.Sdk.Cqp.Model");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Core.Domain");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Sdk.Cqp");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Sdk.Cqp.EventArgs");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Sdk.Cqp.Interface");
+		TemplateBuilder.UsingItems.Add ("CustomGacha.SDK.Sdk.Cqp.Model");
 		TemplateBuilder.UsingItems.Add ("Unity");
 
 		TemplateBuilder.Namespace = "Native.App.Export";

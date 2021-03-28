@@ -1404,7 +1404,7 @@
             e.g.: get_SevenVectorCall@@0
             </summary>
         </member>
-        <member name="M:net.r_eg.Conari.Native.Core.BReader.GetValue(System.Type,System.Int32,System.Int32@,System.Byte[]@)">
+        <member name="M:net.r_eg.Conari.CustomGacha.SDK.Core.BReader.GetValue(System.Type,System.Int32,System.Int32@,System.Byte[]@)">
             <summary>
             To get manually the value from byte-sequence.
             </summary>
@@ -1415,7 +1415,7 @@
             <returns></returns>
             <exception cref="T:System.NotSupportedException"></exception>
         </member>
-        <member name="M:net.r_eg.Conari.Native.Core.BReader.tryNext(System.Type,System.Int32,System.Object@)">
+        <member name="M:net.r_eg.Conari.CustomGacha.SDK.Core.BReader.tryNext(System.Type,System.Int32,System.Object@)">
             <summary>
             Try to get the next value in byte-sequence.
             </summary>
@@ -1424,7 +1424,7 @@
             <param name="value">Output value.</param>
             <returns></returns>
         </member>
-        <member name="M:net.r_eg.Conari.Native.Core.BReader.next(System.Type,System.Int32)">
+        <member name="M:net.r_eg.Conari.CustomGacha.SDK.Core.BReader.next(System.Type,System.Int32)">
             <summary>
             Gets next value in byte-sequence.
             </summary>
@@ -1433,7 +1433,7 @@
             <returns></returns>
             <exception cref="T:System.IndexOutOfRangeException"></exception>
         </member>
-        <member name="M:net.r_eg.Conari.Native.Core.BReader.next``1(System.Int32)">
+        <member name="M:net.r_eg.Conari.CustomGacha.SDK.Core.BReader.next``1(System.Int32)">
             <summary>
             Alias to `next(Type type, int tsize)`
             </summary>
@@ -1441,63 +1441,63 @@
             <param name="tsize"></param>
             <returns></returns>
         </member>
-        <member name="M:net.r_eg.Conari.Native.Core.BReader.next(System.Type)">
+        <member name="M:net.r_eg.Conari.CustomGacha.SDK.Core.BReader.next(System.Type)">
             <summary>
             Gets next value in byte-sequence with size of type by default.
             </summary>
             <param name="type">The type of value.</param>
             <returns></returns>
         </member>
-        <member name="M:net.r_eg.Conari.Native.Core.BReader.next``1">
+        <member name="M:net.r_eg.Conari.CustomGacha.SDK.Core.BReader.next``1">
             <summary>
             Alias to `next(Type type)`
             </summary>
             <typeparam name="T"></typeparam>
             <returns></returns>
         </member>
-        <member name="M:net.r_eg.Conari.Native.Core.BReader.reset(System.Int32)">
+        <member name="M:net.r_eg.Conari.CustomGacha.SDK.Core.BReader.reset(System.Int32)">
             <summary>
             To reset position.
             </summary>
             <param name="offset"></param>
         </member>
-        <member name="F:net.r_eg.Conari.Native.Core.Field.tsize">
+        <member name="F:net.r_eg.Conari.CustomGacha.SDK.Core.Field.tsize">
             <summary>
             Used size of type.
             </summary>
         </member>
-        <member name="F:net.r_eg.Conari.Native.Core.Field.name">
+        <member name="F:net.r_eg.Conari.CustomGacha.SDK.Core.Field.name">
             <summary>
             Field name.
             </summary>
         </member>
-        <member name="F:net.r_eg.Conari.Native.Core.Field.value">
+        <member name="F:net.r_eg.Conari.CustomGacha.SDK.Core.Field.value">
             <summary>
             The value of field.
             </summary>
         </member>
-        <member name="F:net.r_eg.Conari.Native.Core.Field.user">
+        <member name="F:net.r_eg.Conari.CustomGacha.SDK.Core.Field.user">
             <summary>
             User object for any purpose.
             </summary>
         </member>
-        <member name="P:net.r_eg.Conari.Native.Core.Field.IsValidForDLR">
+        <member name="P:net.r_eg.Conari.CustomGacha.SDK.Core.Field.IsValidForDLR">
             <summary>
             Checks the correct name for DLR features.
             </summary>
         </member>
-        <member name="M:net.r_eg.Conari.Native.Core.Field.toBytes">
+        <member name="M:net.r_eg.Conari.CustomGacha.SDK.Core.Field.toBytes">
             <summary>
             Get bytes from current field.
             </summary>
             <returns></returns>
         </member>
-        <member name="P:net.r_eg.Conari.Native.Core.BType.DLR">
+        <member name="P:net.r_eg.Conari.CustomGacha.SDK.Core.BType.DLR">
             <summary>
             Access to dynamic features like getting of values at runtime from generated fields etc.
             </summary>
         </member>
-        <member name="M:net.r_eg.Conari.Native.Core.BType.TryGetMember(System.Dynamic.GetMemberBinder,System.Object@)">
+        <member name="M:net.r_eg.Conari.CustomGacha.SDK.Core.BType.TryGetMember(System.Dynamic.GetMemberBinder,System.Object@)">
             <summary>
             Magic fields. Get.
             </summary>
@@ -1505,7 +1505,7 @@
             <param name="result"></param>
             <returns></returns>
         </member>
-        <member name="M:net.r_eg.Conari.Native.Core.BType.TrySetMember(System.Dynamic.SetMemberBinder,System.Object)">
+        <member name="M:net.r_eg.Conari.CustomGacha.SDK.Core.BType.TrySetMember(System.Dynamic.SetMemberBinder,System.Object)">
             <summary>
             Magic fields. Set.
             </summary>
@@ -1513,23 +1513,23 @@
             <param name="value"></param>
             <returns></returns>
         </member>
-        <member name="M:net.r_eg.Conari.Native.Core.BType.GetDynamicMemberNames">
+        <member name="M:net.r_eg.Conari.CustomGacha.SDK.Core.BType.GetDynamicMemberNames">
             <summary>
             List of magic fields.
             </summary>
             <returns></returns>
         </member>
-        <member name="P:net.r_eg.Conari.Native.Core.Raw.Values">
+        <member name="P:net.r_eg.Conari.CustomGacha.SDK.Core.Raw.Values">
             <summary>
             Final byte-sequence from values (via pointer or local data).
             </summary>
         </member>
-        <member name="P:net.r_eg.Conari.Native.Core.Raw.Iter">
+        <member name="P:net.r_eg.Conari.CustomGacha.SDK.Core.Raw.Iter">
             <summary>
             Access to byte-sequence from values (via pointer or local data).
             </summary>
         </member>
-        <member name="P:net.r_eg.Conari.Native.Core.Raw.Type">
+        <member name="P:net.r_eg.Conari.CustomGacha.SDK.Core.Raw.Type">
             <summary>
             Generates dynamic type for current data.
             /+DLR

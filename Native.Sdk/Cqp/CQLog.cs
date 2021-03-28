@@ -1,9 +1,9 @@
-﻿using Native.Sdk.Cqp.Core;
-using Native.Sdk.Cqp.Enum;
-using Native.Sdk.Cqp.Expand;
+﻿using CustomGacha.SDK.Sdk.Cqp.Core;
+using CustomGacha.SDK.Sdk.Cqp.Enum;
+using CustomGacha.SDK.Sdk.Cqp.Expand;
 using System.Runtime.InteropServices;
 
-namespace Native.Sdk.Cqp
+namespace CustomGacha.SDK.Sdk.Cqp
 {
 	/// <summary>
 	/// 表示 酷Q日志 的封装类

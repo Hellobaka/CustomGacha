@@ -1,11 +1,11 @@
-﻿using Native.Sdk.Cqp.Expand;
+﻿using CustomGacha.SDK.Sdk.Cqp.Expand;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Native.Sdk.Cqp.Model
+namespace CustomGacha.SDK.Sdk.Cqp.Model
 {
 	/// <summary>
 	/// 表示描述 QQ群信息 的类

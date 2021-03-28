@@ -1,8 +1,8 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Native.Sdk.Cqp;
-using Native.Sdk.Cqp.EventArgs;
+using CustomGacha.SDK.Sdk.Cqp;
+using CustomGacha.SDK.Sdk.Cqp.EventArgs;
 using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions

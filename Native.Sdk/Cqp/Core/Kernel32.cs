@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Native.Sdk.Cqp.Core
+namespace CustomGacha.SDK.Sdk.Cqp.Core
 {
 	internal class Kernel32
 	{

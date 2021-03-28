@@ -1,11 +1,11 @@
-﻿using Native.Tool.IniConfig;
+﻿using CustomGacha.SDK.Tool.IniConfig;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Native.Tool.IniConfig.Exception
+namespace CustomGacha.SDK.Tool.IniConfig.Exception
 {
 	/// <summary>
 	/// 表示属性找不到的异常

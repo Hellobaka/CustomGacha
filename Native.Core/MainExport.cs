@@ -4,13 +4,13 @@ using System.Linq;
 using System.Reflection;
 using System.Threading;
 using me.cqp.luohuaming.CustomGacha.Code;
-using Native.Sdk.Cqp.EventArgs;
-using Native.Sdk.Cqp.Interface;
+using CustomGacha.SDK.Sdk.Cqp.EventArgs;
+using CustomGacha.SDK.Sdk.Cqp.Interface;
 using PublicInfos;
 using System.Windows;
 
 
-namespace Native.Core
+namespace CustomGacha.SDK.Core
 {
     public class MainExport : IGroupMessage, IPrivateMessage
     {

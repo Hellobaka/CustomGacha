@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Native.Tool.IniConfig.Exception
+namespace CustomGacha.SDK.Tool.IniConfig.Exception
 {
 	/// <summary>
 	/// 表示 "节" 找不到的异常
