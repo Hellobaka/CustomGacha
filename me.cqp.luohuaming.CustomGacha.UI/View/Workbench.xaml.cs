@@ -17,7 +17,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
     {
         public Workbench()
         {
-            Application.ResourceAssembly = Assembly.Load("me.cqp.luohuaming.CustomGacha.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null");
+            if (Application.ResourceAssembly == null)
+            {
+                Application.ResourceAssembly = Assembly.Load("me.cqp.luohuaming.CustomGacha.UI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null");
+            }
             PackIconCodicons o = new PackIconCodicons();
             PackIconMaterial oo = new PackIconMaterial();
             PackIconUnicons ooo = new PackIconUnicons();

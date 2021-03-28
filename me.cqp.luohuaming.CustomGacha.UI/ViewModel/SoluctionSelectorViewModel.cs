@@ -37,8 +37,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         public SoluctionSelectorViewModel()
         {
             SQLHelper.CreateDB();
-            if (MainSave.PoolInstances == null)
-                MainSave.PoolInstances = SQLHelper.GetAllPools();
+            MainSave.PoolInstances = SQLHelper.GetAllPools();
             RecentList = new List<RecentSoluction>();
             ButtonGroup = new List<ButtonItem>
             {

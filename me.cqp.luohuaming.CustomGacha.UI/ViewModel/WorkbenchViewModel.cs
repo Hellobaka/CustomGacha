@@ -719,10 +719,20 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 return;
             EditPool = new Pool { Name = "未选择项目", PoolID = -1 };
             string filePath = ShowSelectJsonDialog(MainSave.AppDirectory);
+            if (string.IsNullOrWhiteSpace(filePath))
+            {
+                Helper.ShowGrowlMsg("操作已取消", Helper.NoticeEnum.Error);
+                return;
+            }
             try
             {
                 JObject json = JObject.Parse(File.ReadAllText(filePath));
                 string relativePath = ShowSelectDirDialog();
+                if (string.IsNullOrWhiteSpace(relativePath))
+                {
+                    Helper.ShowGrowlMsg("操作已取消", Helper.NoticeEnum.Error);
+                    return;
+                }
                 Helper.ShowGrowlMsg("相对目录读取成功");
                 if (VeifyJson(relativePath, json) is false)
                 {
@@ -815,8 +825,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             };
             dialog.InitialDirectory = openDir;
             dialog.Filters.Add(new CommonFileDialogFilter("Json", "*.json"));
-            dialog.ShowDialog();
-            return dialog.FileName;
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                return dialog.FileName;
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
         private string ShowSelectDirDialog()
         {
@@ -826,8 +842,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 Title = "请选择仓库迁移后 图片所在的相对根目录",
                 IsFolderPicker = true
             };
-            dialog.ShowDialog();
-            return dialog.FileName;
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                return dialog.FileName;
+            }
+            else
+            {
+                return string.Empty;
+            }
         }
         private void ReloadCategroies()
         {

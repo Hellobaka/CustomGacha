@@ -17,9 +17,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
             InitializeComponent();
             SQLHelper.LoadConfig();
             SoluctionSelector_Export = this;
-            
-            //Uri mainwindow = new Uri("View/Workbench.xaml", UriKind.Relative);
-            //Application.LoadComponent(mainwindow);
         }
         public static SoluctionSelector SoluctionSelector_Export;
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -33,9 +30,9 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
                 vm.EditPool = (c as RecentSoluction).Object;
                 vm.Config = MainSave.ApplicationConfig.Clone();
                 vm.OrderConfig = MainSave.OrderConfig.Clone();
-                //fm.InitializeComponent();
+                fm.InitializeComponent();
                 fm.Show();
-                this.Close();
+                this.Hide();
             }
         }
 
@@ -44,6 +41,12 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
             ButtonItem item = (ButtonItem)(sender as ListBox).SelectedItem;
             if(item.Action!=null)
                 item.Action.Execute(null);
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            e.Cancel = true;
+            Hide();
         }
     }
 }
