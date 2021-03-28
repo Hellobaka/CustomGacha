@@ -25,14 +25,14 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
                 SendID = e.FromGroup,
             };
             //检索能够应答指令的卡池
-            var destPool = MainSave.PoolInstances.Find(x => x.MultiOrder == e.Message.Text);
+            var destPool = MainSave.PoolInstances.Find(x => x.SingalGachaOrder == e.Message.Text);
             //预构建图片保存目录
             string resultPicPath = Path.Combine(MainSave.GachaResultRootPath, destPool.Name);
             Directory.CreateDirectory(resultPicPath);
 
             //检索用户
             DB_User user = SQLHelper.GetUser(e.FromQQ);
-            long gachaCost = MainSave.ApplicationConfig.GachaCost * destPool.MultiGachaNumber;
+            long gachaCost = MainSave.ApplicationConfig.GachaCost;
             if (user.Money < gachaCost)//货币不足以抽卡
             {
                 sendText.MsgToSend.Add(Helper.HandleModelString(MainSave.OrderConfig.LeakMoneyText, e.FromQQ, user));
@@ -42,7 +42,7 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
             else//减去所需货币并更新相关字段
             {
                 user.Money -= gachaCost;
-                user.GachaTotalCount += destPool.MultiGachaNumber;
+                user.GachaTotalCount ++;
                 user.MoneyTotalCount += gachaCost;
             }
             //发送回复文本

@@ -23,7 +23,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI
                     Thread thread = new Thread(() =>
                     {
                         app = new App();
-                        app.ShutdownMode = ShutdownMode.OnMainWindowClose;
                         app.InitializeComponent();
                         app.Run();
                     });
