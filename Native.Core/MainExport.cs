@@ -43,7 +43,7 @@ namespace CustomGacha.SDK.Core
         }
         public void PrivateMessage(object sender, CQPrivateMessageEventArgs e)
         {
-            throw new System.NotImplementedException();
+
         }
     }
 }
