@@ -53,6 +53,14 @@ namespace PublicInfos
         private static GachaItem GetGachaItem(Pool pool, int gachaCount = 1)
         {
             var categraies = SQLHelper.GetCategoriesByIDs(pool.Content);
+            for (int i = 0; i < categraies.Count; i++)
+            {
+                if (categraies[i].Content.Count == 0)
+                {
+                    categraies.Remove(categraies[i]);
+                    i--;
+                }
+            }
             Category destCategory = RandomGetItem(categraies);
             List<GachaItem> content = SQLHelper.GetGachaItemsByIDs(destCategory.Content);
             content.ForEach(x =>
@@ -143,7 +151,7 @@ namespace PublicInfos
             {
                 var o = pool.DrawPoints;
                 var method = o.GetType().GetMethod("GetDrawPoints");
-                DrawPoints = (Point[]) method.Invoke(o, new object[] {pool, DrawPoints.Length});
+                DrawPoints = (Point[])method.Invoke(o, new object[] { pool, DrawPoints.Length });
             }
             else
             {
@@ -158,7 +166,10 @@ namespace PublicInfos
                     }
                     else
                     {
-                        x += pool.PoolDrawConfig.DrawXInterval + pool.ImageConfig.BackgroundImageWidth;
+                        if(pool.ImageConfig.BackgroundImageWidth != 0)
+                            x += pool.PoolDrawConfig.DrawXInterval + pool.ImageConfig.BackgroundImageWidth;
+                        else
+                            x += pool.PoolDrawConfig.DrawXInterval + pool.ImageConfig.ImageWidth;
                         y += pool.PoolDrawConfig.DrawYInterval;
                     }
                 }
@@ -170,26 +181,29 @@ namespace PublicInfos
             {
                 var o = pool.DrawPoints;
                 var method = o.GetType().GetMethod("DrawAllItems");
-                background = (Bitmap) method.Invoke(o, new object[] {images2Draw, gachaItems, background, pool});
+                background = (Bitmap)method.Invoke(o, new object[] { images2Draw, gachaItems, background, pool });
             }
             else
             {
-                using (Graphics g = Graphics.FromImage(background))
-                using (Bitmap newImage = (Bitmap) Image.FromFile(Path.Combine(pool.RelativePath, pool.NewPicPath)))
+                if (string.IsNullOrWhiteSpace(pool.NewPicPath) is false)
                 {
-                    int index = 0;
-                    foreach (var item in images2Draw)
+                    using (Graphics g = Graphics.FromImage(background))
+                    using (Bitmap newImage = (Bitmap)Image.FromFile(Path.Combine(pool.RelativePath, pool.NewPicPath)))
                     {
-                        g.DrawImage(item, new Rectangle(DrawPoints[index], item.Size));
-                        if (gachaItems[index].IsNew)
+                        int index = 0;
+                        foreach (var item in images2Draw)
                         {
-                            Point newPoint = new Point(DrawPoints[index].X + pool.NewPicX,
-                                DrawPoints[index].Y + pool.NewPicY);
-                            g.DrawImage(newImage,
-                                new Rectangle(newPoint, new Size(pool.NewPicWidth, pool.NewPicHeight)));
-                        }
+                            g.DrawImage(item, new Rectangle(DrawPoints[index], item.Size));
+                            if (gachaItems[index].IsNew)
+                            {
+                                Point newPoint = new Point(DrawPoints[index].X + pool.NewPicX,
+                                    DrawPoints[index].Y + pool.NewPicY);
+                                g.DrawImage(newImage,
+                                    new Rectangle(newPoint, new Size(pool.NewPicWidth, pool.NewPicHeight)));
+                            }
 
-                        index++;
+                            index++;
+                        }
                     }
                 }
             }
@@ -198,7 +212,7 @@ namespace PublicInfos
             {
                 var o = pool.DrawPoints;
                 var method = o.GetType().GetMethod("FinallyDraw");
-                background = (Bitmap) method.Invoke(o, new object[] {background, SQLHelper.GetUser(QQ), pool});
+                background = (Bitmap)method.Invoke(o, new object[] { background, SQLHelper.GetUser(QQ), pool });
             }
 
             return background;
@@ -214,23 +228,23 @@ namespace PublicInfos
             //不需要合成时请填写图片路径，忽略背景路径
             string bkImagePath = Path.Combine(pool.RelativePath, item.BackgroundImagePath);
             string ImagePath = Path.Combine(pool.RelativePath, item.ImagePath);
-            bool nobackgroundFlag = string.IsNullOrWhiteSpace(bkImagePath);
+            bool nobackgroundFlag = string.IsNullOrWhiteSpace(item.BackgroundImagePath);
 
             if (!File.Exists(ImagePath))
                 throw new FileNotFoundException($"卡片的图片文件不存在，在卡 {item.Name} 中 路径{ImagePath}");
-            if (!File.Exists(bkImagePath) && nobackgroundFlag is false)
+            if (nobackgroundFlag is false && !File.Exists(bkImagePath))
                 throw new FileNotFoundException($"卡片的背景图片文件不存在，在卡 {item.Name} 中 路径{ImagePath}");
             Image DestImage = Image.FromFile(ImagePath);
             if (pool.DrawMainImage != null)
             {
                 var method = pool.DrawMainImage.GetType().GetMethod("RedrawMainImage");
-                DestImage = (Bitmap) method.Invoke(pool.DrawMainImage, new object[] {DestImage, pool});
+                DestImage = (Bitmap)method.Invoke(pool.DrawMainImage, new object[] { DestImage, pool });
             }
 
             if (pool.DrawItem != null)
             {
                 var method = pool.DrawItem.GetType().GetMethod("DrawPicItem");
-                return (Bitmap) method.Invoke(pool.DrawItem, new object[] {item, pool});
+                return (Bitmap)method.Invoke(pool.DrawItem, new object[] { item, pool });
             }
             else
             {

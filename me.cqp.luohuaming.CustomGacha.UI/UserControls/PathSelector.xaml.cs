@@ -68,13 +68,16 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
             CommonOpenFileDialog dialog = new CommonOpenFileDialog
             {
                 Multiselect = false,
-            }; 
+            };
             string baseDir = Path.Combine(ReletivePath, FilePath);
-            var flag = File.GetAttributes(baseDir);
-            if (flag.HasFlag(FileAttributes.Directory) is false)
+            if (string.IsNullOrWhiteSpace(baseDir) is false)
             {
-                FileInfo info = new FileInfo(baseDir);
-                baseDir = info.DirectoryName;
+                var flag = File.GetAttributes(baseDir);
+                if (flag.HasFlag(FileAttributes.Directory) is false)
+                {
+                    FileInfo info = new FileInfo(baseDir);
+                    baseDir = info.DirectoryName;
+                }
             }
             switch (OpenType)
             {

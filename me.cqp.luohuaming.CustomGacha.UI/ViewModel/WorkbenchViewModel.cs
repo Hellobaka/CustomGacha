@@ -162,6 +162,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         GachaitemsInCategory = new Dictionary<Category, List<GachaItem>>();
                         foreach (var item in categories)
                         {
+                            if (string.IsNullOrWhiteSpace(item.GUID))
+                            { 
+                                item.GUID = Guid.NewGuid().ToString();
+                                SQLHelper.UpdateOrAddCategory(item);
+                            }
                             var c = SQLHelper.GetGachaItemsByIDs(item.Content);
                             if (c.Any(x => x == null))
                             {
@@ -178,6 +183,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                                 }
                                 Helper.ShowGrowlMsg($"检测到目录 {item.Name} 存在无效项目，共清理了 {count} 个无效项目", Helper.NoticeEnum.Info, 3);
                             }
+                            c.ForEach(x => 
+                            {
+                                if (string.IsNullOrWhiteSpace(x.GUID))
+                                {
+                                    x.GUID = Guid.NewGuid().ToString();
+                                    SQLHelper.UpdateOrAddGachaItem(x);
+                                }
+                            });
                             c.Where(x => item.UpContent.Any(o => o == x.ItemID)).Do(x => x.IsUp = true);
                             GachaitemsInCategory.Add(item, c);
                         }
@@ -296,6 +309,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     item.ID = SQLHelper.UpdateOrAddCategory(item, true);
                     count++;
                 }
+                else
+                    SQLHelper.UpdateOrAddCategory(item);
             }
             if (count > 0)
             {
@@ -314,6 +329,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         item.Key.Content[index] = items.ItemID;
                         count++;
                     }
+                    else
+                        SQLHelper.UpdateOrAddGachaItem(items);
                     index++;
                 }
                 SQLHelper.UpdateOrAddCategory(item.Key);
@@ -525,7 +542,9 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         {
                             Name = "新目录",
                             Probablity = 0.5,
-                            IsBaodi = false
+                            IsBaodi = false,
+                            GUID = Guid.NewGuid().ToString(),
+                            ID = -1
                         };
                     }).GetResultAsync<Category>().ContinueWith(x =>
                     {
@@ -584,7 +603,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         {
                             if (x.Result != null)
                             {
-                                var c = Categories.First(o => o.ID == x.Result.ID);
+                                var c = Categories.First(o => o.GUID == x.Result.GUID);
                                 Categories.Insert(Categories.IndexOf(c), x.Result);
                                 Categories.Remove(c);
                                 GachaitemsInCategory.Remove(c);

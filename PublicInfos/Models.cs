@@ -406,6 +406,7 @@ namespace PublicInfos
         public DateTime UpdateDt { get; set; }
         [SugarColumn(IsIgnore = true)] 
         public bool IsNew { get; set; }
+        public string GUID { get; set; } = "";
         public GachaItem Clone()
         {
             return (GachaItem)this.MemberwiseClone();
@@ -469,6 +470,7 @@ namespace PublicInfos
         public List<int> UpContent { get; set; } = new List<int>();
         public DateTime CreateDt { get; set; } = DateTime.Now;
         public DateTime UpdateDt { get; set; }
+        public string GUID { get; set; } = "";
         public Category Clone()
         {
             var o = (Category)this.MemberwiseClone();

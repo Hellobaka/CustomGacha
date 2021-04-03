@@ -300,6 +300,8 @@ namespace PublicInfos
                 }
                 else
                 {
+                    if (string.IsNullOrWhiteSpace(item.Remark))
+                        item.Remark = string.Empty;
                     return db.Insertable(item).ExecuteReturnIdentity();
                 }
             }
