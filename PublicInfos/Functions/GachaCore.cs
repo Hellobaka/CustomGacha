@@ -166,7 +166,7 @@ namespace PublicInfos
                     }
                     else
                     {
-                        if(pool.ImageConfig.BackgroundImageWidth != 0)
+                        if (pool.ImageConfig.BackgroundImageWidth != 0)
                             x += pool.PoolDrawConfig.DrawXInterval + pool.ImageConfig.BackgroundImageWidth;
                         else
                             x += pool.PoolDrawConfig.DrawXInterval + pool.ImageConfig.ImageWidth;
@@ -181,7 +181,7 @@ namespace PublicInfos
             {
                 var o = pool.DrawPoints;
                 var method = o.GetType().GetMethod("DrawAllItems");
-                background = (Bitmap)method.Invoke(o, new object[] { images2Draw, gachaItems, background, pool });
+                background = (Bitmap)method.Invoke(o, new object[] { images2Draw, gachaItems, DrawPoints, background, pool });
             }
             else
             {
@@ -210,9 +210,9 @@ namespace PublicInfos
 
             if (pool.FinallyDraw != null)
             {
-                var o = pool.DrawPoints;
+                var o = pool.FinallyDraw;
                 var method = o.GetType().GetMethod("FinallyDraw");
-                background = (Bitmap)method.Invoke(o, new object[] { background, SQLHelper.GetUser(QQ), pool });
+                background = (Bitmap)method.Invoke(o, new object[] { background, DrawPoints, gachaItems, SQLHelper.GetUser(QQ), pool });
             }
 
             return background;

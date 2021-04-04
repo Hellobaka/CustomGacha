@@ -15,9 +15,10 @@ namespace PluginInterface
         /// </summary>
         /// <param name="allItemImages">所有子项目图片</param>
         /// <param name="gachaItems">图片对应的项目</param>
+        /// <param name="drawPoints">绘制的坐标</param>
         /// <param name="backgroundImg">背景图片</param>
         /// <param name="pool">目标池</param>
         /// <returns>自定义绘制图片</returns>
-        Bitmap DrawAllItems(List<Image> allItemImages, List<GachaItem> gachaItems, Bitmap backgroundImg, Pool pool);
+        Bitmap DrawAllItems(List<Image> allItemImages, List<GachaItem> gachaItems, Point[] drawPoints, Bitmap backgroundImg, Pool pool);
     }
 }
