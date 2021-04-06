@@ -15,6 +15,6 @@ namespace PluginInterface
         /// <param name="mainImage">未经处理的中心图片</param>
         /// <param name="pool">目标池</param>
         /// <returns>处理后的图片</returns>
-        Bitmap RedrawMainImage(Bitmap mainImage, Pool pool);
+        Bitmap RedrawMainImage(Bitmap mainImage, Pool pool, GachaItem item);
     }
 }

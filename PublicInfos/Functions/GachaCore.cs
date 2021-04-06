@@ -212,7 +212,23 @@ namespace PublicInfos
             {
                 var o = pool.FinallyDraw;
                 var method = o.GetType().GetMethod("FinallyDraw");
-                background = (Bitmap)method.Invoke(o, new object[] { background, DrawPoints, gachaItems, SQLHelper.GetUser(QQ), pool });
+                DB_User user = SQLHelper.GetUser(QQ);
+                if (user == null)
+                {
+                    Random rd = new Random();
+                    user = new DB_User
+                    {
+                        Money = rd.Next(0, 10000),
+                        GachaCount = rd.Next(0, 10),
+                        GachaTotalCount = rd.Next(0, 500),
+                        LastSignTime = DateTime.Now.AddSeconds(-rd.Next(360, rd.Next(0, 72) * 3600)),
+                        MoneyTotalCount = rd.Next(MainSave.ApplicationConfig.GachaCost * rd.Next(0, 500)),
+                        QQID = QQ,
+                        RowID = 10,
+                        SignTotalCount = rd.Next(1000)
+                    };
+                }
+                background = (Bitmap)method.Invoke(o, new object[] { background, DrawPoints, gachaItems, user, pool });
             }
 
             return background;
@@ -238,7 +254,7 @@ namespace PublicInfos
             if (pool.DrawMainImage != null)
             {
                 var method = pool.DrawMainImage.GetType().GetMethod("RedrawMainImage");
-                DestImage = (Bitmap)method.Invoke(pool.DrawMainImage, new object[] { DestImage, pool });
+                DestImage = (Bitmap)method.Invoke(pool.DrawMainImage, new object[] { DestImage, pool, item });
             }
 
             if (pool.DrawItem != null)

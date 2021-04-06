@@ -14,7 +14,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
     {
         public NewPoolStepViewModel()
         {
-            EditPool = new Pool();
+            EditPool = new Pool() { GUID=Guid.NewGuid().ToString() };
             Result = new Pool();
             NextCmd = new DelegateCommand 
             {

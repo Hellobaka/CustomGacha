@@ -296,6 +296,7 @@ namespace PublicInfos
         /// </summary>
         [SugarColumn(IsIgnore = true)]
         public object DrawAllItems { get; set; }
+        public string GUID { get; set; } = "";
         public void PluginInit()
         {
             if (string.IsNullOrWhiteSpace(PluginPath) is false)
