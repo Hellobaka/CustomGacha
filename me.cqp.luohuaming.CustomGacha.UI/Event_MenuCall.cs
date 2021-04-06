@@ -22,7 +22,9 @@ namespace me.cqp.luohuaming.CustomGacha.UI
                     isOpen = true; 
                     Thread thread = new Thread(() =>
                     {
+                        AppDomain.CurrentDomain.DomainUnload += (a,b)=> { app.Dispatcher.Invoke(() => { SoluctionSelector.ExitFlag = true; SoluctionSelector.SoluctionSelector_Export.Close(); }); };
                         app = new App();
+                        app.ShutdownMode = ShutdownMode.OnMainWindowClose;
                         app.InitializeComponent();
                         app.Run();
                     });

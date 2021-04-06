@@ -12,6 +12,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
     /// </summary>
     public partial class SoluctionSelector : Window
     {
+        public static bool ExitFlag = false;
         public SoluctionSelector()
         {
             InitializeComponent();
@@ -45,8 +46,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            e.Cancel = true;
-            Hide();
+            if(ExitFlag is false)
+            {
+                e.Cancel = true;
+                Hide();
+            }
         }
     }
 }
