@@ -20,7 +20,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
         public string ReletivePath
         {
             get { reletivePath = (this.DataContext as WorkbenchViewModel).EditPool.RelativePath; return reletivePath; }
-            set { reletivePath = value; }
+            set { reletivePath = value; HandleOnPathChanged(this, null); }
         }
 
 
@@ -38,6 +38,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
                 {
                     imageViewer.Source = new BitmapImage(new Uri(path));
                 }
+
+                HandleOnPathChanged(this, null);
             }
         }
         // Using a DependencyProperty as the backing store for ImagePath.  This enables animation, styling, binding, etc...
@@ -57,6 +59,19 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
                     imageViewer.Source = new BitmapImage(new Uri(path));
                 }
             }
+
+            HandleOnPathChanged(sender, e);
         }
+        public static readonly RoutedEvent OnPathChangedEvent = EventManager.RegisterRoutedEvent("OnPathChanged", RoutingStrategy.Bubble, typeof(RoutedEventHandler), typeof(ImageSelector));
+        public event RoutedEventHandler OnPathChanged
+        {
+            add { AddHandler(OnPathChangedEvent, value); }
+            remove { RemoveHandler(OnPathChangedEvent, value); }
+        }
+        private void HandleOnPathChanged(object sender,RoutedEventArgs e)
+        {
+            this.RaiseEvent(new RoutedEventArgs(ImageSelector.OnPathChangedEvent, this));
+        }
+
     }
 }

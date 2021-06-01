@@ -467,7 +467,8 @@
         <ScrollViewer VerticalScrollBarVisibility="Hidden"
                       Grid.RowSpan="2"
                       Grid.Column="0"
-                      HorizontalAlignment="Right">
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Top">
             <StackPanel HorizontalAlignment="Right"
                         controls:Growl.GrowlParent="True"
                         VerticalAlignment="Top"

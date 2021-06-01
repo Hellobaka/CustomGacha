@@ -135,6 +135,8 @@
                                         <Separator />
                                         <MenuItem Header="复制"
                                                   Command="{Binding Path=PlacementTarget.Tag.CopyItem,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
+                                        <MenuItem Header="批量复制"
+                                                  Command="{Binding Path=PlacementTarget.Tag.MultiCopyItem,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
                                         <MenuItem Header="删除"
                                                   Command="{Binding Path=PlacementTarget.Tag.DeleteItem,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
                                     </ContextMenu>
@@ -170,7 +172,7 @@
                                      IsEnabled="False"
                                      Text="{Binding SelectGachaItem.ItemID}" />
                             <TextBlock Margin="3,3">名称</TextBlock>
-                            <TextBox Margin="0,3"
+                            <TextBox Margin="0,3" Name="Name_TextBox"
                                      Text="{Binding SelectGachaItem.Name,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock Margin="3,3">概率</TextBlock>
                             <TextBox Margin="0,3"
@@ -179,7 +181,7 @@
                             <TextBox Margin="0,3"
                                      Text="{Binding SelectGachaItem.UpProbablity,Mode=TwoWay}" />
                             <TextBlock Margin="3,3">主图片</TextBlock>
-                            <usercontrols:ImageSelector ImagePath="{Binding SelectGachaItem.ImagePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
+                            <usercontrols:ImageSelector ImagePath="{Binding SelectGachaItem.ImagePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" OnPathChanged="ImageSelector_OnOnPathChanged"/>
                             <TextBlock Margin="3,3">背景图片</TextBlock>
                             <usercontrols:ImageSelector ImagePath="{Binding SelectGachaItem.BackgroundImagePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock Margin="3,3">获取时数量下限</TextBlock>

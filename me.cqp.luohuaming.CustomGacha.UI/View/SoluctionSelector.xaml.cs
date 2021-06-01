@@ -52,5 +52,15 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
                 Hide();
             }
         }
+
+        private void OpenMenu_Click(object sender, RoutedEventArgs e)
+        {
+            this.Show();
+        }
+
+        private void HideMenu_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+        }
     }
 }

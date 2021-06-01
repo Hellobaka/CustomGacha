@@ -316,5 +316,22 @@
                 </Hyperlink>
             </TextBlock>
         </StackPanel>
+        <hc:NotifyIcon x:Name="NotifyIconContextContent"
+                       Text="自定义抽卡控制台"
+                       Visibility="Visible">
+            <hc:NotifyIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem x:Name="openMenu" Click="OpenMenu_Click"
+                              Header="打开菜单" />
+                    <MenuItem x:Name="hideMenu" Click="HideMenu_Click"
+                              Header="隐藏菜单" />
+                </ContextMenu>
+            </hc:NotifyIcon.ContextMenu>
+            <hc:Interaction.Triggers>
+                <hc:EventTrigger EventName="Click">
+                    <hc:EventToCommand Command="hc:ControlCommands.PushMainWindow2Top" />
+                </hc:EventTrigger>
+            </hc:Interaction.Triggers>
+        </hc:NotifyIcon>
     </Grid>
 </Window>

@@ -32,7 +32,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             {
                 ExecuteAction = new Action<object>(readMessage)
             };
-            //TODO: 每次加指令都得这样吗？
+            //TODO: 通过反射自动增加指令
             if (MainSave.Instances.Count == 0)
             {
                 MainSave.Instances.Add(new Register());//这里需要将指令实例化填在这里

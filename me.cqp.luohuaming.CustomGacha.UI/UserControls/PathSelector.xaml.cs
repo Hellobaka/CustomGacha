@@ -70,7 +70,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.UserControls
                 Multiselect = false,
             };
             string baseDir = Path.Combine(ReletivePath, FilePath);
-            if (string.IsNullOrWhiteSpace(baseDir) is false)
+            if (string.IsNullOrWhiteSpace(baseDir) is false && File.Exists(baseDir))
             {
                 var flag = File.GetAttributes(baseDir);
                 if (flag.HasFlag(FileAttributes.Directory) is false)
