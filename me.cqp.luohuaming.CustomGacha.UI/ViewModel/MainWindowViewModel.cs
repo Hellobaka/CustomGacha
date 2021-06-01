@@ -147,6 +147,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 if (value == null)
                     return;
                 var c = SQLHelper.GetGachaItemsByIDs(value.Content);
+                c.ForEach(x => x.Editted = false);
                 c.Where(x => value.UpContent.Any(o => o == x.ItemID)).Do(x => x.IsUp = true);
                 GachaItems = Helper.List2ObservableCollection(c);
             }

@@ -204,6 +204,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                                 }
                             });
                             c.Where(x => item.UpContent.Any(o => o == x.ItemID)).Do(x => x.IsUp = true);
+                            c.Do(x => x.Editted = false);
                             GachaitemsInCategory.Add(item, c);
                         }
                     });
@@ -281,11 +282,9 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         public DelegateCommand SetCategoryBaodi { get; set; }
         private void setCategoryBaodi(object parameter)
         {
-
             var c = SelectCategory.ID;
             var o = Categories.First(x => x.ID == c);
             o.IsBaodi = true;
-            //Categories2Change.Add(new ChangedCategory{Object = o,Action = ObjectAction.Update});
             RaisePropertyChanged("Categories");
             ReloadCategroies();
             Helper.ShowGrowlMsg($"设置子项目 {o.Name} 的保底属性为 True");
@@ -314,6 +313,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 return;
             }
             int count = 0;
+            Stopwatch sw = new Stopwatch();
+            sw.Start();
             foreach (var item in Categories)
             {
                 if (item.ID == -1)
@@ -325,12 +326,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 else
                     SQLHelper.UpdateOrAddCategory(item);
             }
+            sw.Stop();
+            Console.WriteLine($"检索目录耗时：{sw.ElapsedMilliseconds} ms");
             if (count > 0)
             {
                 Helper.ShowGrowlMsg($"在数据库新建了 {count} 个目录");
                 count = 0;
             }
-            EditPool.Content = Categories.Select(x => x.ID).ToList();
+            sw.Restart();
             foreach (var item in GachaitemsInCategory)
             {
                 int index = 0;
@@ -343,17 +346,24 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         item.Key.Content[index] = items.ItemID;
                         count++;
                     }
-                    else
+                    else if(items.Editted)
                         SQLHelper.UpdateOrAddGachaItem(items);
                     index++;
                 }
                 SQLHelper.UpdateOrAddCategory(item.Key);
             }
+            sw.Stop();
+            Console.WriteLine($"更新已更改项目耗时：{sw.ElapsedMilliseconds} ms");
             if (count > 0)
             {
                 Helper.ShowGrowlMsg($"在数据库新建了 {count} 个子项目");
             }
+            sw.Restart();
+            EditPool.Content = Categories.Select(x => x.ID).ToList();
             SQLHelper.UpdatePool(EditPool);
+            sw.Stop();
+            Console.WriteLine($"更新卡池耗时：{sw.ElapsedMilliseconds} ms");
+            sw.Restart();
             try
             {
                 EditPool.PluginInit();
@@ -367,7 +377,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 EditPool.DrawPoints = null;
                 EditPool.FinallyDraw = null;
             }
-
+            sw.Stop();
+            Console.WriteLine($"启用插件耗时：{sw.ElapsedMilliseconds} ms");
             Helper.ShowGrowlMsg("保存完成");
         }
         public DelegateCommand ClearCategories { get; set; }
