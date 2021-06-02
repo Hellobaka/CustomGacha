@@ -18,8 +18,6 @@ using PublicInfos;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
 {
-    //TODO: 不能每次保存都全部保存一遍, 得有个列表来保存修改过的项目
-    //TODO: 希望出一个功能能快捷对一个文件夹内的图片快速生成项目
     //TODO: 优化MVVM的样子, 看起来很累赘
     //TODO: 可视化插件编辑器
     //TODO: 希望插件能自定义指令
@@ -136,6 +134,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     ShowInteractiveDialog(DialogAction.NewPool);
                 })
             };
+            TemplateCopyItem = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(templateCopyItem)
+            };
         }
 
         #region ---绑定属性---
@@ -175,7 +177,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         foreach (var item in categories)
                         {
                             if (string.IsNullOrWhiteSpace(item.GUID))
-                            { 
+                            {
                                 item.GUID = Guid.NewGuid().ToString();
                                 SQLHelper.UpdateOrAddCategory(item);
                             }
@@ -195,9 +197,9 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                                 }
                                 Helper.ShowGrowlMsg($"检测到目录 {item.Name} 存在无效项目，共清理了 {count} 个无效项目", Helper.NoticeEnum.Info, 3);
                             }
-                            c.ForEach(x => 
+                            c.ForEach(x =>
                             {
-                                if (x!=null && string.IsNullOrWhiteSpace(x.GUID))
+                                if (x != null && string.IsNullOrWhiteSpace(x.GUID))
                                 {
                                     x.GUID = Guid.NewGuid().ToString();
                                     SQLHelper.UpdateOrAddGachaItem(x);
@@ -346,8 +348,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         item.Key.Content[index] = items.ItemID;
                         count++;
                     }
-                    else if(items.Editted)
+                    else if (items.Editted)
+                    { 
                         SQLHelper.UpdateOrAddGachaItem(items);
+                        items.Editted = false;
+                    }
                     index++;
                 }
                 SQLHelper.UpdateOrAddCategory(item.Key);
@@ -494,6 +499,37 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 Helper.ShowGrowlMsg($"成功复制 {c.Name} 子项目");
             }
         }
+        public DelegateCommand TemplateCopyItem { get; set; }
+        private void templateCopyItem(object parameter)
+        {
+            string baseDir = Path.Combine(EditPool.RelativePath, SelectGachaItem.ImagePath);
+            CommonOpenFileDialog dialog = new CommonOpenFileDialog
+            {
+                Multiselect = true,
+                InitialDirectory = new FileInfo(baseDir).DirectoryName,
+                IsFolderPicker = false,
+            };
+            if (dialog.ShowDialog() == CommonFileDialogResult.Cancel)
+                return;
+            foreach (var item in dialog.FileNames)
+            {
+                FileInfo info = new FileInfo(item);
+                var c = SelectGachaItem.Clone();
+                int index = GachaItems.IndexOf(SelectGachaItem);
+                GachaItems.Insert(index, c);
+                c.ItemID = -1;
+                c.GUID = Guid.NewGuid().ToString();
+                c.Name = info.Name.Replace(info.Extension, "");
+                c.ImagePath = info.FullName.Replace(EditPool.RelativePath + "\\", "");
+                SelectCategory.Content.Add(c.ItemID);
+                GachaitemsInCategory[SelectCategory].Add(c);
+                SelectGachaItem = c;
+                if (c.IsUp)
+                {
+                    setItemUp(null);
+                }
+            }
+        }
         public DelegateCommand MultiCopyItem { get; set; }
         private void multicopyItem(object parameter)
         {
@@ -505,7 +541,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 GachaItems.Insert(index, c);
                 c.ItemID = -1;
                 c.GUID = Guid.NewGuid().ToString();
-                //c.ItemID = SQLHelper.InsertOrUpdateGachaItem(c);
                 SelectCategory.Content.Add(c.ItemID);
                 GachaitemsInCategory[SelectCategory].Add(c);
                 SelectGachaItem = c;
@@ -605,7 +640,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                                 Categories.Add(x.Result);
                                 GachaitemsInCategory.Add(x.Result, new List<GachaItem>());
                             }
-                
+
                         });
                     });
                     break;
@@ -660,7 +695,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                                 GachaitemsInCategory.Add(x.Result, SQLHelper.GetGachaItemsByIDs(x.Result.Content));
                                 SelectCategory = x.Result;
                                 ReloadCategroies();
-                    
+
                                 RaisePropertyChanged("Categories");
                             }
                         });
@@ -682,7 +717,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         {
                             if (x.Result != null)
                             {
-                                int count = 0;                                
+                                int count = 0;
                                 x.Result.ForEach(o =>
                                 {
                                     if (GachaItems.Any(z => z.ItemID == o.ItemID) is false)

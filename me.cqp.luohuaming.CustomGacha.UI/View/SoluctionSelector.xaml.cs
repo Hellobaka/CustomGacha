@@ -35,6 +35,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
                 fm.Show();
                 this.Hide();
             }
+            (sender as ListBox).SelectedItem = null;
         }
 
         private void OrderButtonPressed(object sender, SelectionChangedEventArgs e)
