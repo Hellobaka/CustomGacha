@@ -25,6 +25,17 @@
                 <Button HorizontalAlignment="Stretch"
                         Style="{StaticResource ButtonPrimary}"
                         Click="TestDraw_Click">测试图片生成</Button>
+                <Separator Margin="10"/>
+                <TextBlock Margin="0,3">自定义插件</TextBlock>
+                <usercontrols:PathSelector FilePath="{Binding EditPool.PluginPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
+                                           OpenType="File" />
+                <TextBlock Margin="0,3">插件实现的接口</TextBlock>
+                <ListBox x:Name="PluginInterfaceInfo" Margin="0,3"/>
+                <Button HorizontalAlignment="Stretch"
+                        Margin="0,3"
+                        Style="{StaticResource ButtonPrimary}"
+                        Click="ReloadPlugin_Click">重载插件</Button>
+
             </StackPanel>
             <hc:Divider LineStrokeThickness="2"
                         Grid.Column="1"

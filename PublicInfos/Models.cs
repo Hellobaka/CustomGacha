@@ -297,6 +297,8 @@ namespace PublicInfos
         [SugarColumn(IsIgnore = true)]
         public object DrawAllItems { get; set; }
         public string GUID { get; set; } = "";
+
+        private Assembly plugin = null;
         public void PluginInit()
         {
             if (string.IsNullOrWhiteSpace(PluginPath) is false)
@@ -304,7 +306,13 @@ namespace PublicInfos
                 string filePath = Path.Combine(RelativePath, PluginPath);
                 if (File.Exists(filePath))
                 {
-                    Assembly plugin = Assembly.LoadFile(filePath);
+                    byte[] fsContent;
+                    using (FileStream fs = File.OpenRead(filePath))
+                    {
+                        fsContent = new byte[fs.Length];
+                        fs.Read(fsContent, 0, fsContent.Length);
+                    }
+                    plugin = Assembly.Load(fsContent);
                     try
                     {
                         foreach (var item in plugin.GetTypes())
@@ -365,7 +373,7 @@ namespace PublicInfos
         /// <summary>
         /// 项目名称
         /// </summary>
-        public string Name { get { return name; } set { name = value;Editted = true; } }
+        public string Name { get { return name; } set { name = value; Editted = true; } }
         private double probablity = 0;
         /// <summary>
         /// 项目概率
@@ -405,7 +413,7 @@ namespace PublicInfos
         public int CountFloor { get { return countFloor; } set { countFloor = value; Editted = true; } }
 
         private bool isUp = false;
-        [SugarColumn(IsIgnore = true)] 
+        [SugarColumn(IsIgnore = true)]
         public bool IsUp { get { return isUp; } set { isUp = value; Editted = true; } }
         private bool canBeFolded = false;
         /// <summary>
@@ -533,6 +541,5 @@ namespace PublicInfos
         {
             return (OrderConfig)this.MemberwiseClone();
         }
-
     }
 }

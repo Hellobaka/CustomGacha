@@ -60,6 +60,40 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View.ChildView
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
             datacontext = this.DataContext as WorkbenchViewModel;
+            ReadInterfaceInfo();
+        }
+        private void ReadInterfaceInfo()
+        {
+            PluginInterfaceInfo.Items.Clear();
+            if (datacontext.EditPool.DrawAllItems != null)
+                PluginInterfaceInfo.Items.Add("DrawAllItems");
+            if (datacontext.EditPool.DrawItem != null)
+                PluginInterfaceInfo.Items.Add("DrawItem");
+            if (datacontext.EditPool.DrawMainImage != null)
+                PluginInterfaceInfo.Items.Add("DrawMainImage");
+            if (datacontext.EditPool.DrawPoints != null)
+                PluginInterfaceInfo.Items.Add("DrawPoints");
+            if (datacontext.EditPool.FinallyDraw != null)
+                PluginInterfaceInfo.Items.Add("FinallyDraw");
+        }
+        private void ReloadPlugin_Click(object sender, RoutedEventArgs e)
+        {
+            PluginInterfaceInfo.Items.Clear();
+            try
+            {
+                datacontext.EditPool.PluginInit();
+                ReadInterfaceInfo();
+                Helper.ShowGrowlMsg($"插件重载成功", Helper.NoticeEnum.Success, 2);
+            }
+            catch (Exception exc)
+            {
+                Helper.ShowGrowlMsg($"插件初始化失败，错误信息: {exc.Message}", Helper.NoticeEnum.Error, 2);
+                datacontext.EditPool.DrawAllItems = null;
+                datacontext.EditPool.DrawItem = null;
+                datacontext.EditPool.DrawMainImage = null;
+                datacontext.EditPool.DrawPoints = null;
+                datacontext.EditPool.FinallyDraw = null;
+            }
         }
     }
 }

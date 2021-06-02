@@ -31,9 +31,6 @@
                 <TextBlock Margin="0,3">相对路径</TextBlock>
                 <usercontrols:PathSelector FilePath="{Binding EditPool.RelativePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
                                            OpenType="Folder" />
-                <TextBlock Margin="0,3">自定义插件</TextBlock>
-                <usercontrols:PathSelector FilePath="{Binding EditPool.PluginPath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"
-                                           OpenType="File" />
                 <Expander Margin="5"
                           Header="背景设置"
                           Background="LightGray"
