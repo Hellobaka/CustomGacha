@@ -38,6 +38,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         {
             SQLHelper.CreateDB();
             MainSave.PoolInstances = SQLHelper.GetAllPools();
+            MainSave.PoolInstances = MainSave.PoolInstances.OrderBy(x => x.UpdateDt).ToList();
             RecentList = new List<RecentSoluction>();
             ButtonGroup = new List<ButtonItem>
             {
@@ -53,10 +54,20 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 },
                 new ButtonItem
                 {
+                    Title = "复制模板",
+                    Remark = "从现有的卡池继承所有的设置，便于快速部署",
+                    ImageKind= PackIconUniconsKind.Copy,
+                    Action = new DelegateCommand
+                    {
+                        ExecuteAction = new Action<object>(copyPool)
+                    }
+                },
+                new ButtonItem
+                {
                     Title = "敬请期待...",
                     Remark = "未来可期未来可期",
                     ImageKind= PackIconUniconsKind.EllipsisH
-                }
+                },
             };
             MainSave.PoolInstances.ForEach(x =>
             {
@@ -99,6 +110,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             fm.InitializeComponent();
             fm.Show();
             SoluctionSelector.SoluctionSelector_Export.Hide();
+        }
+        public void copyPool(object o)
+        {
+            Console.WriteLine("Call copy");
         }
         #endregion
     }

@@ -41,8 +41,9 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
         private void OrderButtonPressed(object sender, SelectionChangedEventArgs e)
         {
             ButtonItem item = (ButtonItem)(sender as ListBox).SelectedItem;
-            if(item.Action!=null)
+            if(item is ButtonItem && item.Action!=null)
                 item.Action.Execute(null);
+            (sender as ListBox).SelectedItem = null;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)

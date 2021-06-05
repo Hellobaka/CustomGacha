@@ -241,7 +241,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         {
             Thread thread = new Thread(() =>
             {
-                //TODO: 进度条请求
+                //TODO: 进度条请求(2mon later 我觉得实现不了
                 if (SelectPool == null)
                 {
                     Helper.ShowGrowlMsg("请先选中一个池"); return;

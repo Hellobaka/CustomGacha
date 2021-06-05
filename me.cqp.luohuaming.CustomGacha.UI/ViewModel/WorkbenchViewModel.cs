@@ -61,6 +61,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             {
                 ExecuteAction = new Action<object>(deleteItem)
             };
+            DeleteItemFromDB = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(deleteItemFromDB)
+            };
             DeleteCategoryFromDB = new DelegateCommand
             {
                 ExecuteAction = new Action<object>(deleteCategoryFromDB)
@@ -140,7 +144,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 ExecuteAction = new Action<object>(templateCopyItem)
             };
         }
-
         #region ---绑定属性---
         public Dictionary<Category, List<GachaItem>> GachaitemsInCategory { get; set; }
         private Pool editPool;
@@ -171,47 +174,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             {
                 if (categories == null && EditPool != null)
                 {
-                    categories = Helper.List2ObservableCollection(SQLHelper.GetCategoriesByIDs(EditPool.Content));
-                    Thread thread = new Thread(() =>
-                    {
-                        GachaitemsInCategory = new Dictionary<Category, List<GachaItem>>();
-                        foreach (var item in categories)
-                        {
-                            if (string.IsNullOrWhiteSpace(item.GUID))
-                            {
-                                item.GUID = Guid.NewGuid().ToString();
-                                SQLHelper.UpdateOrAddCategory(item);
-                            }
-                            var c = SQLHelper.GetGachaItemsByIDs(item.Content);
-                            if (c.Any(x => x == null))
-                            {
-                                int count = 0;
-                                for (int i = 0; i < c.Count; i++)
-                                {
-                                    if (c[i] == null)
-                                    {
-                                        c.RemoveAt(i);
-                                        item.Content.RemoveAt(i);
-                                        SQLHelper.UpdateOrAddCategory(item);
-                                        count++;
-                                    }
-                                }
-                                Helper.ShowGrowlMsg($"检测到目录 {item.Name} 存在无效项目，共清理了 {count} 个无效项目", Helper.NoticeEnum.Info, 3);
-                            }
-                            c.ForEach(x =>
-                            {
-                                if (x != null && string.IsNullOrWhiteSpace(x.GUID))
-                                {
-                                    x.GUID = Guid.NewGuid().ToString();
-                                    SQLHelper.UpdateOrAddGachaItem(x);
-                                }
-                            });
-                            c.Where(x => item.UpContent.Any(o => o == x.ItemID)).Do(x => x.IsUp = true);
-                            c.Do(x => x.Editted = false);
-                            GachaitemsInCategory.Add(item, c);
-                        }
-                    });
-                    thread.Start();
+                    LoadCategories();
                 }
                 return categories;
             }
@@ -221,6 +184,52 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 this.RaisePropertyChanged("Categories");
             }
         }
+
+        private void LoadCategories()
+        {
+            categories = Helper.List2ObservableCollection(SQLHelper.GetCategoriesByIDs(EditPool.Content));
+            Thread thread = new Thread(() =>
+            {
+                GachaitemsInCategory = new Dictionary<Category, List<GachaItem>>();
+                foreach (var item in categories)
+                {
+                    if (string.IsNullOrWhiteSpace(item.GUID))
+                    {
+                        item.GUID = Guid.NewGuid().ToString();
+                        SQLHelper.UpdateOrAddCategory(item);
+                    }
+                    var c = SQLHelper.GetGachaItemsByIDs(item.Content);
+                    if (c.Any(x => x == null))
+                    {
+                        int count = 0;
+                        for (int i = 0; i < c.Count; i++)
+                        {
+                            if (c[i] == null)
+                            {
+                                c.RemoveAt(i);
+                                item.Content.RemoveAt(i);
+                                SQLHelper.UpdateOrAddCategory(item);
+                                count++;
+                            }
+                        }
+                        Helper.ShowGrowlMsg($"检测到目录 {item.Name} 存在无效项目，共清理了 {count} 个无效项目", Helper.NoticeEnum.Info, 3);
+                    }
+                    c.ForEach(x =>
+                    {
+                        if (x != null && string.IsNullOrWhiteSpace(x.GUID))
+                        {
+                            x.GUID = Guid.NewGuid().ToString();
+                            SQLHelper.UpdateOrAddGachaItem(x);
+                        }
+                    });
+                    c.Where(x => item.UpContent.Any(o => o == x.ItemID)).Do(x => x.IsUp = true);
+                    c.Do(x => x.Editted = false);
+                    GachaitemsInCategory.Add(item, c);
+                }
+            });
+            thread.Start();
+        }
+
         private GachaItem selectGachaItem;
         public GachaItem SelectGachaItem
         {
@@ -350,7 +359,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         count++;
                     }
                     else if (items.Editted)
-                    { 
+                    {
                         SQLHelper.UpdateOrAddGachaItem(items);
                         items.Editted = false;
                     }
@@ -448,6 +457,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             Helper.ShowGrowlMsg($"成功新建了一个模板项目");
         }
         public DelegateCommand DeleteItem { get; set; }
+
         private void deleteItem(object parameter)
         {
             if (HandyControl.Controls.MessageBox.Ask("确认删除此项目吗？此操作只会将项目从目录中剔除，不影响数据", "提示") == MessageBoxResult.Cancel)
@@ -466,6 +476,17 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             Helper.ShowGrowlMsg($"从 {SelectCategory.Name} 目录中成功删除了子项目 {name}");
 
         }
+        public DelegateCommand DeleteItemFromDB { get; set; }
+        private void deleteItemFromDB(object obj)
+        {
+            if (HandyControl.Controls.MessageBox.Ask("确认从数据库中删除此项目吗？此操作不可逆！", "提示") == MessageBoxResult.Cancel)
+                return;
+            string name = SelectGachaItem.Name;
+            SQLHelper.RemoveGachaItem(SelectGachaItem);
+
+            Helper.ShowGrowlMsg($"从数据库中成功删除了项目 {name}");
+        }
+
         public DelegateCommand DeleteCategoryFromDB { get; set; }
         private void deleteCategoryFromDB(object parameter)
         {
@@ -789,6 +810,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 return;
             JObject json = new JObject
             {
+                new JProperty("Editor_Version", Helper.GetVersionOrDefault()),
                 new JProperty("Pool_Info",JsonConvert.SerializeObject(EditPool)),
                 new JProperty("Categories_Info",new JArray()),
                 new JProperty("Items_Info",new JArray())
@@ -824,6 +846,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             if (HandyControl.Controls.MessageBox.Ask("确认导入吗？请确认所有的编辑工作已经保存", "提示") == MessageBoxResult.Cancel)
                 return;
             EditPool = new Pool { Name = "未选择项目", PoolID = -1 };
+            categories.Clear();
+            GachaitemsInCategory.Clear();
             string filePath = ShowSelectJsonDialog(MainSave.AppDirectory);
             if (string.IsNullOrWhiteSpace(filePath))
             {
@@ -833,6 +857,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             try
             {
                 JObject json = JObject.Parse(File.ReadAllText(filePath));
+                if (json.ContainsKey("Editor_Version") && json["Editor_Version"].ToObject<int>() > Helper.GetVersionOrDefault())
+                {
+                    if (HandyControl.Controls.MessageBox.Ask("此卡池的版本似乎高于当前编辑器版本, 可能导致导入失败, 建议升级插件版本. 确实继续导入吗?", "提示") == MessageBoxResult.Cancel)
+                        return;
+                }
                 string relativePath = ShowSelectDirDialog();
                 if (string.IsNullOrWhiteSpace(relativePath))
                 {
@@ -840,20 +869,27 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     return;
                 }
                 Helper.ShowGrowlMsg("相对目录读取成功");
-                if (VeifyJson(relativePath, json) is false)
+                if (VeifyJson(relativePath, json) is false)//选择的相对路径与json内填写的相对路径不匹配
                 {
                     Helper.ShowGrowlMsg("路径验证失败，请检查相对目录是否设置正确", Helper.NoticeEnum.Error);
                     return;
                 }
                 Pool pool_dest = JsonConvert.DeserializeObject<Pool>(json["Pool_Info"].ToString());
-                if (MainSave.PoolInstances.Any(x => x.Name == pool_dest.Name))
+                bool updateFlag = false;
+                if (MainSave.PoolInstances.Any(x => x.Name == pool_dest.Name))//判断同名卡池, 同名可选择覆盖或不冲突命名
                 {
-                    if (HandyControl.Controls.MessageBox.Ask("似乎现在已经有一个相同名称的卡池了，是否继续导入？", "提示") == MessageBoxResult.Cancel)
-                        return;
-                    pool_dest.Name += "_2";
+                    if (HandyControl.Controls.MessageBox.Ask("似乎现在已经有一个相同名称的卡池了，点是来覆盖卡池, 点否来重命名卡池", "提示") == MessageBoxResult.OK)
+                    {
+                        updateFlag = true;
+                    }
+                    else
+                    {
+                        while (MainSave.PoolInstances.Any(x => x.Name == pool_dest.Name))
+                            pool_dest.Name += "_2";
+                    }
                 }
-                pool_dest.PoolID = -1;
-
+                pool_dest.PoolID = updateFlag ? MainSave.PoolInstances.First(x => x.Name == pool_dest.Name).PoolID : -1;
+                //导入目录, 先取出所有目录
                 Dictionary<int, Category> categories = new Dictionary<int, Category>();
                 foreach (var item in json["Categories_Info"] as JArray)
                 {
@@ -861,7 +897,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     category.ID = -1;
                     categories.Add(Convert.ToInt32(item["ID"]), category);
                 }
-
+                //导入所有项目, 先取出所有项目
                 Dictionary<int, GachaItem> gachaItems = new Dictionary<int, GachaItem>();
                 foreach (var item in json["Items_Info"] as JArray)
                 {
@@ -870,17 +906,18 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     gachaItems.Add(Convert.ToInt32(item["ID"].ToString()), gachaItem);
                 }
                 Helper.ShowGrowlMsg("Json读取成功");
-                foreach (var item in gachaItems)
+                //按GUID更新或添加所有的项目
+                gachaItems = SQLHelper.UpdateIDByGUID(gachaItems);
+                //更新目录内容, 主要是项目的ID
+                foreach (var item in pool_dest.Content)//需要导入卡池的目录
                 {
-                    item.Value.ItemID = SQLHelper.UpdateOrAddGachaItem(item.Value);
-                }
-                foreach (var item in pool_dest.Content)
-                {
+                    //更新需要导入卡池目录中的项目ID, 因为项目已经导入了数据库并有了编号
                     List<int> itemID = new List<int>();
                     foreach (var id in categories[item].Content)
                     {
-                        itemID.Add(gachaItems[id].ItemID);
+                        itemID.Add(gachaItems[id].ItemID);//按旧卡池的键, 读入项目
                     }
+                    //同理, 更新UP内容
                     List<int> upID = new List<int>();
                     foreach (var id in categories[item].UpContent)
                     {
@@ -892,22 +929,30 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     }
                     categories[item].Content = itemID;
                     categories[item].UpContent = upID;
-                    categories[item].ID = SQLHelper.UpdateOrAddCategory(categories[item], true);
+                    categories[item].ID = SQLHelper.UpdateOrAddCategory(categories[item]);
                 }
                 List<int> contentID = new List<int>();
                 foreach (var item in categories)
                 {
                     contentID.Add(item.Value.ID);
                 }
+                //将卡池的目录也进行ID的更新
                 pool_dest.Content = contentID;
                 pool_dest.RelativePath = relativePath;
-                pool_dest.PoolID = SQLHelper.AddPool(pool_dest);
+                if (updateFlag)
+                {
+                    pool_dest.PoolID = SQLHelper.GetAllPools().First(x => x.GUID == pool_dest.GUID).PoolID;
+                    SQLHelper.UpdatePool(pool_dest); 
+                }
+                else
+                    pool_dest.PoolID = SQLHelper.AddPool(pool_dest);
                 EditPool = pool_dest;
+                LoadCategories();
                 Helper.ShowGrowlMsg($"导入卡池 {EditPool.Name} 成功, 重启编辑器以测试卡池");
             }
             catch (Exception e)
             {
-                Helper.ShowGrowlMsg("Json读取失败，请验证Json格式", Helper.NoticeEnum.Error);
+                //Helper.ShowGrowlMsg("Json读取失败，请验证Json格式", Helper.NoticeEnum.Error);
                 Helper.ShowGrowlMsg($"错误信息: {e.Message}", Helper.NoticeEnum.Error);
                 return;
             }

@@ -26,7 +26,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
         }
         GachaItemQueryDialogViewModel datacontext;
         public static DataGrid DataGrid_Export { get; set; }
-        //TODO: 分页控件请求
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             switch ((sender as Button).Tag)

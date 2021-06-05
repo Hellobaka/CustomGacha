@@ -142,6 +142,8 @@
                                         <Separator />
                                         <MenuItem Header="删除"
                                                   Command="{Binding Path=PlacementTarget.Tag.DeleteItem,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
+                                        <MenuItem Header="彻底删除"
+                                                  Command="{Binding Path=PlacementTarget.Tag.DeleteItemFromDB,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
                                     </ContextMenu>
                                 </StackPanel.ContextMenu>
                                 <StackPanel Orientation="Horizontal">

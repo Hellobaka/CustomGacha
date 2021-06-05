@@ -148,7 +148,7 @@ namespace PublicInfos
         {
             using (var db = GetInstance())
             {
-                if (db.Queryable<Pool>().Any(x => x.PoolID == pool.PoolID) is false)
+                if (db.Queryable<Pool>().Any(x => x.GUID == pool.GUID) is false)
                 {
                     return db.Insertable(pool).ExecuteReturnIdentity();
                 }
@@ -256,9 +256,17 @@ namespace PublicInfos
                 }
                 else
                 {
-                    item.UpdateDt = DateTime.Now;
-                    db.Updateable(item).ExecuteCommand();
-                    return item.ID;
+                    if (db.Queryable<Category>().Any(x => x.GUID == item.GUID))
+                    {
+                        item.ID = db.Queryable<Category>().First(x => x.GUID == item.GUID).ID;
+                        item.UpdateDt = DateTime.Now;
+                        db.Updateable(item).ExecuteCommand();
+                        return item.ID;
+                    }
+                    else
+                    {
+                        return db.Insertable(item).ExecuteReturnIdentity();
+                    }
                 }
             }
         }
@@ -292,11 +300,11 @@ namespace PublicInfos
                 return -1;
             using (var db = GetInstance())
             {
-                if (db.Queryable<GachaItem>().Any(x => x.ItemID == item.ItemID))
+                if (db.Queryable<GachaItem>().Any(x => x.GUID == item.GUID))
                 {
                     item.UpdateDt = DateTime.Now;
                     db.Updateable(item).ExecuteCommand();
-                    return item.ItemID;
+                    return db.Queryable<GachaItem>().First(x => x.GUID == item.GUID).ItemID;
                 }
                 else
                 {
@@ -305,6 +313,31 @@ namespace PublicInfos
                     return db.Insertable(item).ExecuteReturnIdentity();
                 }
             }
+        }
+        public static Dictionary<int, GachaItem> UpdateIDByGUID(Dictionary<int, GachaItem> ls)
+        {
+            if (ls == null || ls.Count == 0)
+                return ls;
+            using (var db = GetInstance())
+            {
+                foreach(var pair in ls)
+                {
+                    var item = pair.Value;
+                    if (db.Queryable<GachaItem>().Any(x => x.GUID == item.GUID))
+                    {
+                        item.UpdateDt = DateTime.Now;
+                        db.Updateable(item).ExecuteCommand();
+                        item.ItemID = db.Queryable<GachaItem>().First(x => x.GUID == item.GUID).ItemID;
+                    }
+                    else
+                    {
+                        if (string.IsNullOrWhiteSpace(item.Remark))
+                            item.Remark = string.Empty;
+                        item.ItemID = db.Insertable(item).ExecuteReturnIdentity();
+                    }
+                }
+            }
+            return ls;
         }
         public static void RemoveGachaItem(GachaItem item)
         {

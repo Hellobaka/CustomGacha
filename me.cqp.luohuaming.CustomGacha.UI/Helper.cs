@@ -54,7 +54,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI
         public static List<T> ToPageList<T>(List<T> ls, int pageIndex, int pageCount)
         {
             List<T> result = new List<T>();
-            if (ls.Count < pageIndex  * pageCount)
+            if (ls.Count < pageIndex * pageCount)
             {
                 int index = (pageIndex - 1) * pageCount;
                 result = ls.GetRange(index, ls.Count - (index));
@@ -65,6 +65,16 @@ namespace me.cqp.luohuaming.CustomGacha.UI
                 result = ls.GetRange(index, pageCount);
             }
             return result;
+        }
+
+        public static int GetVersionOrDefault()
+        {
+            if (MainSave.CQApi == null)
+            {
+                return 114;
+            }
+            string version = MainSave.CQApi.AppInfo.Version.ToString();
+            return Convert.ToInt32(version.Replace(".", ""));
         }
     }
 }
