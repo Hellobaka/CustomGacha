@@ -6,6 +6,7 @@ using CustomGacha.SDK.Sdk.Cqp.EventArgs;
 using CustomGacha.SDK.Sdk.Cqp.Interface;
 using PluginInterface;
 using PublicInfos;
+using System.Reflection;
 
 namespace me.cqp.luohuaming.CustomGacha.Code
 {
@@ -28,10 +29,21 @@ namespace me.cqp.luohuaming.CustomGacha.Code
                 SQLHelper.LoadConfig();
                 MainSave.PoolInstances = SQLHelper.GetAllPools();
                 Directory.CreateDirectory(MainSave.GachaResultRootPath);
-                MainSave.Instances.Add(new Register());//这里需要将指令实例化填在这里
-                MainSave.Instances.Add(new Sign());
-                MainSave.Instances.Add(new MultiGacha());
-                MainSave.Instances.Add(new SingalGacha());
+                foreach (var item in Assembly.GetAssembly(typeof(Event_GroupMessage)).GetTypes())
+                {
+                    if (item.IsInterface)
+                        continue;
+                    foreach (var instance in item.GetInterfaces())
+                    {
+                        if (instance == typeof(IOrderModel))
+                        {
+                            IOrderModel obj = (IOrderModel)Activator.CreateInstance(item);
+                            if (obj.ImplementFlag == false)
+                                break;
+                            MainSave.Instances.Add(obj);
+                        }
+                    }
+                }
             }
             catch (Exception exc)
             {

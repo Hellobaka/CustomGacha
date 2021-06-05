@@ -9,6 +9,8 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
 {
     public class SingalGacha : IOrderModel
     {
+        public bool ImplementFlag { get; set; } = true;
+
         public string GetOrderStr() => string.Empty;
 
         public bool Judge(string destStr) => MainSave.PoolInstances.Any(x => x.SingalGachaOrder == destStr);

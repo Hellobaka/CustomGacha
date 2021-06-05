@@ -24,6 +24,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
     //TODO: 增加更多的指令操作(氪金 黑名单等
     //TODO: 云数据库构建希望
     //TODO: 云卡池构建希望
+    //TODO: 卡池以GUID覆盖(升级)时的策略
     public class WorkbenchViewModel : NotifyicationObject
     {
         public WorkbenchViewModel()

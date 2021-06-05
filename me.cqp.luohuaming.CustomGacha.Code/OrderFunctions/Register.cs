@@ -6,6 +6,8 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
 {
     public class Register : IOrderModel
     {
+        public bool ImplementFlag { get; set; } = true;
+
         public string GetOrderStr() => MainSave.OrderConfig.RegisterOrder;
 
         public bool Judge(string destStr) => destStr.Replace("＃", "#").Equals(GetOrderStr());//这里判断是否能触发指令

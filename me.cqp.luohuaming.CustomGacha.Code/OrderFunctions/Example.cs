@@ -6,6 +6,8 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
 {
     public class Example : IOrderModel
     {
+        public bool ImplementFlag { get; set; } = false;
+
         public string GetOrderStr() => "这里输入触发指令";
 
         public bool Judge(string destStr) => destStr.StartsWith(GetOrderStr());//这里判断是否能触发指令

@@ -17,6 +17,7 @@ using System.IO;
 using System.Windows.Media.Imaging;
 using me.cqp.luohuaming.CustomGacha.Code.OrderFunctions;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
 {
@@ -32,13 +33,23 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             {
                 ExecuteAction = new Action<object>(readMessage)
             };
-            //TODO: 通过反射自动增加指令
             if (MainSave.Instances.Count == 0)
             {
-                MainSave.Instances.Add(new Register());//这里需要将指令实例化填在这里
-                MainSave.Instances.Add(new Sign());
-                MainSave.Instances.Add(new MultiGacha());
-                MainSave.Instances.Add(new SingalGacha());
+                foreach (var item in Assembly.GetAssembly(typeof(Event_GroupMessage)).GetTypes())
+                {
+                    if (item.IsInterface)
+                        continue;
+                    foreach (var instance in item.GetInterfaces())
+                    {
+                        if(instance == typeof(IOrderModel))
+                        {
+                            IOrderModel obj = (IOrderModel)Activator.CreateInstance(item);
+                            if (obj.ImplementFlag == false)
+                                break;
+                            MainSave.Instances.Add(obj);
+                        }
+                    }
+                }
             }
         }
         private long testQQ = 1145141919;
@@ -71,7 +82,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         private void sendString(object o)
         {
             KeyEventArgs e = o as KeyEventArgs;
-            if (e.Key == Key.Enter)
+            if (o==null || e.Key == Key.Enter)
             {
                 if (string.IsNullOrEmpty(ChatString)) return;
                 var info = new ChatInfoModel
