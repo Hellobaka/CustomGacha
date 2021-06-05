@@ -57,6 +57,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
 
         private void OpenMenu_Click(object sender, RoutedEventArgs e)
         {
+            ((SoluctionSelectorViewModel)(DataContext)).ReloadList();
             this.Show();
         }
 

@@ -224,6 +224,7 @@
       <DependentUpon>PathSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="ViewModel\ChatBoxViewModel.cs" />
+    <Compile Include="ViewModel\CopyPoolModelView.cs" />
     <Compile Include="ViewModel\NewPoolStepViewModel.cs" />
     <Compile Include="ViewModel\NewPoolViewModel.cs" />
     <Compile Include="ViewModel\WorkbenchViewModel.cs" />
@@ -257,6 +258,9 @@
     </Compile>
     <Compile Include="View\ChildView\TestPage.xaml.cs">
       <DependentUpon>TestPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\CopyPoolView.xaml.cs">
+      <DependentUpon>CopyPoolView.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\GachaItemQueryDialog.xaml.cs">
       <DependentUpon>GachaItemQueryDialog.xaml</DependentUpon>
@@ -325,6 +329,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\ChildView\TestPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\CopyPoolView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

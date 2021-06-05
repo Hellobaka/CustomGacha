@@ -360,6 +360,11 @@ namespace PublicInfos
         {
             return Name;
         }
+        public Pool Clone()
+        {
+            return (Pool)this.MemberwiseClone();
+        }
+
     }
 
     /// <summary>

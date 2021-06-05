@@ -144,6 +144,15 @@ namespace PublicInfos
                 return c;
             }
         }
+        public static Pool GetPoolByID(int id)
+        {
+            using (var db = GetInstance())
+            {
+                var c = db.Queryable<Pool>().First(x=>x.PoolID==id);
+                c.PluginInit();
+                return c;
+            }
+        }
         public static int AddPool(Pool pool)
         {
             using (var db = GetInstance())

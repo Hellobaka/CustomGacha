@@ -184,10 +184,8 @@
                             <Border x:Name="Bd"
                                     Background="{TemplateBinding Background}"
                                     SnapsToDevicePixels="True">
-                                <hc:ScrollViewer Focusable="False">
                                     <ItemsPresenter Margin="{TemplateBinding Padding}"
                                                     SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" />
-                                </hc:ScrollViewer>
                             </Border>
                         </ControlTemplate>
                     </Setter.Value>
@@ -212,61 +210,70 @@
                    Margin="70,0,0,0">
             水银抽卡机
         </TextBlock>
-        <StackPanel Grid.Row="1"
-                    Margin="70,10,50,0">
-            <TextBlock FontSize="20"
-                       Grid.Row="1"
-                       Margin="0,5,0,5">打开最近使用的内容</TextBlock>
-            <hc:SearchBar Margin="0,15,0,5"
-                          Width="300"
-                          HorizontalAlignment="Left"></hc:SearchBar>
-            <ListBox Margin="0,5,0,5"
-                     HorizontalAlignment="Stretch"
-                     VerticalAlignment="Stretch"
-                     ItemsSource="{Binding RecentList}"
-                     HorizontalContentAlignment="Stretch"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                     Style="{DynamicResource SplitItem}"
-                     SelectionChanged="ListBox_SelectionChanged">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <Grid Height="60"
-                              Margin="0,5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition />
-                                <RowDefinition />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="50" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="120" />
-                            </Grid.ColumnDefinitions>
-                            <iconPacks:PackIconUnicons Kind="LinkAlt"
-                                                       Grid.RowSpan="2"
-                                                       VerticalAlignment="Center"
-                                                       HorizontalAlignment="Center"
-                                                       Height="20"
-                                                       Width="20"
-                                                       Foreground="{StaticResource PrimaryBrush}" />
-                            <TextBlock Grid.Column="1"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Left"
-                                       Style="{StaticResource TextBlockDefaultBold}"
-                                       Text="{Binding Name}" />
-                            <TextBlock Grid.Column="2"
-                                       VerticalAlignment="Center"
-                                       HorizontalAlignment="Left"
-                                       Text="{Binding Date}" />
-                            <TextBlock Grid.Row="1"
-                                       VerticalAlignment="Top"
-                                       Grid.Column="1"
-                                       Grid.ColumnSpan="2"
-                                       Text="{Binding Path}" />
-                        </Grid>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
-        </StackPanel>
+        <ScrollViewer Grid.Row="1"
+                      Margin="70,10,50,0"
+                      VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <TextBlock FontSize="20"
+                           Grid.Row="1"
+                           Margin="0,5,0,5">打开最近使用的内容</TextBlock>
+                <hc:SearchBar Margin="0,15,0,5"
+                              Width="300"
+                              HorizontalAlignment="Left"></hc:SearchBar>
+                <ListBox Margin="0,5,0,5"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Stretch"
+                         ItemsSource="{Binding RecentList}"
+                         HorizontalContentAlignment="Stretch"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                         Style="{DynamicResource SplitItem}"
+                         SelectionChanged="ListBox_SelectionChanged">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Height="60"
+                                  Margin="0,5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition />
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="50" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="120" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Command="{Binding HidePool}">隐藏</MenuItem>
+                                        <MenuItem Command="{Binding DeletePool}">删除</MenuItem>
+                                    </ContextMenu>
+                                </Grid.ContextMenu>
+                                <iconPacks:PackIconUnicons Kind="LinkAlt"
+                                                           Grid.RowSpan="2"
+                                                           VerticalAlignment="Center"
+                                                           HorizontalAlignment="Center"
+                                                           Height="20"
+                                                           Width="20"
+                                                           Foreground="{StaticResource PrimaryBrush}" />
+                                <TextBlock Grid.Column="1"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Left"
+                                           Style="{StaticResource TextBlockDefaultBold}"
+                                           Text="{Binding Name}" />
+                                <TextBlock Grid.Column="2"
+                                           VerticalAlignment="Center"
+                                           HorizontalAlignment="Left"
+                                           Text="{Binding Date}" />
+                                <TextBlock Grid.Row="1"
+                                           VerticalAlignment="Top"
+                                           Grid.Column="1"
+                                           Grid.ColumnSpan="2"
+                                           Text="{Binding Path}" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </StackPanel>
+        </ScrollViewer>
         <StackPanel Grid.Column="1"
                     Grid.Row="1"
                     Margin="10,10,70,0">
@@ -275,7 +282,6 @@
                      Background="White"
                      ItemsSource="{Binding ButtonGroup}"
                      HorizontalContentAlignment="Stretch"
-                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"
                      Style="{DynamicResource SplitItem}"
                      SelectionChanged="OrderButtonPressed">
                 <ListBox.ItemTemplate>

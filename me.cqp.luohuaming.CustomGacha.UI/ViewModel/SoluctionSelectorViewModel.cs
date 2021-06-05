@@ -6,14 +6,15 @@ using PublicInfos;
 using MahApps.Metro.IconPacks;
 using me.cqp.luohuaming.CustomGacha.UI.Command;
 using me.cqp.luohuaming.CustomGacha.UI.View;
+using System.Collections.ObjectModel;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
 {
     public class SoluctionSelectorViewModel : NotifyicationObject
     {
         #region ---绑定属性---
-        private List<RecentSoluction> recentList;
-        public List<RecentSoluction> RecentList
+        private ObservableCollection<RecentSoluction> recentList;
+        public ObservableCollection<RecentSoluction> RecentList
         {
             get { return recentList; }
             set
@@ -32,6 +33,17 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 this.RaisePropertyChanged("ButtonGroup");
             }
         }
+        public DelegateCommand HidePool { get; set; }
+        public void hidePool(object o)
+        {
+
+        }
+        public DelegateCommand DeletePool { get; set; }
+        public void deletePool(object o)
+        {
+
+        }
+
         #endregion
         #region ---构造函数---
         public SoluctionSelectorViewModel()
@@ -39,7 +51,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             SQLHelper.CreateDB();
             MainSave.PoolInstances = SQLHelper.GetAllPools();
             MainSave.PoolInstances = MainSave.PoolInstances.OrderBy(x => x.UpdateDt).ToList();
-            RecentList = new List<RecentSoluction>();
+            RecentList = new ObservableCollection<RecentSoluction>();
             ButtonGroup = new List<ButtonItem>
             {
                 new ButtonItem
@@ -83,6 +95,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             {
                 ExecuteAction = new Action<object>(openWithNoPool)
             };
+            HidePool = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(hidePool)
+            };
+            DeletePool = new DelegateCommand
+            {
+                ExecuteAction = new Action<object>(deletePool)
+            };
         }
         #endregion
         #region ---绑定命令---
@@ -113,7 +133,17 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         }
         public void copyPool(object o)
         {
-            Console.WriteLine("Call copy");
+            CopyPoolView fm = new CopyPoolView();
+            ((CopyPoolModelView)fm.DataContext).RecentList = RecentList;
+            fm.InitializeComponent();
+            fm.Show();
+        }
+        public void ReloadList()
+        {
+            var c = new ObservableCollection<RecentSoluction>();
+            foreach (var item in RecentList)
+                c.Add(item);
+            RecentList = c;
         }
         #endregion
     }
