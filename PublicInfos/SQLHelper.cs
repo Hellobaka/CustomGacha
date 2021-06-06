@@ -286,6 +286,14 @@ namespace PublicInfos
                 db.Deleteable(category).ExecuteCommand();
             }
         }
+        public static void RemoveCategoryByIDs(List<int> id)
+        {
+            using (var db = GetInstance())
+            {
+                var category = SQLHelper.GetCategoriesByIDs(id);
+                db.Deleteable(category).ExecuteCommand();
+            }
+        }
         #endregion
 
         #region ---GachaItem---

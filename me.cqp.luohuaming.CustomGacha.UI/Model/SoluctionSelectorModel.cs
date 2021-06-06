@@ -10,6 +10,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.Model
         public string Date { get; set; }
         public string Path { get; set; }
         public Pool Object { get; set; }
+        public bool Checked { get; set; } = false;
     }
     public class ButtonItem
     {

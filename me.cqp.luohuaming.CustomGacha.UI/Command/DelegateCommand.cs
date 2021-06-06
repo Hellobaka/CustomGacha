@@ -10,6 +10,14 @@ namespace me.cqp.luohuaming.CustomGacha.UI.Command
     public class DelegateCommand : ICommand
     {
         public event EventHandler CanExecuteChanged;
+        public DelegateCommand(Action<object> action)
+        {
+            ExecuteAction = action;
+        }
+        public DelegateCommand()
+        {
+
+        }
         public Action<object> ExecuteAction { get; set; }
         public Func<object, bool> CanExecuteFunc { get; set; }
         public bool CanExecute(object parameter)

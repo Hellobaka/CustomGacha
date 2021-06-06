@@ -1,0 +1,116 @@
+﻿<Window x:Class="me.cqp.luohuaming.CustomGacha.UI.View.ManagePoolsView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.View"
+        mc:Ignorable="d"
+        xmlns:hc="https://handyorg.github.io/handycontrol"
+        xmlns:viewmodel="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.ViewModel"
+        Title="ManagePoolsView"
+        MinHeight="450"
+        MinWidth="800"
+        xmlns:controls="clr-namespace:HandyControl.Controls;assembly=HandyControl"
+        WindowStartupLocation="CenterScreen"
+        Height="450"
+        Width="800">
+    <Window.DataContext>
+        <viewmodel:ManagePoolsModelView />
+    </Window.DataContext>
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="6*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal"
+                    Grid.Column="0"
+                    Grid.Row="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center">
+            <Button Margin="5,0"
+                    Command="{Binding SelectAll}"
+                    Style="{StaticResource ButtonPrimary}">全选</Button>
+            <Button Margin="5,0"
+                    Command="{Binding SelectNon}"
+                    Style="{StaticResource ButtonPrimary}">全不选</Button>
+            <Button Margin="5,0"
+                    Command="{Binding SelectAnti}"
+                    Style="{StaticResource ButtonPrimary}">反选</Button>
+        </StackPanel>
+        <ListBox Margin="5,5,0,0"
+                 HorizontalAlignment="Stretch"
+                 VerticalAlignment="Stretch"
+                 ItemsSource="{Binding RecentList}"
+                 HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Grid Height="60"
+                          Margin="0,5">
+                        <Grid.RowDefinitions>
+                            <RowDefinition />
+                            <RowDefinition />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="50" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="120" />
+                        </Grid.ColumnDefinitions>
+                        <ToggleButton Grid.Column="0"
+                                      HorizontalAlignment="Left"
+                                      VerticalAlignment="Center"
+                                      Grid.RowSpan="2"
+                                      Checked="ToggleButton_Checked"
+                                      Unchecked="ToggleButton_Unchecked"
+                                      Style="{StaticResource ToggleButtonSwitch}"
+                                      IsChecked="{Binding Checked,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBlock Grid.Column="1"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   Style="{StaticResource TextBlockDefaultBold}"
+                                   Text="{Binding Name}" />
+                        <TextBlock Grid.Column="2"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Left"
+                                   Text="{Binding Object.Visable, StringFormat=项目是否可见: \{0\}}" />
+                        <TextBlock Grid.Row="1"
+                                   VerticalAlignment="Top"
+                                   Grid.Column="1"
+                                   Grid.ColumnSpan="2"
+                                   Text="{Binding Path}" />
+                    </Grid>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+        <StackPanel Grid.Column="1"
+                    Margin="15"
+                    HorizontalAlignment="Stretch">
+            <TextBlock Text="{Binding SelectNum,StringFormat=选中的个数: \{0\}}"/>
+            <Button HorizontalAlignment="Stretch"
+                    Margin="0,10"
+                    Command="{Binding SetUnVisable}"
+                    Style="{StaticResource MessageBoxPrimaryButtonStyle}">置隐藏</Button>
+            <Button HorizontalAlignment="Stretch"
+                    Margin="0,10"
+                    Command="{Binding SetVisable}"
+                    Style="{StaticResource MessageBoxPrimaryButtonStyle}">置显示</Button>
+            <Button Margin="0,10"
+                    HorizontalAlignment="Stretch"
+                    Command="{Binding DeleteSelected}"
+                    Style="{StaticResource MessageBoxPrimaryButtonStyle}">删除所选</Button>
+        </StackPanel>
+        <ScrollViewer VerticalScrollBarVisibility="Hidden"
+                      Grid.RowSpan="2"
+                      Grid.Column="1"
+                      HorizontalAlignment="Right"
+                      VerticalAlignment="Top">
+            <StackPanel HorizontalAlignment="Right"
+                        controls:Growl.GrowlParent="True"
+                        VerticalAlignment="Top"
+                        Margin="0,10,10,10" />
+        </ScrollViewer>
+    </Grid>
+</Window>

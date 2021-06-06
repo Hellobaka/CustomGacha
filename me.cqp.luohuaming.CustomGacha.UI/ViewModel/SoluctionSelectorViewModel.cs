@@ -7,6 +7,7 @@ using MahApps.Metro.IconPacks;
 using me.cqp.luohuaming.CustomGacha.UI.Command;
 using me.cqp.luohuaming.CustomGacha.UI.View;
 using System.Collections.ObjectModel;
+using System.Windows;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
 {
@@ -33,15 +34,34 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 this.RaisePropertyChanged("ButtonGroup");
             }
         }
+        private RecentSoluction selectedPool;
+        public RecentSoluction SelectedPool
+        {
+            get { return selectedPool; }
+            set
+            {
+                selectedPool = value;
+                this.RaisePropertyChanged("SelectedPool");
+            }
+        }
+
         public DelegateCommand HidePool { get; set; }
         public void hidePool(object o)
         {
-
+            SelectedPool.Object.Visable = false;
+            SQLHelper.UpdatePool(SelectedPool.Object);
+            RecentList.Remove(SelectedPool);
+            SelectedPool = null;
         }
         public DelegateCommand DeletePool { get; set; }
         public void deletePool(object o)
         {
-
+            if (HandyControl.Controls.MessageBox.Ask($"确认删除卡池 {SelectedPool.Name} 吗？此操作将会从数据库中删除它的目录信息，但不会影响内容", "提示") == MessageBoxResult.Cancel)
+                return;
+            SQLHelper.RemoveCategoryByIDs(SelectedPool.Object.Content);
+            SQLHelper.RemovePool(SelectedPool.Object);
+            RecentList.Remove(SelectedPool);
+            SelectedPool = null;
         }
 
         #endregion
@@ -76,6 +96,16 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 },
                 new ButtonItem
                 {
+                    Title = "卡池管理",
+                    Remark = "批量操作卡池",
+                    ImageKind= PackIconUniconsKind.TachometerFastAlt,
+                    Action = new DelegateCommand
+                    {
+                        ExecuteAction = new Action<object>(managePools)
+                    }
+                },
+                new ButtonItem
+                {
                     Title = "敬请期待...",
                     Remark = "未来可期未来可期",
                     ImageKind= PackIconUniconsKind.EllipsisH
@@ -83,13 +113,16 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             };
             MainSave.PoolInstances.ForEach(x =>
             {
-                RecentList.Add(new RecentSoluction
+                if (x.Visable)
                 {
-                    Date = x.UpdateDt.ToString("yyyy/MM/dd HH:mm"),
-                    Name = x.Name,
-                    Path = x.RelativePath,
-                    Object = x
-                });
+                    RecentList.Add(new RecentSoluction
+                    {
+                        Date = x.UpdateDt.ToString("yyyy/MM/dd HH:mm"),
+                        Name = x.Name,
+                        Path = x.RelativePath,
+                        Object = x
+                    });
+                }
             });
             OpenWithNoPool = new DelegateCommand
             {
@@ -138,12 +171,32 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             fm.InitializeComponent();
             fm.Show();
         }
+        public void managePools(object o)
+        {
+            ManagePoolsView fm = new ManagePoolsView();
+            fm.InitializeComponent();
+            fm.Show();
+            fm.Closing += (a, b) => ReloadList();
+        }
+
         public void ReloadList()
         {
-            var c = new ObservableCollection<RecentSoluction>();
-            foreach (var item in RecentList)
-                c.Add(item);
-            RecentList = c;
+            RecentList.Clear();
+            MainSave.PoolInstances = SQLHelper.GetAllPools();
+            MainSave.PoolInstances = MainSave.PoolInstances.OrderBy(x => x.UpdateDt).ToList();
+            MainSave.PoolInstances.ForEach(x =>
+            {
+                if (x.Visable)
+                {
+                    RecentList.Add(new RecentSoluction
+                    {
+                        Date = x.UpdateDt.ToString("yyyy/MM/dd HH:mm"),
+                        Name = x.Name,
+                        Path = x.RelativePath,
+                        Object = x
+                    });
+                }
+            });
         }
         #endregion
     }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using me.cqp.luohuaming.CustomGacha.UI.Model;
@@ -20,35 +21,17 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
             SoluctionSelector_Export = this;
         }
         public static SoluctionSelector SoluctionSelector_Export;
-        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            object c = (sender as ListBox).SelectedItem;
-            if(c is RecentSoluction)
-            {
-                //新建窗口
-                Workbench fm = new Workbench();
-                WorkbenchViewModel vm = (fm.DataContext as WorkbenchViewModel);
-                vm.EditPool = (c as RecentSoluction).Object;
-                vm.Config = MainSave.ApplicationConfig.Clone();
-                vm.OrderConfig = MainSave.OrderConfig.Clone();
-                fm.InitializeComponent();
-                fm.Show();
-                this.Hide();
-            }
-            (sender as ListBox).SelectedItem = null;
-        }
-
         private void OrderButtonPressed(object sender, SelectionChangedEventArgs e)
         {
             ButtonItem item = (ButtonItem)(sender as ListBox).SelectedItem;
-            if(item is ButtonItem && item.Action!=null)
+            if (item is ButtonItem && item.Action != null)
                 item.Action.Execute(null);
             (sender as ListBox).SelectedItem = null;
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if(ExitFlag is false)
+            if (ExitFlag is false)
             {
                 e.Cancel = true;
                 Hide();
@@ -64,6 +47,32 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
         private void HideMenu_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
+        }
+
+        private void Grid_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            Thread thread = new Thread(() =>
+            {
+                Thread.Sleep(50);
+                poolSelector.Dispatcher.Invoke(() =>
+                {
+                    object c = poolSelector.SelectedItem;
+                    if (c is RecentSoluction)
+                    {
+                        //新建窗口
+                        Workbench fm = new Workbench();
+                        WorkbenchViewModel vm = (fm.DataContext as WorkbenchViewModel);
+                        vm.EditPool = (c as RecentSoluction).Object;
+                        vm.Config = MainSave.ApplicationConfig.Clone();
+                        vm.OrderConfig = MainSave.OrderConfig.Clone();
+                        fm.InitializeComponent();
+                        fm.Show();
+                        this.Hide();
+                    }
+                    poolSelector.SelectedItem = null;
+                });
+            });
+            thread.Start();
         }
     }
 }

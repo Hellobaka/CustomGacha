@@ -8,7 +8,9 @@
         xmlns:viewmodel="clr-namespace:me.cqp.luohuaming.CustomGacha.UI.ViewModel"
         WindowStartupLocation="CenterScreen"
         mc:Ignorable="d"
-        Title="CopyPoolView" Height="450" Width="800">
+        Title="CopyPoolView"
+        MinHeight="450"
+        MinWidth="800">
     <Window.DataContext>
         <viewmodel:CopyPoolModelView />
     </Window.DataContext>

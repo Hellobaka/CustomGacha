@@ -298,6 +298,7 @@ namespace PublicInfos
         [SugarColumn(IsIgnore = true)]
         public object DrawAllItems { get; set; }
         public string GUID { get; set; } = "";
+        public bool Visable { get; set; } = true;
 
         private Assembly plugin = null;
         public void PluginInit()
