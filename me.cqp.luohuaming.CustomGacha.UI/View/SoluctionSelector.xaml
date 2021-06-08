@@ -333,7 +333,7 @@
         <hc:NotifyIcon x:Name="NotifyIconContextContent"
                        Text="自定义抽卡控制台"
                        Visibility="Visible"
-                       Icon="pack://application:,,,/Resources/Icon.ico">            
+                       Icon="pack://application:,,,/me.cqp.luohuaming.CustomGacha.UI;component/Resources/Icon.ico">            
             <hc:NotifyIcon.ContextMenu>
                 <ContextMenu>
                     <MenuItem x:Name="openMenu" Click="OpenMenu_Click"
