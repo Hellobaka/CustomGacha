@@ -99,6 +99,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     }
                     c.ForEach(x =>
                     {
+                        x.ID = -1;
                         x.CreateDt = DateTime.Now;
                         x.UpdateDt = DateTime.Now;
                         x.ID = SQLHelper.UpdateOrAddCategory(x, true);
