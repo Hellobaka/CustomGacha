@@ -214,6 +214,7 @@
     <Compile Include="Converter\RelativePath2FullPathConverter.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="Model\SoluctionSelectorModel.cs" />
+    <Compile Include="Model\WorkBenchModel.cs" />
     <Compile Include="UserControls\ChatBox.xaml.cs">
       <DependentUpon>ChatBox.xaml</DependentUpon>
     </Compile>

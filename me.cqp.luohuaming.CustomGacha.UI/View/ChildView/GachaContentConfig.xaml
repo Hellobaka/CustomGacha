@@ -36,9 +36,11 @@
                        Margin="0,3"
                        HorizontalAlignment="Left"
                        Style="{StaticResource TextBlockTitle}">目录列表</TextBlock>
-            <ListBox Grid.Row="1"
+            <ListBox Grid.Row="1" x:Name="CategoryListBox"
                      ItemsSource="{Binding Categories, Mode=TwoWay}"
-                     SelectedItem="{Binding SelectCategory, Mode=TwoWay}">
+                     SelectedItem="{Binding SelectCategory, Mode=TwoWay}"
+                     SelectionMode="Extended"
+                     KeyDown="CategoryListBox_KeyDown">
                 <ListBox.ContextMenu>
                     <ContextMenu>
                         <MenuItem Header="新建"
@@ -71,8 +73,6 @@
                                     <MenuItem Header="复制"
                                               Command="{Binding Path=PlacementTarget.Tag.CopyCategory,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
                                     <MenuItem Header="删除"
-                                              Command="{Binding Path=PlacementTarget.Tag.DeleteCategory,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
-                                    <MenuItem Header="从数据库删除"
                                               Command="{Binding Path=PlacementTarget.Tag.DeleteCategoryFromDB,RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}}" />
                                 </ContextMenu>
                             </StackPanel.ContextMenu>
@@ -107,9 +107,11 @@
                            HorizontalAlignment="Left"
                            Style="{StaticResource TextBlockTitle}"
                            Grid.Row="0">内容列表</TextBlock>
-                <ListBox Grid.Row="1"
+                <ListBox Grid.Row="1" x:Name="ContentListBox"
                          ItemsSource="{Binding GachaItems}"
-                         SelectedItem="{Binding SelectGachaItem}">
+                         SelectedItem="{Binding SelectGachaItem}"
+                         SelectionMode="Extended"
+                         KeyDown="ContentListBox_KeyDown">
                     <ListBox.ContextMenu>
                         <ContextMenu>
                             <MenuItem Header="新建" Command="{Binding NewItem}"/>

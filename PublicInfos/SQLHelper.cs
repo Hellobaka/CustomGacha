@@ -148,7 +148,7 @@ namespace PublicInfos
         {
             using (var db = GetInstance())
             {
-                var c = db.Queryable<Pool>().First(x=>x.PoolID==id);
+                var c = db.Queryable<Pool>().First(x => x.PoolID == id);
                 c.PluginInit();
                 return c;
             }
@@ -337,7 +337,7 @@ namespace PublicInfos
                 return ls;
             using (var db = GetInstance())
             {
-                foreach(var pair in ls)
+                foreach (var pair in ls)
                 {
                     var item = pair.Value;
                     if (db.Queryable<GachaItem>().Any(x => x.GUID == item.GUID))
@@ -361,6 +361,21 @@ namespace PublicInfos
             using (var db = GetInstance())
             {
                 db.Deleteable(item).ExecuteCommand();
+            }
+        }
+        public static void RemoveGachaItems(List<GachaItem> item)
+        {
+            using (var db = GetInstance())
+            {
+                db.Deleteable(item).ExecuteCommand();
+            }
+        }
+
+        public static void RemoveGachaItemByIDs(List<int> item)
+        {
+            using (var db = GetInstance())
+            {
+                db.Deleteable<GachaItem>().Where(x => item.Any(o => x.ItemID == o)).ExecuteCommand();
             }
         }
         public static GachaItem GetGachaItemByID(int id)

@@ -39,23 +39,19 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             };
             OpenNewCategoryDialog = new DelegateCommand
             {
-                ExecuteAction = new Action<object>(o => { ShowInteractiveDialog(DialogAction.NewCategory); })
+                ExecuteAction = new Action<object>(o => { ShowInteractiveDialog(Model.WorkBenchModel.DialogAction.NewCategory); })
             };
             SetUpContentDialog = new DelegateCommand
             {
-                ExecuteAction = new Action<object>(o => { ShowInteractiveDialog(DialogAction.SetUpContent); })
+                ExecuteAction = new Action<object>(o => { ShowInteractiveDialog(Model.WorkBenchModel.DialogAction.SetUpContent); })
             };
             EditCategory = new DelegateCommand
             {
-                ExecuteAction = new Action<object>(o => { ShowInteractiveDialog(DialogAction.EditCategory); })
+                ExecuteAction = new Action<object>(o => { ShowInteractiveDialog(Model.WorkBenchModel.DialogAction.EditCategory); })
             };
             CopyCategory = new DelegateCommand
             {
                 ExecuteAction = new Action<object>(copyCategory)
-            };
-            DeleteCategory = new DelegateCommand
-            {
-                ExecuteAction = new Action<object>(deleteCategory)
             };
             DeleteItem = new DelegateCommand
             {
@@ -91,7 +87,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             };
             QueryItemDialog = new DelegateCommand
             {
-                ExecuteAction = new Action<object>(o => { ShowInteractiveDialog(DialogAction.QueryGachaItem); })
+                ExecuteAction = new Action<object>(o => { ShowInteractiveDialog(Model.WorkBenchModel.DialogAction.QueryGachaItem); })
             };
             ClearItems = new DelegateCommand
             {
@@ -123,7 +119,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             };
             ForeConfigDialog = new DelegateCommand
             {
-                ExecuteAction = new Action<object>(o => { ShowInteractiveDialog(DialogAction.ForeConfig); })
+                ExecuteAction = new Action<object>(o => { ShowInteractiveDialog(Model.WorkBenchModel.DialogAction.ForeConfig); })
             };
             NewPoolDialog = new DelegateCommand
             {
@@ -136,7 +132,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                             return;
                         }
                     }
-                    ShowInteractiveDialog(DialogAction.NewPool);
+                    ShowInteractiveDialog(Model.WorkBenchModel.DialogAction.NewPool);
                 })
             };
             TemplateCopyItem = new DelegateCommand
@@ -187,12 +183,20 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
 
         private void LoadCategories()
         {
-            categories = Helper.List2ObservableCollection(SQLHelper.GetCategoriesByIDs(EditPool.Content));
+            Categories = Helper.List2ObservableCollection(SQLHelper.GetCategoriesByIDs(EditPool.Content));
             Thread thread = new Thread(() =>
             {
                 GachaitemsInCategory = new Dictionary<Category, List<GachaItem>>();
-                foreach (var item in categories)
+                int index = 0;
+                foreach (var item in Categories)
                 {
+                    if (item == null)
+                    {
+                        EditPool.Content.RemoveAt(index);
+                        SQLHelper.UpdatePool(EditPool);
+                        Helper.ShowGrowlMsg("遇到一个无效目录，重启编辑器以除错.");
+                        continue;
+                    }
                     if (string.IsNullOrWhiteSpace(item.GUID))
                     {
                         item.GUID = Guid.NewGuid().ToString();
@@ -406,23 +410,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             SelectCategory = new Category();
             RaisePropertyChanged("Categories");
             Helper.ShowGrowlMsg($"已将目录列表清空", Helper.NoticeEnum.Info);
-
-        }
-        public DelegateCommand DeleteCategory { get; set; }
-        private void deleteCategory(object parameter)
-        {
-            if (HandyControl.Controls.MessageBox.Ask("确认删除此目录吗？此操作将会从数据库中删除此目录，但不会影响内容", "提示") == MessageBoxResult.Cancel)
-                return;
-            string name = SelectCategory.Name;
-            GachaitemsInCategory.Remove(SelectCategory);
-            Categories.Remove(Categories.First(x => x.GUID == SelectCategory.GUID));
-            RaisePropertyChanged("Categories");
-            SelectCategory = new Category();
-            GachaItems.Clear();
-            ReloadCategroies();
-            Helper.ShowGrowlMsg($"已删除目录 {name}", Helper.NoticeEnum.Info);
-
-
         }
         public DelegateCommand UnSetCategoryBaodi { get; set; }
         private void unSetCategoryBaodi(object parameter)
@@ -447,7 +434,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 Name = "新项目",
                 ItemID = -1
             };
-            //c.ItemID = SQLHelper.InsertOrUpdateGachaItem(c);
             GachaItems.Add(c);
             SelectGachaItem = c;
             SelectCategory.Content.Add(c.ItemID);
@@ -460,42 +446,91 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
 
         private void deleteItem(object parameter)
         {
-            if (HandyControl.Controls.MessageBox.Ask("确认删除此项目吗？此操作只会将项目从目录中剔除，不影响数据", "提示") == MessageBoxResult.Cancel)
-                return;
-            string name = SelectGachaItem.Name;
-            var c = SelectGachaItem.ItemID;
-            SelectCategory.Content.Remove(c);
-            if (SelectCategory.UpContent.Any(x => c == x))
+            if (parameter is List<GachaItem> ls)
             {
-                SelectCategory.UpContent.Remove(c);
+                if (HandyControl.Controls.MessageBox.Ask("确认删除选中的项目吗？此操作只会将项目从目录中剔除，不影响数据库", "提示") == MessageBoxResult.Cancel)
+                    return;
+                ls.Do(x =>
+                { 
+                    SelectCategory.Content.Remove(x.ItemID);
+                    SelectCategory.UpContent.Remove(x.ItemID);
+                    GachaitemsInCategory[SelectCategory].Remove(x);
+                });
+                Helper.ShowGrowlMsg($"从 {SelectCategory.Name} 目录中成功删除了 {ls.Count} 个子项目");
             }
-            GachaitemsInCategory[SelectCategory].Remove(SelectGachaItem);
-            RaisePropertyChanged("GachaItems");
+            else
+            {
+                if (HandyControl.Controls.MessageBox.Ask("确认删除此项目吗？此操作只会将项目从目录中剔除，不影响数据", "提示") == MessageBoxResult.Cancel)
+                    return;
+                string name = SelectGachaItem.Name;
+                var c = SelectGachaItem.ItemID;
+                SelectCategory.Content.Remove(c);
+                if (SelectCategory.UpContent.Any(x => c == x))
+                {
+                    SelectCategory.UpContent.Remove(c);
+                }
+                GachaitemsInCategory[SelectCategory].Remove(SelectGachaItem);
+                Helper.ShowGrowlMsg($"从 {SelectCategory.Name} 目录中成功删除了子项目 {name}");
+            }
             ReloadItems();
             SelectGachaItem = new GachaItem();
-            Helper.ShowGrowlMsg($"从 {SelectCategory.Name} 目录中成功删除了子项目 {name}");
-
         }
         public DelegateCommand DeleteItemFromDB { get; set; }
-        private void deleteItemFromDB(object obj)
+        private void deleteItemFromDB(object parameter)
         {
-            if (HandyControl.Controls.MessageBox.Ask("确认从数据库中删除此项目吗？此操作不可逆！", "提示") == MessageBoxResult.Cancel)
-                return;
-            string name = SelectGachaItem.Name;
-            SQLHelper.RemoveGachaItem(SelectGachaItem);
-
-            Helper.ShowGrowlMsg($"从数据库中成功删除了项目 {name}");
+            if (parameter is List<GachaItem> ls)
+            {
+                if (HandyControl.Controls.MessageBox.Ask("确认从数据库中删除选中的项目吗？此操作不可逆！", "提示") == MessageBoxResult.Cancel)
+                    return;
+                SQLHelper.RemoveGachaItems(ls);
+                ls.Do(x => GachaItems.Remove(x));
+                SQLHelper.UpdatePool(EditPool);
+                Helper.ShowGrowlMsg($"从数据库中成功删除了 {ls.Count} 个目录");
+            }
+            else
+            {
+                if (HandyControl.Controls.MessageBox.Ask("确认从数据库中删除此项目吗？此操作不可逆！", "提示") == MessageBoxResult.Cancel)
+                    return;
+                string name = SelectGachaItem.Name;
+                SQLHelper.RemoveGachaItem(SelectGachaItem);
+                Helper.ShowGrowlMsg($"从数据库中成功删除了项目 {name}");
+            }
+            ReloadItems();
         }
 
         public DelegateCommand DeleteCategoryFromDB { get; set; }
         private void deleteCategoryFromDB(object parameter)
         {
-            if (HandyControl.Controls.MessageBox.Ask("确认从数据库中删除此项目吗？此操作不可逆！", "提示") == MessageBoxResult.Cancel)
-                return;
-            string name = selectCategory.Name;
-            deleteCategory(null);
-
-            Helper.ShowGrowlMsg($"从数据库中成功删除了目录 {name}");
+            if (parameter is List<Category> ls)
+            {
+                if (HandyControl.Controls.MessageBox.Ask("确认从数据库中删除选中的目录吗？此操作不可逆！删除不会影响目录的内容", "提示") == MessageBoxResult.Cancel)
+                    return;
+                SQLHelper.RemoveCategoryByIDs(ls.Select(x => x.ID).ToList());
+                ls.Do(x =>
+                {
+                    EditPool.Content.Remove(x.ID);
+                    GachaitemsInCategory.Remove(x);
+                    Categories.Remove(x);
+                });
+                SelectCategory = new Category();
+                GachaItems.Clear();
+                Helper.ShowGrowlMsg($"从数据库中成功删除了 {ls.Count} 个目录");
+            }
+            else
+            {
+                if (HandyControl.Controls.MessageBox.Ask("确认从数据库中删除此目录吗？此操作不可逆！删除不会影响目录的内容", "提示") == MessageBoxResult.Cancel)
+                    return;
+                string name = selectCategory.Name;
+                SQLHelper.RemoveCategory(SelectCategory);
+                GachaitemsInCategory.Remove(SelectCategory);
+                Categories.Remove(SelectCategory);
+                SelectCategory = new Category();
+                GachaItems.Clear();
+                EditPool.Content.Remove(SelectCategory.ID);
+                Helper.ShowGrowlMsg($"从数据库中成功删除了目录 {name}");
+            }
+            SQLHelper.UpdatePool(EditPool);
+            ReloadCategroies();
         }
         public DelegateCommand CopyItem { get; set; }
         private void copyItem(object parameter)
@@ -505,7 +540,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             GachaItems.Insert(index, c);
             c.ItemID = -1;
             c.GUID = Guid.NewGuid().ToString();
-            //c.ItemID = SQLHelper.InsertOrUpdateGachaItem(c);
             SelectCategory.Content.Add(c.ItemID);
             GachaitemsInCategory[SelectCategory].Add(c);
             SelectGachaItem = c;
@@ -598,9 +632,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             SelectCategory.UpContent.Add(o.ItemID);
             SelectGachaItem = o;
             GachaitemsInCategory[SelectCategory].First(x => x.ItemID == o.ItemID).IsUp = true;
-            RaisePropertyChanged("GachaItems");
             ReloadItems();
-
             Helper.ShowGrowlMsg($"设置子项目 {o.Name} 的Up属性为 True");
         }
         public DelegateCommand ClearItems { get; set; }
@@ -621,17 +653,6 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
             Helper.ShowGrowlMsg($"已将 {SelectCategory} 目录的列表清空", Helper.NoticeEnum.Info);
         }
 
-        enum DialogAction
-        {
-            NewCategory,
-            SetUpContent,
-            EditCategory,
-            NewGachaItem,
-            QueryGachaItem,
-            ForeConfig,
-            WorkBenchConfig,
-            NewPool
-        }
         public DelegateCommand ForeConfigDialog { get; set; }
         public DelegateCommand NewPoolDialog { get; set; }
         public DelegateCommand QueryItemDialog { get; set; }
@@ -639,9 +660,9 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         public DelegateCommand SetUpContentDialog { get; set; }
         private void ShowInteractiveDialog(object peremeter)
         {
-            switch ((DialogAction)peremeter)
+            switch ((Model.WorkBenchModel.DialogAction)peremeter)
             {
-                case DialogAction.NewCategory:
+                case Model.WorkBenchModel.DialogAction.NewCategory:
                     Dialog.Show<NewCategoryPage>()
                     .Initialize<NewPoolViewModel>(vm =>
                     {
@@ -662,11 +683,10 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                                 Categories.Add(x.Result);
                                 GachaitemsInCategory.Add(x.Result, new List<GachaItem>());
                             }
-
                         });
                     });
                     break;
-                case DialogAction.SetUpContent:
+                case Model.WorkBenchModel.DialogAction.SetUpContent:
                     Dialog.Show<GachaItemQueryDialog>()
                     .Initialize<GachaItemQueryDialogViewModel>(vm =>
                     {
@@ -680,7 +700,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         {
                             if (x.Result == null)
                                 return;
-                            SelectCategory.UpContent.Clear();
+                            SelectCategory.UpContent.Clear(); 
+                            GachaitemsInCategory[SelectCategory].ForEach(c => c.IsUp = false);
                             int count = 0;
                             x.Result.ForEach(o =>
                             {
@@ -688,18 +709,16 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                                 {
                                     SelectCategory.UpContent.Add(o.ItemID);
                                     GachaitemsInCategory[SelectCategory].First(c => c.ItemID == o.ItemID).IsUp = true;
-                                    ReloadItems();
                                     count++;
                                 }
                             });
-                            //SQLHelper.UpdateOrAddCategory(SelectCategory);
                             ReloadItems();
                             this.RaisePropertyChanged("GachaItems");
                             Helper.ShowGrowlMsg($"共设置了 {count} 个Up项");
                         });
                     });
                     break;
-                case DialogAction.EditCategory:
+                case Model.WorkBenchModel.DialogAction.EditCategory:
                     Dialog.Show<NewCategoryPage>()
                     .Initialize<NewPoolViewModel>(vm =>
                     {
@@ -717,13 +736,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                                 GachaitemsInCategory.Add(x.Result, SQLHelper.GetGachaItemsByIDs(x.Result.Content));
                                 SelectCategory = x.Result;
                                 ReloadCategroies();
-
-                                RaisePropertyChanged("Categories");
                             }
                         });
                     });
                     break;
-                case DialogAction.QueryGachaItem:
+                case Model.WorkBenchModel.DialogAction.QueryGachaItem:
                     if (SelectCategory == null)
                     {
                         Helper.ShowGrowlMsg($"请至少选中一个目录", Helper.NoticeEnum.Error);
@@ -755,16 +772,16 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         });
                     });
                     break;
-                case DialogAction.ForeConfig:
+                case Model.WorkBenchModel.DialogAction.ForeConfig:
                     Dialog.Show<ForeConfig>().Initialize<WorkbenchViewModel>(c =>
                     {
                         c.Config = Config.Clone();
                         c.OrderConfig = OrderConfig.Clone();
                     });
                     break;
-                case DialogAction.WorkBenchConfig:
+                case Model.WorkBenchModel.DialogAction.WorkBenchConfig:
                     break;
-                case DialogAction.NewPool:
+                case Model.WorkBenchModel.DialogAction.NewPool:
                     Dialog.Show<NewPoolStep>().GetResultAsync<Pool>().ContinueWith(x =>
                     {
                         Application.Current.Dispatcher.Invoke(() =>
@@ -1010,6 +1027,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 c.Add(item);
             }
             Categories = c;
+            RaisePropertyChanged("Categories");
         }
         private void ReloadItems()
         {
@@ -1019,6 +1037,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 c.Add(item);
             }
             GachaItems = c;
+            RaisePropertyChanged("GachaItems");
         }
         public enum OpenType
         {

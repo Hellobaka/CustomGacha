@@ -6,6 +6,8 @@ using System.Linq;
 using System.Windows;
 using PublicInfos;
 using ImageSelector = me.cqp.luohuaming.CustomGacha.UI.UserControls.ImageSelector;
+using System.Windows.Input;
+using System.Collections.Generic;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.View.ChildView
 {
@@ -32,6 +34,46 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View.ChildView
                 dataContext.SelectGachaItem.Name = info.Name.Replace(info.Extension,"");
                 dataContext.RaisePropertyChanged("SelectGachaItem.Name");
                 Name_TextBox.Text = dataContext.SelectGachaItem.Name;
+            }
+        }
+
+        private void CategoryListBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            dataContext = DataContext as WorkbenchViewModel;
+            if (e.Key == Key.Delete)
+            {
+                List<Category> ls = new List<Category>();
+                foreach (Category item in CategoryListBox.SelectedItems)
+                {
+                    ls.Add(item);
+                }
+                dataContext.DeleteCategoryFromDB.Execute(ls);
+            }
+        }
+
+        private void ContentListBox_KeyDown(object sender, KeyEventArgs e)
+        {
+            dataContext = DataContext as WorkbenchViewModel;
+            if(e.KeyboardDevice.IsKeyDown(Key.LeftShift) || e.KeyboardDevice.IsKeyDown(Key.RightShift))
+            {
+                if (e.Key == Key.Delete)
+                {
+                    List<GachaItem> ls = new List<GachaItem>();
+                    foreach (GachaItem item in ContentListBox.SelectedItems)
+                    {
+                        ls.Add(item);
+                    }
+                    dataContext.DeleteItemFromDB.Execute(ls);
+                }
+            }
+            else if (e.Key == Key.Delete)
+            {
+                List<GachaItem> ls = new List<GachaItem>();
+                foreach (GachaItem item in ContentListBox.SelectedItems)
+                {
+                    ls.Add(item);
+                }
+                dataContext.DeleteItem.Execute(ls);
             }
         }
     }
