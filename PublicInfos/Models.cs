@@ -448,6 +448,8 @@ namespace PublicInfos
         public bool IsNew { get { return isNew; } set { isNew = value; Editted = true; } }
         [SugarColumn(IsIgnore = true)]
         public bool Editted { get; set; } = false;
+        [SugarColumn(IsIgnore = true)]
+        public bool IsChecked { get; set; } = false;
         public string GUID { get; set; } = "";
         public GachaItem Clone()
         {

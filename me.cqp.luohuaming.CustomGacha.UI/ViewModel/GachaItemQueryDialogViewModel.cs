@@ -10,13 +10,13 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
     public class GachaItemQueryDialogViewModel : NotifyicationObject, IDialogResultable<List<GachaItem>>
     {
         public static string RelateivePath { get; set; }
-        public class VMArray : NotifyicationObject
-        {
-            public GachaItem Object { get; set; }
-            public bool IsSelected { get; set; }
-        }
-        private ObservableCollection<VMArray> gachaItems;
-        public ObservableCollection<VMArray> GachaItems
+        //public class GachaItem : NotifyicationObject
+        //{
+        //    public GachaItem Object { get; set; }
+        //    public bool IsSelected { get; set; }
+        //}
+        private ObservableCollection<GachaItem> gachaItems;
+        public ObservableCollection<GachaItem> GachaItems
         {
             get { return gachaItems; }
             set
@@ -25,8 +25,19 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 this.RaisePropertyChanged("GachaItems");
             }
         }
-        private ObservableCollection<VMArray> queryItems;
-        public ObservableCollection<VMArray> QueryItems
+        private int selectNum;
+        public int SelectNum
+        {
+            get { return selectNum; }
+            set
+            {
+                selectNum = value;
+                this.RaisePropertyChanged("SelectNum");
+            }
+        }
+
+        private ObservableCollection<GachaItem> queryItems;
+        public ObservableCollection<GachaItem> QueryItems
         {
             get { return queryItems; }
             set
@@ -83,8 +94,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 {
                     case "Query":
                         var c = SQLHelper.GetAllGachaItem();
-                        GachaItems = new ObservableCollection<VMArray>();
-                        c.ForEach(x => GachaItems.Add(new VMArray { Object = x, IsSelected = false }));
+                        GachaItems = new ObservableCollection<GachaItem>();
+                        c.ForEach(x => GachaItems.Add(x));
                         break;
                 }
             }
@@ -102,7 +113,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         public int PageCount { get; set; } = 30;
         public GachaItemQueryDialogViewModel()
         {
-            GachaItems = new ObservableCollection<VMArray>();
+            GachaItems = new ObservableCollection<GachaItem>();
             PageUpdatedCmd = new DelegateCommand
             {
                 ExecuteAction = new Action<object>(pageUpdatedCmd)

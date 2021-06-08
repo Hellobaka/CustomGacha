@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
@@ -7,7 +6,6 @@ using System.Windows;
 using System.Windows.Controls;
 using me.cqp.luohuaming.CustomGacha.UI.ViewModel;
 using PublicInfos;
-using static me.cqp.luohuaming.CustomGacha.UI.ViewModel.GachaItemQueryDialogViewModel;
 
 namespace me.cqp.luohuaming.CustomGacha.UI.View
 {
@@ -33,21 +31,21 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
                 case "AllSelect":
                     foreach (var item in datacontext.QueryItems)
                     {
-                        item.IsSelected = true;
+                        item.IsChecked = true;
                     }
                     ReloadItems();
                     break;
                 case "NonSelect":
                     foreach (var item in datacontext.QueryItems)
                     {
-                        item.IsSelected = false;
+                        item.IsChecked = false;
                     }
                     ReloadItems();
                     break;
                 case "AntiSelect":
                     foreach (var item in datacontext.QueryItems)
                     {
-                        item.IsSelected = !item.IsSelected;
+                        item.IsChecked = !item.IsChecked;
                     }
                     ReloadItems();
                     break;
@@ -56,11 +54,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
                         return;
                     for (int i = 0; i < DataGrid_Main.SelectedItems.Count; i++)
                     {
-                        VMArray item = DataGrid_Main.SelectedItems[0] as VMArray;
+                        GachaItem item = DataGrid_Main.SelectedItems[0] as GachaItem;
                         datacontext.GachaItems.Remove(item);
                         datacontext.MaxPageCount = (int)Math.Ceiling(datacontext.GachaItems.Count / (double)datacontext.PageCount);
                         datacontext.QueryItems = Helper.ToPageList(datacontext.GachaItems, datacontext.PageIndex, datacontext.PageCount);
-                        SQLHelper.RemoveGachaItem(item.Object);
+                        SQLHelper.RemoveGachaItem(item);
                     }
                     ReloadItems();
                     break;
@@ -70,7 +68,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
         }
         private void Save_Click(object sender, RoutedEventArgs e)
         {
-            ((GachaItemQueryDialogViewModel)this.DataContext).Result = datacontext.GachaItems.Where(x => x.IsSelected).Select(x => x.Object).ToList();
+            ((GachaItemQueryDialogViewModel)this.DataContext).Result = datacontext.GachaItems.Where(x => x.IsChecked).ToList();
             ((GachaItemQueryDialogViewModel)this.DataContext).CloseCmd.Execute(null);
         }
         private void Quit_Click(object sender, RoutedEventArgs e)
@@ -86,27 +84,32 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
             datacontext.MaxPageCount = (int)Math.Ceiling(datacontext.GachaItems.Count / (double)datacontext.PageCount);
             if (datacontext.OpenMode == "Query")
             {
-                var c = datacontext.QueryItems.Where(x => datacontext.Result.Any(o => x.Object.ItemID == o.ItemID)).ToList();
+                var c = datacontext.QueryItems.Where(x => datacontext.Result.Any(o => x.ItemID == o.ItemID)).ToList();
                 foreach (var item in c)
                 {
-                    item.IsSelected = true;
+                    item.IsChecked = true;
                 }
             }
             else if (datacontext.OpenMode == "SelectUp")
             {
-                var c = datacontext.GachaItems.Where(x => datacontext.UpContent.Any(o => x.Object.ItemID == o)).ToList();
+                var c = datacontext.GachaItems.Where(x => datacontext.UpContent.Any(o => x.ItemID == o)).ToList();
                 foreach (var item in c)
                 {
-                    item.IsSelected = true;
+                    item.IsChecked = true;
                 }
             }
         }
-        ObservableCollection<VMArray> arrayBackup = null;
+        ObservableCollection<GachaItem> arrayBackup = null;
         private void SearchBar_SearchStarted(object sender, HandyControl.Data.FunctionEventArgs<string> e)
         {
             string key = e.Info;
             if (string.IsNullOrWhiteSpace(key))
             {
+                if (arrayBackup == null)
+                {
+                    return;
+                }
+                arrayBackup = Helper.List2ObservableCollection(arrayBackup.OrderByDescending(x => x.IsChecked).ToList());
                 datacontext.GachaItems = arrayBackup;
                 arrayBackup = null;
                 datacontext.PageIndex = 1;
@@ -117,17 +120,17 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
             {
                 if (arrayBackup == null)
                 {
-                    arrayBackup = new ObservableCollection<VMArray>();
+                    arrayBackup = new ObservableCollection<GachaItem>();
                     foreach (var item in datacontext.GachaItems)
                         arrayBackup.Add(item);
                 }
-                ObservableCollection<VMArray> c = new ObservableCollection<VMArray>();
+                ObservableCollection<GachaItem> c = new ObservableCollection<GachaItem>();
                 foreach (var item in arrayBackup)
                 {
-                    if (item.Object.Name.Contains(key) ||
-                        item.Object.ItemID.ToString().Contains(key) ||
-                        item.Object.Probablity.ToString().Contains(key) ||
-                        item.Object.UpProbablity.ToString().Contains(key))
+                    if (item.Name.Contains(key) ||
+                        item.ItemID.ToString().Contains(key) ||
+                        item.Probablity.ToString().Contains(key) ||
+                        item.UpProbablity.ToString().Contains(key))
                     {
                         c.Add(item);
                     }
@@ -140,12 +143,17 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View
         }
         public void ReloadItems()
         {
-            var c = new ObservableCollection<VMArray>();
+            var c = new ObservableCollection<GachaItem>();
             foreach (var item in datacontext.QueryItems)
             {
                 c.Add(item);
             }
             datacontext.QueryItems = c;
+        }
+
+        private void DataGrid_Main_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            datacontext.SelectNum = datacontext.GachaItems.Count(x=>x.IsChecked);
         }
     }
 }

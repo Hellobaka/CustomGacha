@@ -334,7 +334,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 Dialog.Show<GachaItemQueryDialog>()
                 .Initialize<GachaItemQueryDialogViewModel>(vm =>
                     {
-                        GachaItems.ToList().ForEach(x=>vm.GachaItems.Add(new GachaItemQueryDialogViewModel.VMArray { Object=x, IsSelected=true }));
+                        GachaItems.ToList().ForEach(x=>vm.GachaItems.Add(x));
                         vm.UpContent = SelectCategory.UpContent;
                         vm.OpenMode = "SelectUp";
                     })
