@@ -71,10 +71,15 @@ namespace me.cqp.luohuaming.CustomGacha.UI
         {
             if (MainSave.CQApi == null)
             {
-                return 114;
+                return 115;
             }
             string version = MainSave.CQApi.AppInfo.Version.ToString();
             return Convert.ToInt32(version.Replace(".", ""));
+        }
+        public static string ParseVerID2String(int VersionID)
+        {
+            string c = VersionID.ToString();
+            return $"{c.Substring(0, c.Length - 2)}.{c.Substring(c.Length - 2, 1)}.{c.Substring(c.Length - 1, 1)}";
         }
     }
 }

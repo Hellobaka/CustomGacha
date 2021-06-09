@@ -350,7 +350,8 @@
                 <MenuItem Header="GitHub"
                           Icon="{iconPacks:Material Kind=Github}"
                           Command="{Binding OpenGitHub}"/>
-                <MenuItem Header="检查更新">
+                <MenuItem Header="检查更新"
+                          Command="{Binding CheckUpdate}">
                     <MenuItem.Icon>
                         <iconPacks:PackIconMaterial Kind="Update"
                                                     Foreground="{StaticResource SuccessBrush}" />

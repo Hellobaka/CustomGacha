@@ -4,8 +4,10 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Windows;
+using CustomGacha.SDK.Tool.Http;
 using HandyControl.Controls;
 using HandyControl.Tools.Extension;
 using me.cqp.luohuaming.CustomGacha.UI.Command;
@@ -20,11 +22,9 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
 {
     //TODO: 优化MVVM的样子, 看起来很累赘
     //TODO: 可视化插件编辑器
-    //TODO: 希望插件能自定义指令
     //TODO: 增加更多的指令操作(氪金 黑名单等
     //TODO: 云数据库构建希望
     //TODO: 云卡池构建希望
-    //TODO: 卡池以GUID覆盖(升级)时的策略
     public class WorkbenchViewModel : NotifyicationObject
     {
         public WorkbenchViewModel()
@@ -978,6 +978,44 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 Helper.ShowGrowlMsg($"错误信息: {e.Message}", Helper.NoticeEnum.Error);
                 return;
             }
+        }
+        public DelegateCommand CheckUpdate => new Lazy<DelegateCommand>(() =>
+                    new DelegateCommand(checkUpdate)).Value;
+        public void checkUpdate(object peremeter)
+        {
+            Helper.ShowGrowlMsg("开始拉取更新信息");
+            Thread thread = new Thread(()=>
+            {
+                HttpWebClient http = new HttpWebClient
+                {
+                    Encoding = Encoding.UTF8
+                };
+                string json = http.DownloadString(MainSave.UpdateURL);
+                UpdateInfo info = JsonConvert.DeserializeObject<UpdateInfo>(json);
+                int versionID = Helper.GetVersionOrDefault();
+                if (info.Plugin.Versions[info.Plugin.Versions.Length - 1].VersionID == versionID || info.Plugin.Versions.Any(x => x.VersionID == versionID) is false)
+                {
+                    Helper.ShowGrowlMsg("当前版本已经为最新版本，感谢你的使用 :)");
+                }
+                else
+                {
+                    StringBuilder sb = new StringBuilder();
+                    sb.AppendLine("检测到新版本, 信息如下");
+                    foreach (var item in info.Plugin.Versions.Where(x => x.VersionID > versionID))
+                    {
+                        sb.AppendLine($"版本: {Helper.ParseVerID2String(item.VersionID)}");
+                        sb.AppendLine($"更新时间: {item.UpdateTime:G}");
+                        sb.AppendLine($"更新内容: {item.Info}");
+                        sb.AppendLine("--------------------");
+                    }
+                    sb.AppendLine("要前往下载页面更新吗？");
+                    if (HandyControl.Controls.MessageBox.Ask(sb.ToString(), "发现新版本") == MessageBoxResult.OK)
+                    {
+                        Process.Start(info.Plugin.URL);
+                    }
+                }
+            });
+            thread.Start();
         }
         #endregion
         private bool VeifyJson(string relativePath, JObject json)

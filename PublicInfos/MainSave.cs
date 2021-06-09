@@ -22,5 +22,6 @@ namespace PublicInfos
         public static OrderConfig OrderConfig { get; set; }
         public static Config ApplicationConfig { get; set; }
         public static List<Pool> PoolInstances { get; set; }
+        public static string UpdateURL { get; set; } = "https://gitee.com/Hellobaka/CustomGachaRepo/raw/master/Version.json";
     }
 }
