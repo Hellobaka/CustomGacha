@@ -1,6 +1,4 @@
-﻿using PublicInfos;
-
-namespace PluginInterface
+﻿namespace PublicInfos
 {
     public interface IPluginOrderModel
     {

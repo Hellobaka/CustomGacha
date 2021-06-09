@@ -93,8 +93,10 @@
     <Compile Include="Models\Config.cs" />
     <Compile Include="Models\GachaItem.cs" />
     <Compile Include="Models\IOrderModel.cs" />
+    <Compile Include="Models\IPluginOrderModel.cs" />
     <Compile Include="Models\ItemDrawConfig.cs" />
     <Compile Include="Models\OrderConfig.cs" />
+    <Compile Include="Models\PluginMessage.cs" />
     <Compile Include="Models\Pool.cs" />
     <Compile Include="Models\PoolDrawConfig.cs" />
     <Compile Include="Models\Repo.cs" />

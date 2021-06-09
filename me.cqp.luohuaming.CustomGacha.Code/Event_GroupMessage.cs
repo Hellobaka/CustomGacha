@@ -15,10 +15,27 @@ namespace me.cqp.luohuaming.CustomGacha.Code
             };
             try
             {
-                if (SQLHelper.IDExists(e.FromQQ) is false 
+                if (SQLHelper.IDExists(e.FromQQ) is false
                     && e.Message.Text.Replace("＃", "#").Equals(MainSave.OrderConfig.RegisterOrder) is false)
                 {
                     return result;
+                }
+
+                foreach (var item in MainSave.PoolInstances)
+                {
+                    foreach (var x in item.PluginMessageHandler)
+                    {
+                        if (x.Judge(e.Message.Text))
+                        {
+                            PluginMessage message = new PluginMessage
+                            {
+                                Message = e.Message.Text,
+                                MsgOrigin = MsgOrigin.Group,
+                                OriginID = e.FromGroup
+                            };
+                            return x.Progress(message);
+                        }
+                    }
                 }
                 foreach (var item in MainSave.Instances.Where(item => item.Judge(e.Message.Text)))
                 {

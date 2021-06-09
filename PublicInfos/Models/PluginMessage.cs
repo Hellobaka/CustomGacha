@@ -1,4 +1,4 @@
-﻿namespace PluginInterface
+﻿namespace PublicInfos
 {
     public enum MsgOrigin
     {

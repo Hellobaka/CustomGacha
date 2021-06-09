@@ -31,6 +31,8 @@
                                            OpenType="File" />
                 <TextBlock Margin="0,3">插件实现的接口</TextBlock>
                 <ListBox x:Name="PluginInterfaceInfo" Margin="0,3"/>
+                <TextBlock Margin="0,3">插件实现的自定义指令</TextBlock>
+                <ListBox x:Name="PluginOrderInfo" Margin="0,3"/>
                 <Button HorizontalAlignment="Stretch"
                         Margin="0,3"
                         Style="{StaticResource ButtonPrimary}"

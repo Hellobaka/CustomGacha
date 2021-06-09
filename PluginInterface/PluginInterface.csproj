@@ -66,9 +66,7 @@
     <Compile Include="IDrawMainImage.cs" />
     <Compile Include="IDrawPoints.cs" />
     <Compile Include="IFinallyDraw.cs" />
-    <Compile Include="IPluginOrderModel.cs" />
     <Compile Include="PluginHelper.cs" />
-    <Compile Include="PluginMessage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

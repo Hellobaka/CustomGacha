@@ -61,6 +61,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View.ChildView
         {
             datacontext = this.DataContext as WorkbenchViewModel;
             ReadInterfaceInfo();
+            ReadOrders();
         }
         private void ReadInterfaceInfo()
         {
@@ -76,6 +77,11 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View.ChildView
             if (datacontext.EditPool.FinallyDraw != null)
                 PluginInterfaceInfo.Items.Add("FinallyDraw");
         }
+        private void ReadOrders()
+        {
+            PluginOrderInfo.Items.Clear();
+            datacontext.EditPool.PluginMessageHandler.ForEach(x =>PluginOrderInfo.Items.Add(x.GetOrderStr()));
+        }
         private void ReloadPlugin_Click(object sender, RoutedEventArgs e)
         {
             PluginInterfaceInfo.Items.Clear();
@@ -83,6 +89,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.View.ChildView
             {
                 datacontext.EditPool.PluginInit();
                 ReadInterfaceInfo();
+                ReadOrders();
                 Helper.ShowGrowlMsg($"插件重载成功", Helper.NoticeEnum.Success, 2);
             }
             catch (Exception exc)

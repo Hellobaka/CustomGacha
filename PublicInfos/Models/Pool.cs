@@ -112,12 +112,18 @@ namespace PublicInfos
         /// </summary>
         [SugarColumn(IsIgnore = true)]
         public object DrawAllItems { get; set; }
+        /// <summary>
+        /// 插件_处理消息
+        /// </summary>
+        [SugarColumn(IsIgnore = true)]
+        public List<IPluginOrderModel> PluginMessageHandler { get; set; } = new List<IPluginOrderModel>();
         public string GUID { get; set; } = "";
         public bool Visable { get; set; } = true;
 
         private Assembly plugin = null;
         public void PluginInit()
         {
+            PluginMessageHandler.Clear();
             if (string.IsNullOrWhiteSpace(PluginPath) is false)
             {
                 string filePath = Path.Combine(RelativePath, PluginPath);
@@ -157,6 +163,21 @@ namespace PublicInfos
                             if (item.GetInterface("DrawAllItems") != null)
                             {
                                 DrawAllItems = plugin.CreateInstance(item.FullName);
+                            }                            
+                        }
+                        foreach (var inter in plugin.GetTypes())
+                        {
+                            if (inter.IsInterface)
+                                continue;
+                            foreach (var instance in inter.GetInterfaces())
+                            {
+                                if (instance == typeof(IPluginOrderModel))
+                                {
+                                    IPluginOrderModel obj = (IPluginOrderModel)Activator.CreateInstance(inter);
+                                    if (obj.ImplementFlag == false)
+                                        continue;
+                                    PluginMessageHandler.Add(obj);
+                                }
                             }
                         }
                     }
