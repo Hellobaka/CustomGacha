@@ -11,6 +11,7 @@ namespace PublicInfos
         /// 保存各种事件的数组
         /// </summary>
         public static List<IOrderModel> Instances { get; set; } = new List<IOrderModel>();
+        public static int AuthCode { get; set; }
         public static CQLog CQLog { get; set; }
         public static CQApi CQApi { get; set; }
         //TODO: 发布时抹去此处

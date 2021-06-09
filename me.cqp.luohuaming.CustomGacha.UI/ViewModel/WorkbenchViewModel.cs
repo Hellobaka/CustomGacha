@@ -924,6 +924,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                 }
                 Helper.ShowGrowlMsg("Json读取成功");
                 //按GUID更新或添加所有的项目
+                gachaItems.Do(x=> { if (string.IsNullOrWhiteSpace(x.Value.GUID)) { x.Value.GUID = Guid.NewGuid().ToString(); } });
                 gachaItems = SQLHelper.UpdateIDByGUID(gachaItems);
                 //更新目录内容, 主要是项目的ID
                 foreach (var item in pool_dest.Content)//需要导入卡池的目录
@@ -944,6 +945,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                         }
                         catch (KeyNotFoundException) { }
                     }
+                    if (string.IsNullOrWhiteSpace(categories[item].GUID))
+                        categories[item].GUID = Guid.NewGuid().ToString(); 
                     categories[item].Content = itemID;
                     categories[item].UpContent = upID;
                     categories[item].ID = SQLHelper.UpdateOrAddCategory(categories[item]);
@@ -954,6 +957,8 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
                     contentID.Add(item.Value.ID);
                 }
                 //将卡池的目录也进行ID的更新
+                if (string.IsNullOrWhiteSpace(pool_dest.GUID))
+                    pool_dest.GUID = Guid.NewGuid().ToString();
                 pool_dest.Content = contentID;
                 pool_dest.RelativePath = relativePath;
                 if (updateFlag)

@@ -22,11 +22,12 @@ namespace me.cqp.luohuaming.CustomGacha.Code
                 MainSave.ImageDirectory = CommonHelper.GetAppImageDirectory();
                 MainSave.GachaResultRootPath = Path.Combine(MainSave.ImageDirectory, "CustomGacha");
                 MainSave.DBPath = Path.Combine(e.CQApi.AppDirectory, "data.db");
-                if (File.Exists(MainSave.DBPath) is false)
+                //if (File.Exists(MainSave.DBPath) is false)
                 {
                     SQLHelper.CreateDB();
                 }
                 SQLHelper.LoadConfig();
+                MainSave.AuthCode = e.CQApi.AppInfo.AuthCode;
                 MainSave.PoolInstances = SQLHelper.GetAllPools();
                 Directory.CreateDirectory(MainSave.GachaResultRootPath);
                 foreach (var item in Assembly.GetAssembly(typeof(Event_GroupMessage)).GetTypes())

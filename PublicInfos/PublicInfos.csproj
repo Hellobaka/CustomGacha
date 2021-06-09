@@ -89,7 +89,16 @@
     <Compile Include="FunctionResult.cs" />
     <Compile Include="Functions\GachaCore.cs" />
     <Compile Include="MainSave.cs" />
-    <Compile Include="Models.cs" />
+    <Compile Include="Models\Category.cs" />
+    <Compile Include="Models\Config.cs" />
+    <Compile Include="Models\GachaItem.cs" />
+    <Compile Include="Models\IOrderModel.cs" />
+    <Compile Include="Models\ItemDrawConfig.cs" />
+    <Compile Include="Models\OrderConfig.cs" />
+    <Compile Include="Models\Pool.cs" />
+    <Compile Include="Models\PoolDrawConfig.cs" />
+    <Compile Include="Models\Repo.cs" />
+    <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SQLHelper.cs" />
   </ItemGroup>
