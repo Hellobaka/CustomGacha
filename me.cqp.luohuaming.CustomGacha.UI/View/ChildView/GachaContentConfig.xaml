@@ -183,10 +183,10 @@
                                      Text="{Binding SelectGachaItem.Name,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                             <TextBlock Margin="3,3">概率</TextBlock>
                             <TextBox Margin="0,3"
-                                     Text="{Binding SelectGachaItem.Probablity,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                     Text="{Binding SelectGachaItem.Probablity,Mode=TwoWay}" />
                             <TextBlock Margin="3,3">UP后概率</TextBlock>
                             <TextBox Margin="0,3"
-                                     Text="{Binding SelectGachaItem.UpProbablity,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                                     Text="{Binding SelectGachaItem.UpProbablity,Mode=TwoWay}" />
                             <TextBlock Margin="3,3">主图片</TextBlock>
                             <usercontrols:ImageSelector ImagePath="{Binding SelectGachaItem.ImagePath,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}" OnPathChanged="ImageSelector_OnOnPathChanged"/>
                             <TextBlock Margin="3,3">背景图片</TextBlock>

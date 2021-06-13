@@ -70,7 +70,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         {
             SQLHelper.CreateDB();
             MainSave.PoolInstances = SQLHelper.GetAllPools();
-            MainSave.PoolInstances = MainSave.PoolInstances.OrderBy(x => x.UpdateDt).ToList();
+            MainSave.PoolInstances = MainSave.PoolInstances.OrderByDescending(x => x.UpdateDt).ToList();
             RecentList = new ObservableCollection<RecentSoluction>();
             ButtonGroup = new List<ButtonItem>
             {
@@ -183,7 +183,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.ViewModel
         {
             RecentList.Clear();
             MainSave.PoolInstances = SQLHelper.GetAllPools();
-            MainSave.PoolInstances = MainSave.PoolInstances.OrderBy(x => x.UpdateDt).ToList();
+            MainSave.PoolInstances = MainSave.PoolInstances.OrderByDescending(x => x.UpdateDt).ToList();
             MainSave.PoolInstances.ForEach(x =>
             {
                 if (x.Visable)

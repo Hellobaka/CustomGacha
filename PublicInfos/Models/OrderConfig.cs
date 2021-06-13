@@ -19,6 +19,7 @@ namespace PublicInfos
         /// </summary>
         public string SignOrder { get; set; }
         public string DuplicateRegisterText { get; set; }
+        public string NonRegisterText { get; set; }
         public string SuccessfulRegisterText { get; set; }
         public string LeakMoneyText { get; set; }
         public string SuccessfulSignText { get; set; }
