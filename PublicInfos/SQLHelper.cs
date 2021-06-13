@@ -403,6 +403,7 @@ namespace PublicInfos
             {
                 foreach (var item in ls)
                 {
+                    item.IsNew = false;
                     if (ls.Any(x => x.ItemID == item.ItemID && x.IsNew))
                         continue;
                     item.IsNew = !db.Queryable<DB_Repo>().Any(x => x.QQID == QQ && x.ItemID == item.ItemID);

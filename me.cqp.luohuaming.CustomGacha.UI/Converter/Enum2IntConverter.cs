@@ -36,7 +36,7 @@ namespace me.cqp.luohuaming.CustomGacha.UI.Converter
         {
             if (value == null)
                 return null;
-            return (DrawOrder2IntConverter)value;
+            return (DrawOrder)value;
         }
     }
 
