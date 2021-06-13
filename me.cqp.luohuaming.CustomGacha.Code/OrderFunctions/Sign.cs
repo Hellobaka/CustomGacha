@@ -23,8 +23,13 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
             {
                 SendID = e.FromGroup,
             };
-            int signMoney = SQLHelper.Sign(e.FromQQ);
+            if (SQLHelper.IDExists(e.FromQQ) is false)
+            {
+                var c = SQLHelper.Register(e.FromQQ);
+                sendText.MsgToSend.Add(Helper.HandleModelString(MainSave.OrderConfig.SuccessfulRegisterText, e.FromQQ, c));
+            }
             DB_User user = SQLHelper.GetUser(e.FromQQ);
+            int signMoney = SQLHelper.Sign(e.FromQQ);
             if (signMoney > 0)
             {
                 sendText.MsgToSend.Add(Helper.HandleModelString(MainSave.OrderConfig.SuccessfulSignText, e.FromQQ, user, signMoney));

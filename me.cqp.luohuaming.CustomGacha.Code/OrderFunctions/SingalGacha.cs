@@ -26,6 +26,13 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
             {
                 SendID = e.FromGroup,
             };
+            if (SQLHelper.IDExists(e.FromQQ) is false)
+            {
+                sendText.MsgToSend.Add(Helper.HandleModelString(MainSave.OrderConfig.NonRegisterText, e.FromQQ, null));
+                result.SendObject.Add(sendText);
+                return result;
+            }
+
             //检索能够应答指令的卡池
             var destPool = MainSave.PoolInstances.Find(x => x.SingalGachaOrder == e.Message.Text);
             //预构建图片保存目录

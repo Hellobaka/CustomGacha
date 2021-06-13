@@ -23,9 +23,9 @@ namespace me.cqp.luohuaming.CustomGacha.Code.OrderFunctions
             {
                 SendID = e.FromGroup,
             };
+            result.SendObject.Add(sendText);
 
             sendText.MsgToSend.Add("这里输入需要发送的文本");
-            result.SendObject.Add(sendText);
             return result;
         }
 
