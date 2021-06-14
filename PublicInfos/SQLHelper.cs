@@ -211,6 +211,7 @@ namespace PublicInfos
                     {
                         RegisterOrder = "#抽卡注册",
                         SignOrder = "#抽卡签到",
+                        NonRegisterText="尚未注册，输入 #抽卡注册 来进行一个册的注吧",
                         SuccessfulSignText = "<@>签到成功，获得通用货币<$0>",
                         DuplicateSignText = "<@>你今天签过到了",
                         SuccessfulRegisterText = "<@>注册成功，获得通用货币<current_money>",
